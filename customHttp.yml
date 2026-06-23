@@ -1,0 +1,9 @@
+customHeaders:
+  - pattern: '/index.js' # Matches your specific file
+    headers:
+      - key: 'Access-Control-Allow-Origin'
+        value: 'https://rd-software-srl-sandbox.mybigcommerce.com/' # Replace '*' with your other app's URL (e.g., 'https://my-other-app.com') for better security
+      - key: 'Access-Control-Allow-Methods'
+        value: 'GET, OPTIONS'
+      - key: 'Access-Control-Allow-Headers'
+        value: 'Content-Type, Authorization'
