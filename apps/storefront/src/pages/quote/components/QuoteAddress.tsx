@@ -37,6 +37,7 @@ interface AddressProps {
   role: string | number;
   accountFormFields: AccountFormFieldsProps[];
   shippingSameAsBilling: boolean;
+  showFullWidth?: boolean;
   type: string;
   setBillingChange: (value: boolean) => void;
 }
@@ -51,6 +52,7 @@ function QuoteAddress(
     role,
     accountFormFields = [],
     shippingSameAsBilling = false,
+    showFullWidth = false,
     type,
     setBillingChange,
   }: AddressProps,
@@ -153,7 +155,7 @@ function QuoteAddress(
     <Box
       role="group"
       aria-labelledby={fieldsetId}
-      width={isMobile ? '100%' : '50%'}
+      width={isMobile || showFullWidth ? '100%' : '50%'}
       mt={isMobile ? '2rem' : '0'}
       pr={pr}
       pl={pl}

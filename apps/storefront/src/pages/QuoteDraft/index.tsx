@@ -200,10 +200,11 @@ function QuoteDraft({ setOpenPage }: PageProps) {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [isEdit, setEdit] = useState<boolean>(false);
+  const [hasTriedSubmit, setHasTriedSubmit] = useState<boolean>(false);
 
   const [addressList, setAddressList] = useState<B2BAddress[]>([]);
 
-  const [shippingSameAsBilling, setShippingSameAsBilling] = useState<boolean>(false);
+  const [shippingSameAsBilling, setShippingSameAsBilling] = useState<boolean>(true);
   const [billingChange, setBillingChange] = useState<boolean>(false);
   const [quoteSubmissionResponseOpen, setQuoteSubmissionResponseOpen] = useState<boolean>(false);
   const [extraFields, setExtraFields] = useState<QuoteFormattedItemsProps[]>([]);
@@ -388,7 +389,9 @@ function QuoteDraft({ setOpenPage }: PageProps) {
     if (billingRef?.current) {
       addressSaveInfo.billingAddress = billingRef.current.getContactInfoValue();
     }
-    if (shippingRef?.current) {
+    if (shippingSameAsBilling) {
+      addressSaveInfo.shippingAddress = addressSaveInfo.billingAddress;
+    } else if (shippingRef?.current) {
       addressSaveInfo.shippingAddress = shippingRef.current.getContactInfoValue();
     }
 
@@ -561,6 +564,7 @@ function QuoteDraft({ setOpenPage }: PageProps) {
       return;
     }
 
+    setHasTriedSubmit(true);
     setLoading(true);
 
     try {
@@ -608,8 +612,10 @@ function QuoteDraft({ setOpenPage }: PageProps) {
 
       const note = info?.note || '';
       const newNote = note.trim();
-      // just trim the note,
-      // no matter it's empty or not, to avoid unnecessary space in the quote info
+      if (!newNote) {
+        snackbar.error(b3Lang('global.quoteNote.requiredError'));
+        return;
+      }
 
       const perfectAddress = (address: AddressWithMasterCopy) => {
         const newAddress = cloneAddressWithId(address);
@@ -801,6 +807,17 @@ function QuoteDraft({ setOpenPage }: PageProps) {
     }
   }, [billingChange, shippingSameAsBilling]);
 
+  useEffect(() => {
+    if (!isEdit || !shippingSameAsBilling) {
+      return;
+    }
+
+    if (billingRef.current && shippingRef.current) {
+      const billingAddress = billingRef.current.getContactInfoValue();
+      shippingRef.current.setShippingInfoValue(billingAddress);
+    }
+  }, [isEdit, shippingSameAsBilling, quoteInfoOrigin.billingAddress]);
+
   return (
     <B3Spin isSpinning={loading}>
       <Box
@@ -965,21 +982,24 @@ function QuoteDraft({ setOpenPage }: PageProps) {
                   role={role}
                   accountFormFields={accountFormFields}
                   shippingSameAsBilling={shippingSameAsBilling}
+                  showFullWidth={shippingSameAsBilling}
                   type="billing"
                   setBillingChange={setBillingChange}
                 />
-                <QuoteAddress
-                  title={b3Lang('quoteDraft.section.shipping')}
-                  info={quoteInfoOrigin?.shippingAddress}
-                  addressList={addressList}
-                  pl={isMobile ? 0 : '8px'}
-                  ref={shippingRef}
-                  role={role}
-                  accountFormFields={accountFormFields}
-                  shippingSameAsBilling={shippingSameAsBilling}
-                  type="shipping"
-                  setBillingChange={setBillingChange}
-                />
+                {!shippingSameAsBilling && (
+                  <QuoteAddress
+                    title={b3Lang('quoteDraft.section.shipping')}
+                    info={quoteInfoOrigin?.shippingAddress}
+                    addressList={addressList}
+                    pl={isMobile ? 0 : '8px'}
+                    ref={shippingRef}
+                    role={role}
+                    accountFormFields={accountFormFields}
+                    shippingSameAsBilling={shippingSameAsBilling}
+                    type="shipping"
+                    setBillingChange={setBillingChange}
+                  />
+                )}
               </Box>
               <FormControlLabel
                 label={b3Lang('quoteDraft.checkbox.sameAddressShippingAndBilling')}
@@ -1058,10 +1078,9 @@ function QuoteDraft({ setOpenPage }: PageProps) {
                 width: '100%',
               }}
             >
+              <QuoteNote quoteStatus="Draft" required showError={hasTriedSubmit} />
               <QuoteSummary ref={quoteSummaryRef} />
               <AddToQuote updateList={updateSummary} addToQuote={addToQuote} />
-
-              <QuoteNote quoteStatus="Draft" />
 
               {role !== 100 && <QuoteAttachment status={0} />}
             </Stack>
