@@ -14,11 +14,13 @@ import {
 interface QuoteNoteProps {
   quoteStatus?: string | number;
   quoteNotes?: string;
+  required?: boolean;
+  showError?: boolean;
 }
 
 export default function QuoteNote(props: QuoteNoteProps) {
   const b3Lang = useB3Lang();
-  const { quoteStatus, quoteNotes = '' } = props;
+  const { quoteStatus, quoteNotes = '', required = false, showError = false } = props;
 
   const [noteText, setNoteText] = useState('');
   const [defaultOpen, setDefaultOpen] = useState(false);
@@ -47,8 +49,21 @@ export default function QuoteNote(props: QuoteNoteProps) {
     if (quoteNotes) setDefaultOpen(true);
   }, [quoteNotes]);
 
+  const isDraftQuote = quoteStatus === 'Draft';
+  const showValidationError = required && showError && noteText.trim().length === 0;
+
   return (
-    <Card>
+    <Card
+      sx={
+        isDraftQuote
+          ? {
+              border: '2px solid',
+              borderColor: showValidationError ? 'error.main' : 'warning.light',
+              backgroundColor: showValidationError ? '#FFF5F5' : '#FFF9ED',
+            }
+          : undefined
+      }
+    >
       <CardContent
         sx={{
           p: '16px !important',
@@ -67,15 +82,33 @@ export default function QuoteNote(props: QuoteNoteProps) {
               padding: '16px 0',
             }}
           >
-            {quoteStatus && quoteStatus === 'Draft' && (
+            {isDraftQuote && (
               <Box
                 sx={{
-                  fontSize: '16px',
-                  color: 'rgba(0, 0, 0, 0.38)',
                   mb: '16px',
+                  p: '16px',
+                  borderRadius: '4px',
+                  backgroundColor: showValidationError ? 'rgba(211, 47, 47, 0.08)' : '#FFFFFF',
                 }}
               >
-                {b3Lang('global.quoteNote.messageNote')}
+                <Typography
+                  sx={{
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    mb: '4px',
+                    color: showValidationError ? 'error.main' : 'text.primary',
+                  }}
+                >
+                  {b3Lang('global.quoteNote.requiredTitle')}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: '14px',
+                    color: 'text.secondary',
+                  }}
+                >
+                  {b3Lang('global.quoteNote.requiredHelper')}
+                </Typography>
               </Box>
             )}
             {quoteNotes ? (
@@ -95,15 +128,26 @@ export default function QuoteNote(props: QuoteNoteProps) {
                   <TextField
                     multiline
                     fullWidth
-                    rows={5}
+                    required={required}
+                    error={showValidationError}
+                    helperText={
+                      showValidationError
+                        ? b3Lang('global.quoteNote.requiredError')
+                        : b3Lang('global.quoteNote.messageNote')
+                    }
+                    rows={6}
                     value={noteText}
                     onChange={handleNoteTextChange}
-                    label={b3Lang('global.quoteNote.typeMessage')}
-                    size="small"
-                    variant="filled"
+                    label={b3Lang('global.quoteNote.fieldLabel')}
+                    placeholder={b3Lang('global.quoteNote.typeMessage')}
+                    size="medium"
+                    variant="outlined"
                     sx={{
                       '& .MuiFormLabel-root': {
                         color: 'rgba(0, 0, 0, 0.38)',
+                      },
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: '#FFF',
                       },
                     }}
                   />

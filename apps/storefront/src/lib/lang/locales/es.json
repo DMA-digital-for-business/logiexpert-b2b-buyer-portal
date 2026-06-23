@@ -2,5 +2,9 @@
   "global.navMenu.orders": "Mis pedidos",
   "global.orders.title": "Mis pedidos",
   "global.tips.loading": "Cargando...",
-  "login.loginText.forgotPasswordText": "¿Olvidaste tu contraseña?"
+  "login.loginText.forgotPasswordText": "¿Olvidaste tu contraseña?",
+  "global.quoteNote.fieldLabel": "Mensaje para tu solicitud de cotización",
+  "global.quoteNote.requiredTitle": "Debes agregar un mensaje antes de enviar esta cotización",
+  "global.quoteNote.requiredHelper": "Explica necesidades de precio, cantidades, tiempos de entrega o cualquier solicitud especial.",
+  "global.quoteNote.requiredError": "Ingresa un mensaje antes de enviar tu cotización"
 }

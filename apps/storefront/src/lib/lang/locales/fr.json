@@ -2,5 +2,9 @@
   "global.tips.loading": "Chargement...",
   "global.navMenu.orders": "Mes commandes",
   "global.orders.title": "Mes commandes",
-  "login.loginText.forgotPasswordText": "Mot de passe oublié ?"
+  "login.loginText.forgotPasswordText": "Mot de passe oublié ?",
+  "global.quoteNote.fieldLabel": "Message pour votre demande de devis",
+  "global.quoteNote.requiredTitle": "Un message est requis avant d'envoyer ce devis",
+  "global.quoteNote.requiredHelper": "Précisez les besoins de prix, les quantités, les délais de livraison ou toute demande particulière.",
+  "global.quoteNote.requiredError": "Veuillez saisir un message avant d'envoyer votre devis"
 }

@@ -8,6 +8,7 @@ type LocaleMessages = Record<string, string>;
 const localeLoaders: Record<string, () => Promise<LocaleMessages>> = {
   fr: () => import('./fr.json').then((m) => m.default),
   es: () => import('./es.json').then((m) => m.default),
+  it: () => import('./it.json').then((m) => m.default),
 };
 
 // Returns true when a static bundle covers the given code — either an exact
