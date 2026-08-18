@@ -42,6 +42,7 @@ You can get straight to work building for your unique B2B business cases.
   - [Developing on Stencil](#developing-on-stencil)
   - [Developing for Headless](#developing-for-headless)
   - [Releases](#releases)
+    - [WebDAV deployment configuration](#webdav-deployment-configuration)
   - [Common issues:](#common-issues)
 - [🤝 Contribution](#-contribution)
 - [📞 Contact \& Support](#-contact--support)
@@ -127,9 +128,66 @@ Read the [Headless Guide](./docs/headless.md) when you are working on Catalyst, 
 
 ### Releases
 
-1. Upon merging your pull request, this repository will automatically deploy your changes to the production environment.
+The [`deploy-ftp.yml`](./.github/workflows/deploy-ftp.yml) GitHub Actions workflow builds
+`apps/storefront` and deploys the generated `dist/` directory over WebDAV when changes are pushed to:
 
-2. You can access the release pipeline at: https://launchbay.bigcommerce.net/projects/515/releases/new
+- `staging`, which deploys through the `staging` GitHub Environment;
+- `main`, which deploys through the `production` GitHub Environment.
+
+The deployment mirrors the contents of `dist/` to the configured remote directory. Files that no
+longer exist in `dist/` are therefore removed from the remote directory.
+
+#### WebDAV deployment configuration
+
+Create the `staging` and `production` environments under **Settings → Environments** in the GitHub
+repository. Define the following values in each environment so that staging and production can use
+different WebDAV credentials and destinations. The existing `FTP_*` names are retained for
+compatibility, but the connection uses WebDAV over HTTPS:
+
+| Type | Name | Example |
+| --- | --- | --- |
+| Secret | `FTP_SERVER` | `https://store-example.mybigcommerce.com/dav` |
+| Secret | `FTP_USERNAME` | WebDAV account username |
+| Secret | `FTP_PASSWORD` | WebDAV account password |
+| Variable | `FTP_REMOTE_DIR` | `content/buyer-portal` |
+
+`FTP_SERVER` must contain the complete HTTPS WebDAV endpoint, including `/dav`. `FTP_REMOTE_DIR`
+must be relative to `/dav` and identify the specific folder to replace, for example
+`content/buyer-portal`. BigCommerce exposes static files uploaded below WebDAV's `content` directory
+at the storefront's public `/content/` URL. For safety, the workflow rejects destinations outside
+`content` and paths containing `.` or `..` segments.
+
+The storefront build also reads the following GitHub Environment variables. Configure them in both
+environments with the values required by staging and production:
+
+| Type | Name | Example |
+| --- | --- | --- |
+| Variable | `VITE_ASSETS_ABSOLUTE_PATH` | `https://store-example.mybigcommerce.com/content/buyer-portal/` |
+| Variable | `VITE_B2B_URL` | Environment-specific B2B API URL |
+| Variable | `VITE_DISABLE_BUILD_HASH` | `TRUE` or `FALSE` |
+| Variable | `VITE_IS_LOCAL_ENVIRONMENT` | `FALSE` |
+| Variable | `VITE_LOCAL_APP_CLIENT_ID` | Environment-specific client ID |
+
+`VITE_ASSETS_ABSOLUTE_PATH` must be the public URL corresponding to `FTP_REMOTE_DIR` and must end
+with a trailing `/`. For example, `content/buyer-portal` corresponds to
+`https://store-example.mybigcommerce.com/content/buyer-portal/`. The workflow validates this match
+before changing any remote files.
+
+The local `apps/storefront/.env` file is ignored by Git and is used only for local development. Do
+not upload it or commit it. Variables prefixed with `VITE_` are included in the client-side bundle
+at build time and must never contain passwords, private API keys, or other sensitive values.
+
+The deployment jobs for the same branch run sequentially to prevent concurrent uploads to the same
+destination. A failed build or a missing/invalid FTP setting stops the workflow before the remote
+directory is synchronized. During synchronization, the workflow reports the number and total size
+of files and every uploaded path. The workflow uses the HTTP Digest authentication required by the
+BigCommerce WebDAV endpoint. It moves the previous deployment to a backup, uploads the new files
+directly to the public destination and restores the backup if an upload fails. Finally, it verifies
+that the entry point, a JavaScript chunk and an asset are publicly reachable. Network operations use
+explicit timeouts and retries, preventing an unreachable server from leaving the deployment silent
+indefinitely.
+
+The workflow run and its deployment status are available from the repository's **Actions** tab.
 
 ### Common issues:
 

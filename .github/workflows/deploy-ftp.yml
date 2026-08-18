@@ -1,0 +1,248 @@
+name: Deploy storefront via WebDAV
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-webdav-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+
+    defaults:
+      run:
+        working-directory: apps/storefront
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Enable Yarn
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build storefront
+        env:
+          VITE_ASSETS_ABSOLUTE_PATH: ${{ vars.VITE_ASSETS_ABSOLUTE_PATH }}
+          VITE_B2B_URL: ${{ vars.VITE_B2B_URL }}
+          VITE_DISABLE_BUILD_HASH: ${{ vars.VITE_DISABLE_BUILD_HASH }}
+          VITE_IS_LOCAL_ENVIRONMENT: ${{ vars.VITE_IS_LOCAL_ENVIRONMENT }}
+          VITE_LOCAL_APP_CLIENT_ID: ${{ vars.VITE_LOCAL_APP_CLIENT_ID }}
+        run: yarn build
+
+      - name: Replace WebDAV folder with dist
+        env:
+          WEBDAV_SERVER: ${{ secrets.FTP_SERVER }}
+          WEBDAV_USERNAME: ${{ secrets.FTP_USERNAME }}
+          WEBDAV_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          WEBDAV_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR }}
+          ASSETS_ABSOLUTE_PATH: ${{ vars.VITE_ASSETS_ABSOLUTE_PATH }}
+        run: |
+          set -euo pipefail
+
+          : "${WEBDAV_SERVER:?Missing FTP_SERVER secret}"
+          : "${WEBDAV_USERNAME:?Missing FTP_USERNAME secret}"
+          : "${WEBDAV_PASSWORD:?Missing FTP_PASSWORD secret}"
+          : "${WEBDAV_REMOTE_DIR:?Missing FTP_REMOTE_DIR variable}"
+          : "${ASSETS_ABSOLUTE_PATH:?Missing VITE_ASSETS_ABSOLUTE_PATH variable}"
+
+          server_url="${WEBDAV_SERVER%/}"
+          if [[ ! "$server_url" =~ ^https://[^/]+/dav$ ]]; then
+            echo "FTP_SERVER must be the HTTPS WebDAV endpoint ending in /dav."
+            exit 1
+          fi
+
+          remote_dir="${WEBDAV_REMOTE_DIR#/}"
+          remote_dir="${remote_dir#dav/}"
+          remote_dir="${remote_dir%/}"
+          if [[ ! "$remote_dir" =~ ^content/[A-Za-z0-9._/-]+$ ]]; then
+            echo "FTP_REMOTE_DIR must identify a folder below content (for example content/buyer-portal)."
+            exit 1
+          fi
+
+          if [[ "$remote_dir" =~ (^|/)\.\.?(/|$) ]]; then
+            echo "FTP_REMOTE_DIR cannot contain . or .. path segments."
+            exit 1
+          fi
+
+          expected_assets_suffix="/$remote_dir/"
+          if [[ ! "$ASSETS_ABSOLUTE_PATH" =~ ^https://.*/$ ]] || [[ "$ASSETS_ABSOLUTE_PATH" != *"$expected_assets_suffix" ]]; then
+            echo "VITE_ASSETS_ABSOLUTE_PATH must be an HTTPS URL ending in $expected_assets_suffix"
+            exit 1
+          fi
+
+          file_count="$(find ./dist -type f | wc -l | tr -d ' ')"
+          upload_size="$(du -sh ./dist | cut -f1)"
+          echo "Starting WebDAV deployment of $file_count files ($upload_size) to /dav/$remote_dir."
+
+          unsafe_path="$(find ./dist -mindepth 1 -printf '%P\n' | LC_ALL=C grep -E '[^A-Za-z0-9._/-]' | head -n 1 || true)"
+          if [[ -n "$unsafe_path" ]]; then
+            echo "Unsupported character in build output path: $unsafe_path"
+            exit 1
+          fi
+
+          parent_dir="${remote_dir%/*}"
+          target_name="${remote_dir##*/}"
+          backup_dir="$parent_dir/$target_name.backup-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          backup_url="$server_url/$backup_dir"
+          target_url="$server_url/$remote_dir"
+
+          curl_options=(
+            --digest
+            --user "$WEBDAV_USERNAME:$WEBDAV_PASSWORD"
+            --fail-with-body
+            --silent
+            --show-error
+            --connect-timeout 30
+            --max-time 180
+            --retry 3
+            --retry-delay 5
+          )
+
+          delete_webdav_directory() {
+            curl \
+              --digest \
+              --user "$WEBDAV_USERNAME:$WEBDAV_PASSWORD" \
+              --silent \
+              --show-error \
+              --output /dev/null \
+              --request DELETE \
+              "$1/" || true
+          }
+
+          target_status="$(curl \
+            --digest \
+            --user "$WEBDAV_USERNAME:$WEBDAV_PASSWORD" \
+            --silent \
+            --show-error \
+            --output /dev/null \
+            --write-out '%{http_code}' \
+            --request PROPFIND \
+            --header 'Depth: 0' \
+            "$target_url/")"
+
+          backup_created=false
+          if [[ "$target_status" == "200" || "$target_status" == "207" ]]; then
+            delete_webdav_directory "$backup_url"
+            curl \
+              "${curl_options[@]}" \
+              --output /dev/null \
+              --request MOVE \
+              --header "Destination: $backup_url/" \
+              --header "Overwrite: T" \
+              "$target_url/"
+            backup_created=true
+            echo "Moved the previous deployment to backup /dav/$backup_dir."
+          elif [[ "$target_status" != "404" ]]; then
+            echo "Cannot inspect the target WebDAV directory (HTTP $target_status)."
+            exit 1
+          fi
+
+          deployment_complete=false
+          rollback_deployment() {
+            if [[ "$deployment_complete" == "true" ]]; then
+              return
+            fi
+
+            echo "Deployment failed; restoring the previous WebDAV directory."
+            delete_webdav_directory "$target_url"
+            if [[ "$backup_created" == "true" ]]; then
+              curl \
+                "${curl_options[@]}" \
+                --output /dev/null \
+                --request MOVE \
+                --header "Destination: $target_url/" \
+                --header "Overwrite: T" \
+                "$backup_url/" || true
+            fi
+          }
+          trap rollback_deployment EXIT
+
+          curl "${curl_options[@]}" --output /dev/null --request MKCOL "$target_url/"
+          echo "Created destination WebDAV directory /dav/$remote_dir."
+
+          while IFS= read -r directory; do
+            relative_directory="${directory#./dist/}"
+            curl \
+              "${curl_options[@]}" \
+              --output /dev/null \
+              --request MKCOL \
+              "$target_url/$relative_directory/"
+            echo "Created directory: $relative_directory/"
+          done < <(find ./dist -mindepth 1 -type d | LC_ALL=C sort)
+
+          uploaded_files=0
+          while IFS= read -r file; do
+            relative_file="${file#./dist/}"
+            uploaded_files=$((uploaded_files + 1))
+            echo "Uploading [$uploaded_files/$file_count]: $relative_file"
+            curl \
+              "${curl_options[@]}" \
+              --output /dev/null \
+              --upload-file "$file" \
+              "$target_url/$relative_file"
+          done < <(find ./dist -type f | LC_ALL=C sort)
+
+          deployment_complete=true
+          if [[ "$backup_created" == "true" ]]; then
+            delete_webdav_directory "$backup_url"
+          fi
+          trap - EXIT
+          unset WEBDAV_PASSWORD
+
+          verify_public_file() {
+            local relative_file="$1"
+            local public_url="${ASSETS_ABSOLUTE_PATH%/}/$relative_file"
+            local status_code
+
+            for attempt in {1..12}; do
+              status_code="$(curl \
+                --head \
+                --silent \
+                --show-error \
+                --output /dev/null \
+                --write-out '%{http_code}' \
+                --connect-timeout 10 \
+                --max-time 30 \
+                "$public_url" || true)"
+              if [[ "$status_code" == "200" ]]; then
+                echo "Public URL verified: $public_url"
+                return
+              fi
+
+              echo "Waiting for public URL ($attempt/12, HTTP $status_code): $public_url"
+              sleep 5
+            done
+
+            echo "Public URL did not become available: $public_url"
+            return 1
+          }
+
+          index_file="$(find ./dist -maxdepth 1 -type f -name 'index*.js' -printf '%P\n' | LC_ALL=C sort | sed -n '1p')"
+          chunk_file="$(find ./dist/chunks -type f -name '*.js' -printf 'chunks/%f\n' | LC_ALL=C sort | sed -n '1p')"
+          asset_file="$(find ./dist/assets -type f -printf 'assets/%f\n' | LC_ALL=C sort | sed -n '1p')"
+          verify_public_file "$index_file"
+          verify_public_file "$chunk_file"
+          verify_public_file "$asset_file"
+
+          echo "WebDAV deployment completed successfully."
