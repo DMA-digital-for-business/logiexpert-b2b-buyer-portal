@@ -28,6 +28,25 @@ const StyledImage = styled('img')(() => ({
   marginRight: '0.5rem',
 }));
 
+const quantityInputSx = {
+  margin: '1rem 0',
+  width: '96px',
+  '& .MuiFilledInput-input': {
+    boxSizing: 'border-box',
+    fontSize: '14px',
+    padding: '8px',
+    textAlign: 'right',
+  },
+  '& input[type="number"]': {
+    MozAppearance: 'textfield',
+  },
+  '& input[type="number"]::-webkit-inner-spin-button, & input[type="number"]::-webkit-outer-spin-button':
+    {
+      margin: 0,
+      WebkitAppearance: 'none',
+    },
+} as const;
+
 function QuoteTableCard({
   item,
   onEdit,
@@ -157,23 +176,13 @@ function QuoteTableCard({
               size="small"
               type="number"
               variant="filled"
-              label="qty"
               inputProps={{
+                'aria-label': b3Lang('quoteDraft.quoteTable.qty'),
                 inputMode: 'numeric',
                 pattern: '[0-9]*',
               }}
               value={quantity}
-              sx={{
-                margin: '1rem 0',
-                width: '60%',
-                maxWidth: '100px',
-                '& label': {
-                  fontSize: '14px',
-                },
-                '& input': {
-                  fontSize: '14px',
-                },
-              }}
+              sx={quantityInputSx}
               onChange={(e) => {
                 handleUpdateProductQty(item, Number(e.target.value));
               }}

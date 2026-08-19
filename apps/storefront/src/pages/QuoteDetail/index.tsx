@@ -725,26 +725,18 @@ function QuoteDetail() {
     if (!state) return;
 
     setTimeout(() => {
-      snackbar.success(
-        Number(role) === 100
-          ? b3Lang('quoteDetail.submittedQuote')
-          : b3Lang('quoteDetail.quoteSubmitted'),
-        {
+      if (Number(role) === 100) {
+        snackbar.success(b3Lang('quoteDetail.submittedQuote'));
+      } else {
+        snackbar.success(b3Lang('quoteDetail.quoteSubmitted'), {
           action: {
-            label:
-              Number(role) === 100
-                ? b3Lang('quoteDetail.copyQuoteLink')
-                : b3Lang('quoteDetail.reviewAllQuotes'),
+            label: b3Lang('quoteDetail.reviewAllQuotes'),
             onClick: () => {
-              if (Number(role) === 100) {
-                copyQuoteLink();
-              } else {
-                navigate('/quotes');
-              }
+              navigate('/quotes');
             },
           },
-        },
-      );
+        });
+      }
     }, 10);
     location.state = null;
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -23,7 +23,7 @@ export default function QuoteNote(props: QuoteNoteProps) {
   const { quoteStatus, quoteNotes = '', required = false, showError = false } = props;
 
   const [noteText, setNoteText] = useState('');
-  const [defaultOpen, setDefaultOpen] = useState(false);
+  const [defaultOpen, setDefaultOpen] = useState(required || Boolean(quoteNotes));
 
   const isB2BUser = useAppSelector(isB2BUserSelector);
   const b2bPermissions = useAppSelector(rolePermissionSelector);
@@ -46,8 +46,8 @@ export default function QuoteNote(props: QuoteNoteProps) {
   }, [noteText]);
 
   useEffect(() => {
-    if (quoteNotes) setDefaultOpen(true);
-  }, [quoteNotes]);
+    if (quoteNotes || required || showError) setDefaultOpen(true);
+  }, [quoteNotes, required, showError]);
 
   const isDraftQuote = quoteStatus === 'Draft';
   const showValidationError = required && showError && noteText.trim().length === 0;
@@ -71,9 +71,14 @@ export default function QuoteNote(props: QuoteNoteProps) {
       >
         <B3CollapseContainer
           title={
-            quoteStatus && quoteStatus === 'Draft'
-              ? b3Lang('global.quoteNote.message')
-              : b3Lang('global.quoteNote.notes')
+            <>
+              {isDraftQuote ? b3Lang('global.quoteNote.message') : b3Lang('global.quoteNote.notes')}
+              {required && isDraftQuote ? (
+                <Box component="span" aria-hidden="true" sx={{ color: 'error.main', ml: '4px' }}>
+                  *
+                </Box>
+              ) : null}
+            </>
           }
           defaultOpen={defaultOpen}
         >

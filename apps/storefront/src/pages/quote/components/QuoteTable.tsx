@@ -62,6 +62,25 @@ const StyledImage = styled('img')(() => ({
 
 const QUOTE_PRODUCT_QTY_MAX = 1000000;
 
+const quantityInputSx = {
+  width: '100%',
+  maxWidth: '96px',
+  '& .MuiFilledInput-input': {
+    boxSizing: 'border-box',
+    fontSize: '14px',
+    padding: '8px',
+    textAlign: 'right',
+  },
+  '& input[type="number"]': {
+    MozAppearance: 'textfield',
+  },
+  '& input[type="number"]::-webkit-inner-spin-button, & input[type="number"]::-webkit-outer-spin-button':
+    {
+      margin: 0,
+      WebkitAppearance: 'none',
+    },
+} as const;
+
 type ProductOptionsValue = {
   valueLabel: string;
   valueText: string;
@@ -438,6 +457,7 @@ function QuoteTable({ total, items, updateSummary }: QuoteTableProps) {
               variant="filled"
               value={row.quantity}
               inputProps={{
+                'aria-label': b3Lang('quoteDraft.quoteTable.qty'),
                 inputMode: 'numeric',
                 pattern: '[0-9]*',
               }}
@@ -447,13 +467,7 @@ function QuoteTable({ total, items, updateSummary }: QuoteTableProps) {
               onBlur={(e) => {
                 handleCheckProductQty(row, Number(e.target.value));
               }}
-              sx={{
-                width: '75%',
-                '& input': {
-                  paddingTop: '12px',
-                  paddingRight: '6px',
-                },
-              }}
+              sx={quantityInputSx}
             />
             {shouldShowBackorder && backorderFields && (
               <Box sx={{ mt: 1.5 }}>

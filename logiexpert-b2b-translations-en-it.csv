@@ -604,7 +604,7 @@ quoteDetail.submittedQuote,Your quote was submitted. You can always find the quo
 quoteDetail.quoteSubmitted,Your quote was submitted,Il tuo preventivo è stato inviato
 quoteDetail.copySuccessful,copy successfully,copiato con successo
 quoteDetail.copyQuoteLink,Copy quote link,Copia il link del preventivo
-quoteDetail.reviewAllQuotes,Review all quotes,Rivedi tutte le preventivi
+quoteDetail.reviewAllQuotes,Review all quotes,Rivedi tutte i preventivi
 quoteDetail.message.message,Message,Messaggio
 quoteDetail.message.merchantAnswers,Merchant typically answers within 1 day,Il commerciante in genere risponde entro 1 giorno
 quoteDetail.message.typeMessage,Type a message...,Digita un messaggio...
