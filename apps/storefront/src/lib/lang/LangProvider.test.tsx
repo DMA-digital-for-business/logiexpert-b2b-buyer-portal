@@ -14,7 +14,7 @@ vi.mock('./locales', async (importOriginal) => {
   const original = await importOriginal<typeof import('./locales')>();
   return {
     ...original,
-    en: { ...original.en, 'test.langprovider.service.override': 'en-default-text' },
+    it: { ...original.it, 'test.langprovider.service.override': 'it-default-text' },
   };
 });
 

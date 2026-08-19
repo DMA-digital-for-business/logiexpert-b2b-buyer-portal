@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { en, localeLoaders } from './locales';
+import { it, localeLoaders } from './locales';
 import { getFallbackLocale } from './pickLocaleBundle';
 
 type LocaleMessages = Record<string, string>;
@@ -70,7 +70,7 @@ export function useLocaleBundle(code: string): UseLocaleBundleResult {
     })();
 
   const bundles = useMemo(() => {
-    const result: Record<string, LocaleMessages | undefined> = { en };
+    const result: Record<string, LocaleMessages | undefined> = { it };
     cache.forEach((value, key) => {
       result[key] = value;
     });
