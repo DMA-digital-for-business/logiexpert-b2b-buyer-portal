@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Box, Button, Grid } from '@mui/material';
+import { Alert, Box, Button, Grid } from '@mui/material';
 import copy from 'copy-to-clipboard';
 import { get } from 'lodash-es';
 
@@ -21,6 +21,7 @@ import type { ProductValidationError } from '@/shared/service/request/b3Fetch';
 import {
   activeCurrencyInfoSelector,
   isB2BUserSelector,
+  isLoggedInSelector,
   rolePermissionSelector,
   useAppSelector,
 } from '@/store';
@@ -119,6 +120,7 @@ function useData() {
   const role = useAppSelector(({ company }) => company.customer.role);
 
   const isB2BUser = useAppSelector(isB2BUserSelector);
+  const isLoggedIn = useAppSelector(isLoggedInSelector);
   const { selectCompanyHierarchyId } = useAppSelector(
     ({ company }) => company.companyHierarchyInfo,
   );
@@ -184,6 +186,7 @@ function useData() {
     role,
     emailAddress,
     isB2BUser,
+    isLoggedIn,
     selectCompanyHierarchyId,
     isAgenting,
     currenciesMap,
@@ -262,6 +265,7 @@ function QuoteDetail() {
     role,
     emailAddress,
     isB2BUser,
+    isLoggedIn,
     selectCompanyHierarchyId,
     isAgenting,
     currenciesMap,
@@ -710,6 +714,11 @@ function QuoteDetail() {
     };
   };
 
+  const copyQuoteLink = () => {
+    copy(window.location.href);
+    snackbar.success(b3Lang('quoteDetail.copySuccessful'));
+  };
+
   useEffect(() => {
     const { state } = location;
 
@@ -728,8 +737,7 @@ function QuoteDetail() {
                 : b3Lang('quoteDetail.reviewAllQuotes'),
             onClick: () => {
               if (Number(role) === 100) {
-                copy(window.location.href);
-                snackbar.success(b3Lang('quoteDetail.copySuccessful'));
+                copyQuoteLink();
               } else {
                 navigate('/quotes');
               }
@@ -849,6 +857,33 @@ function QuoteDetail() {
           flex: 1,
         }}
       >
+        {!isLoggedIn ? (
+          <Alert
+            severity="warning"
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                onClick={copyQuoteLink}
+              >
+                {b3Lang('quoteDetail.copyQuoteLink')}
+              </Button>
+            }
+            sx={{
+              marginBottom: '1rem',
+              '&& .MuiAlert-action .MuiButton-root': {
+                fontSize: '12px !important',
+                minHeight: "0px !important",
+                minWidth: 'auto !important',
+                padding: '0px 6px !important',
+                whiteSpace: 'nowrap !important',
+              },
+            }}
+          >
+            {b3Lang('quoteDetail.guestLinkWarning')}
+          </Alert>
+        ) : null}
+
         <QuoteDetailHeader
           status={quoteDetail.status}
           quoteNumber={quoteDetail.quoteNumber}

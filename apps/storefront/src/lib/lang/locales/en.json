@@ -657,6 +657,7 @@
   "quoteDetail.quoteSubmitted": "Your quote was submitted",
   "quoteDetail.copySuccessful": "copy successfully",
   "quoteDetail.copyQuoteLink": "Copy quote link",
+  "quoteDetail.guestLinkWarning": "Save this quote link. If you leave this page, you won't be able to find the quote again.",
   "quoteDetail.reviewAllQuotes": "Review all quotes",
   "quoteDetail.message.message": "Message",
   "quoteDetail.message.merchantAnswers": "Merchant typically answers within 1 day",

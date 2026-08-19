@@ -10,5 +10,6 @@
   "global.quoteInfo.addBillingAddress": "Veuillez ajouter une adresse de facturation",
   "global.quoteInfo.addShippingAddress": "Veuillez ajouter une adresse de livraison",
   "global.quoteInfo.noBillingAddress": "Aucune adresse de facturation",
-  "global.quoteInfo.noShippingAddress": "Aucune adresse de livraison"
+  "global.quoteInfo.noShippingAddress": "Aucune adresse de livraison",
+  "quoteDetail.guestLinkWarning": "Enregistrez le lien de ce devis. Si vous quittez cette page, vous ne pourrez plus retrouver le devis."
 }

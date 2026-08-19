@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import copy from 'copy-to-clipboard';
 import {
   buildCompanyStateWith,
   builder,
@@ -21,7 +22,7 @@ import { when } from 'vitest-when';
 
 import { B2BProducts, ProductSearch } from '@/shared/service/b2b/graphql/product';
 import { B2BQuoteDetail, QuoteExtraFieldsConfig } from '@/shared/service/b2b/graphql/quote';
-import { CompanyStatus, UserTypes } from '@/types';
+import { CompanyStatus, CustomerRole, UserTypes } from '@/types';
 
 import QuoteDetail from './index';
 
@@ -29,6 +30,8 @@ vitest.mock('react-router-dom', async (importOriginal) => ({
   ...(await importOriginal<typeof import('react-router-dom')>()),
   useParams: vitest.fn(),
 }));
+
+vitest.mock('copy-to-clipboard', () => ({ default: vitest.fn() }));
 
 const { server } = startMockServer();
 
@@ -139,6 +142,75 @@ const buildProductSearchResponseWith = builder<B2BProducts>(() => ({
 const buildQuoteExtraFieldsWith = builder<QuoteExtraFieldsConfig>(() => ({
   data: { quoteExtraFieldsConfig: [] },
 }));
+
+describe('when the user is not logged in', () => {
+  it('warns the user to save the quote link', async () => {
+    const quote = buildQuoteWith({ data: { quote: { productsList: [] } } });
+    const quoteId = quote.data.quote.id;
+
+    server.use(
+      graphql.query('GetQuoteInfoB2B', () => HttpResponse.json(quote)),
+      graphql.query('SearchProducts', () =>
+        HttpResponse.json(buildProductSearchResponseWith('WHATEVER_VALUES')),
+      ),
+      graphql.query('getQuoteExtraFields', () =>
+        HttpResponse.json(buildQuoteExtraFieldsWith('WHATEVER_VALUES')),
+      ),
+    );
+
+    vitest.mocked(useParams).mockReturnValue({ id: quoteId });
+
+    const { user } = renderWithProviders(<QuoteDetail />, {
+      preloadedState: {
+        company: buildCompanyStateWith({ customer: { role: CustomerRole.GUEST } }),
+        storeInfo: buildStoreInfoStateWith('WHATEVER_VALUES'),
+        global: buildGlobalStateWith('WHATEVER_VALUES'),
+      },
+    });
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Salva il link di questo preventivo. Se lasci questa pagina, non potrai più ritrovare il preventivo.',
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Copia il link del preventivo' }));
+
+    expect(copy).toHaveBeenCalledWith(window.location.href);
+  });
+});
+
+describe('when the user is logged in', () => {
+  it('does not display the quote link warning', async () => {
+    const quote = buildQuoteWith({ data: { quote: { productsList: [] } } });
+    const quoteId = quote.data.quote.id;
+    const { quoteNumber } = quote.data.quote;
+
+    server.use(
+      graphql.query('GetQuoteInfoB2B', () => HttpResponse.json(quote)),
+      graphql.query('SearchProducts', () =>
+        HttpResponse.json(buildProductSearchResponseWith('WHATEVER_VALUES')),
+      ),
+      graphql.query('getQuoteExtraFields', () =>
+        HttpResponse.json(buildQuoteExtraFieldsWith('WHATEVER_VALUES')),
+      ),
+    );
+
+    vitest.mocked(useParams).mockReturnValue({ id: quoteId });
+
+    renderWithProviders(<QuoteDetail />, {
+      preloadedState: {
+        company: buildCompanyStateWith({
+          companyInfo: { status: CompanyStatus.APPROVED },
+          customer: { role: CustomerRole.ADMIN, userType: UserTypes.MULTIPLE_B2C },
+        }),
+        storeInfo: buildStoreInfoStateWith('WHATEVER_VALUES'),
+        global: buildGlobalStateWith('WHATEVER_VALUES'),
+      },
+    });
+
+    expect(await screen.findByText(new RegExp(quoteNumber))).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+});
 
 describe('when the user is a B2B customer', () => {
   const approvedB2BCompany = buildCompanyStateWith({

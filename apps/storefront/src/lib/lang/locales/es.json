@@ -10,5 +10,6 @@
   "global.quoteInfo.addBillingAddress": "Añade una dirección de facturación",
   "global.quoteInfo.addShippingAddress": "Añade una dirección de envío",
   "global.quoteInfo.noBillingAddress": "No hay dirección de facturación",
-  "global.quoteInfo.noShippingAddress": "No hay dirección de envío"
+  "global.quoteInfo.noShippingAddress": "No hay dirección de envío",
+  "quoteDetail.guestLinkWarning": "Guarda el enlace de esta cotización. Si abandonas esta página, no podrás volver a encontrar la cotización."
 }
