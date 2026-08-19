@@ -1,0 +1,698 @@
+VARIABLE,DEFAULT_VALUE,CUSTOM_VALUE
+global.tips.loading,Loading...,Caricamento...
+global.button.back,Back,Indietro
+global.button.next,Continue,Continuare
+global.button.submit,Submit,Invia
+global.button.finish,FINISH,FINE
+global.button.logout,Log out,Esci
+global.validate.required,{label} is required,{label} è obbligatoria
+global.validate.password.required,You must enter a password.,È necessario inserire una password.
+global.fileUpload.defaultText,Drag & drop file here or click here to browse,Trascina e rilascia il file qui o fai clic qui per sfogliarlo
+global.fileUpload.typeNotSupport,{name} file type not support,Il tipo di file {name} non è supportato
+global.fileUpload.namedFileSizeExceedsLimit,{name} exceeds upload limit. Maximum file size is {maxSize},{name} supera il limite di caricamento. 
+global.fileUpload.fileNumberExceedsLimit,"The number of files exceeds the limit, with up to {limit} being supported","Il numero di file supera il limite, è supportato un massimo di {limit}"
+global.registerB2B.linkText,Business Account Application,Richiesta di conto aziendale
+global.filter.clearFilters,Clear Filters,Cancella filtri
+global.filter.title,Filters,Filtri
+global.filter.cancel,Cancel,Annulla
+global.filter.apply,Apply,Applica
+global.pagination.rowsPerPage,Rows per page:,Righe per pagina:
+global.pagination.perPage,per page:,per pagina:
+global.pagination.cardsPerPage,Cards per page:,Carte per pagina:
+global.createShoppingList.createNew,Create new,Crea nuovo
+global.createShoppingList.name,Name,Nome
+global.createShoppingList.description,Description,Descrizione
+global.orderShoppingList.confirm,Confirm,Confermare
+global.orderShoppingList.ok,OK,
+global.orderShoppingList.createNew,Create new,Crea nuovo
+global.quoteAttachment.uploadedByCustomer,Uploaded by customer: {createdBy},Caricato dal cliente: {createdBy}
+global.quoteAttachment.uploadedByCustomerWithName,Uploaded by customer: {firstName} {lastName},Caricato dal cliente: {firstName} {lastName}
+global.quoteAttachment.maxFilesMessage,You can add up to 3 files,Puoi aggiungere fino a 3 file
+global.quoteAttachment.title,Attachment,Allegato
+global.fileUpload.addAttachment,Add Attachment,Aggiungi allegato
+global.fileUpload.maxFileSizeMessage,"You can add up to 3 files, not bigger than 2MB each.","Puoi aggiungere fino a 3 file, non più grandi di 2 MB ciascuno."
+global.fileUpload.fileTypeNotSupported,file type not supported,tipo di file non supportato
+global.fileUpload.fileSizeExceedsLimit,file exceeds upload limit. Maximum file size is {maxFileSize},il file supera il limite di caricamento. 
+global.fileUpload.maxFileNumber,You can add up to {fileNumber} files,Puoi aggiungere fino a {fileNumber} file
+global.quoteInfo.editInfo,Edit info,Modifica informazioni
+global.quoteInfo.billing,Billing,Fatturazione
+global.quoteInfo.shipping,Shipping,Spedizione
+global.quoteNote.message,Message,Messaggio
+global.quoteNote.notes,Notes,Note
+global.quoteNote.messageNote,Your message will be sent after submitting a quote,Il tuo messaggio verrà inviato dopo aver inviato un preventivo
+global.quoteNote.typeMessage,Type a message...,Digita un messaggio...
+global.validatorRules.phoneNumber,Please enter a valid phone number,Inserisci un numero di telefono valido
+global.validatorRules.email,"Please use a valid email address, such as user@example.com.","Utilizza un indirizzo email valido, ad esempio utente@example.com."
+global.validatorRules.number,Please enter a valid integer number,Inserisci un numero intero valido
+global.validatorRules.max,Please do not exceed {max},Si prega di non superare il {max}
+global.validatorRules.passwords,Passwords must be at least 7 characters and contain both alphabetic and numeric characters.,Le password devono contenere almeno 7 caratteri e contenere sia caratteri alfabetici che numerici.
+global.tips.registerLogo,register Logo,registrare il logo
+global.registerComplete.passwordMatchPrompt,Your passwords do not match.,Le tue password non corrispondono.
+global.registerFinish.autoApproved.tip,Thank you for creating your account at {storeName}. Your company account application has been approved,Grazie per aver creato il tuo account su {storeName}. 
+global.registerFinish.bcSuccess.tip,Thank you for creating your account at {storeName},Grazie per aver creato il tuo account su {storeName}
+global.loginText.emailAddress,Email address,Indirizzo e-mail
+global.emailValidate.multipleCustomer,This email is used by multiple customers in your store. Please use another email.,Questa email viene utilizzata da più clienti nel tuo negozio. 
+global.emailValidate.companyUsed,This email is used by a customer within another company. {companyName},Questa email viene utilizzata da un cliente di un'altra azienda. 
+global.emailValidate.alreadyExits,This user already exists in this company.,Questo utente esiste già in questa azienda.
+global.emailValidate.usedSuperAdmin,This email is used by a super admin.,Questa email viene utilizzata da un super amministratore.
+global.emailValidate.emailLength,Email length cannot exceed 200 characters,La lunghezza dell'e-mail non può superare i 200 caratteri
+global.filter.search,Search,Ricerca
+global.table.noData,No data,Nessun dato
+global.quoteStatusCode.draft,Draft,Bozza
+global.quoteStatusCode.open,Open,Aperto
+global.quoteStatusCode.ordered,Ordered,Ordinato
+global.quoteStatusCode.expired,Expired,Scaduto
+global.navMenu.dashboard,Dashboard,Pannello di controllo
+global.navMenu.orders,My orders,I miei ordini
+global.navMenu.companyOrders,Company orders,Ordini aziendali
+global.navMenu.invoice,Invoice,Fatture
+global.navMenu.quotes,Quotes,Preventivi
+global.navMenu.shoppingLists,Shopping lists,Liste della spesa
+global.navMenu.quickOrder,Quick order,Ordine veloce
+global.navMenu.addresses,Addresses,Indirizzi
+global.navMenu.userManagement,User management,Gestione utenti
+global.navMenu.accountSettings,Account settings,Impostazioni dell'account
+global.B3MainHeader.superAdmin,Super admin,Super amministratore
+global.B3MainHeader.signIn,Sign in,Registrazione
+global.B3MainHeader.home,Home,
+global.B3MainHeader.cart,Cart,Carrello
+global.dialog.cancel,Cancel,Annulla
+global.dialog.save,Save,Salva
+global.searchProduct.product,Product,Prodotto
+global.searchProduct.price,Price,Prezzo
+global.searchProduct.qty,Qty,Qtà
+global.searchProduct.total,Total,Totale
+global.purchasedProducts.title,Purchased products,Prodotti acquistati
+global.orders.title,My orders,I miei ordini
+global.companyOrders.title,Company orders,Ordini aziendali
+global.searchProduct.chooseOptionsButton,Choose options,Scegli le opzioni
+global.notification.addProductSingular,Product was added to your quote,Il prodotto è stato aggiunto al tuo preventivo
+global.notification.maximumPurchaseExceed,"The maximum purchase quantity does not exceed 1,000,000",La quantità massima di acquisto non supera 1.000.000
+global.shoppingLists.status.all,All,Tutto
+global.shoppingLists.status.approved,Approved,Approvato
+global.shoppingLists.status.draft,Draft,Bozza
+global.shoppingLists.status.readyForApproval,Ready for approval,Pronto per l'approvazione
+global.shoppingLists.status.rejected,Rejected,Respinto
+global.shoppingLists.filter.createdBy,Created by,Creato da
+global.shoppingLists.filter.status,Status,Stato
+global.searchProduct.placeholder.quickOrder,Search products,Cerca prodotti
+global.searchProduct.placeholder.shoppingList,Search products,Cerca prodotti
+global.searchProduct.placeholder.quote,Search products,Cerca prodotti
+global.searchProductAddProduct.searchBySkuOrName,Search by SKU or product name,Cerca per SKU o nome del prodotto
+global.searchProductAddProduct.searchProduct,Search product,Cerca prodotto
+global.searchProductAddProduct.businessAccountPendingApproval,Your business account is pending approval. This feature is currently disabled.,Il tuo account aziendale è in attesa di approvazione. 
+global.searchProductAddProduct.sku,SKU#,
+global.searchProductAddProduct.qty,Qty,Qtà
+global.customStyles.masqueradeButton,END MASQUERADE,FINE MASCHERATA
+global.customStyles.addQuoteBtn,Add to quote,Aggiungi al preventivo
+global.customStyles.floatingAction,Finish quote,Completa preventivo
+global.customStyles.addToAllQuoteBtn,Add All To Quote,Aggiungi tutto al preventivo
+global.customStyles.shoppingListBtn,Add to Shopping List,Aggiungi alla lista della spesa
+global.masquerade.youAreMasqueradeAs,You are masquerade as,Sei mascherato da
+global.companyCredit.alert,Your account does not currently allow purchasing due to a credit hold. Please contact us to reconcile.,Il tuo account attualmente non consente acquisti a causa di una sospensione del credito. 
+global.B3Upload.downloadErrorResults,Download error results,Scarica i risultati degli errori
+global.statusNotifications.orderingWillBeEnabledAfterAccountApproval,Your business account is pending approval. Ordering will be enabled after account approval.,Il tuo account aziendale è in attesa di approvazione. 
+global.statusNotifications.productsPricingAndOrderingWillBeEnabledAfterApproval,Your business account is pending approval. Products pricing and ordering will be enabled after account approval,Il tuo account aziendale è in attesa di approvazione. 
+global.statusNotifications.willGainAccessToBusinessFeatAfterApproval,Your business account is pending approval. You will gain access to business account features after account approval.,Il tuo account aziendale è in attesa di approvazione. 
+global.statusNotifications.willGainAccessToBusinessFeatProductsAndPricingAfterApproval,Your business account is pending approval. You will gain access to business account features products and pricing after account approval.,Il tuo account aziendale è in attesa di approvazione. 
+global.statusNotifications.checkEmailLetterWithDetails,Your business account has been approved. Check your email inbox we sent you a letter with all details.,Il tuo account aziendale è stato approvato. 
+global.statusNotifications.checkEmailLetterWithDetailsResubmitApplication,Your business account has been rejected. Check your email inbox we sent you a letter with all details. You can resubmit your application.,Il tuo account aziendale è stato rifiutato. 
+global.statusNotifications.accountRejectedOrderingDisabled,Your business account has been rejected. Ordering is disabled.,Il tuo account aziendale è stato rifiutato. 
+
+dashboard.company,Company,Azienda
+dashboard.admin,Admin,Ammin
+dashboard.email,Email,E-mail
+dashboard.action,Action,Azione
+dashboard.selected,Selected,Selezionato
+dashboard.masqueradeAction,Masquerade,Mascherata
+dashboard.endMasqueradeAction,End Masquerade,Fine della mascherata
+
+orders.order,Order,Ordine
+orders.poReference,PO / Reference,PO/Riferimento
+orders.grandTotal,Grand total,totale
+orders.orderStatus,Order status,Stato dell'ordine
+orders.placedBy,Placed by,Inserito da
+orders.createdOn,Created on,Creato il
+orders.company,Company,Azienda
+orders.from,From,Da
+orders.to,To,A
+orders.status.incomplete,Incomplete,Incompleto
+orders.status.pending,Pending,In attesa di
+orders.status.shipped,Shipped,Spedito
+orders.status.partiallyShipped,Partially Shipped,Parzialmente spedito
+orders.status.refunded,Refunded,Rimborsato
+orders.status.cancelled,Cancelled,Annullato
+orders.status.declined,Declined,Rifiutato
+orders.status.awaitingPayment,Awaiting Payment,In attesa di pagamento
+orders.status.awaitingPickup,Awaiting Pickup,In attesa di ritiro
+orders.status.awaitingShipment,Awaiting Shipment,In attesa di spedizione
+orders.status.completed,Completed,Completato
+orders.status.awaitingFulfillment,Awaiting Fulfillment,In attesa di adempimento
+orders.status.manualVerificationRequired,Manual Verification Required,Verifica manuale obbligatoria
+orders.status.disputed,Disputed,Contestato
+orders.status.partiallyRefunded,Partially Refunded,Parzialmente rimborsato
+
+invoice.exportCsvText,Export all as CSV,Esporta tutto come CSV
+invoice.exportSelectedAsCsv,Export selected as CSV,Esporta selezionato come CSV
+invoice.exportFilteredAsCsv,Export filtered as CSV,Esportazione filtrata come CSV
+invoice.pdfUrlResolutionError,pdf url resolution error,Errore di risoluzione dell'URL del pdf
+invoice.headers.invoice,Invoice,Fatture
+invoice.headers.order,Order,Ordine
+invoice.headers.invoiceDate,Invoice date,Data della fattura
+invoice.headers.dueDate,Due date,Scadenza
+invoice.headers.invoiceTotal,Invoice total,Totale fattura
+invoice.headers.amountDue,Amount due,Importo dovuto
+invoice.headers.amountToPay,Amount to pay,Importo da pagare
+invoice.headers.status,Status,Stato
+invoice.headers.action,Action,Azione
+invoice.filter.from,From,Da
+invoice.filter.to,To,A
+invoice.openUnpaid,Open: {unpaid},Aperto: {unpaid}
+invoice.overdueAmount,Overdue: {overdue},In ritardo: {overdue}
+invoice.invoiceItemCardHeader.order,Order,Ordine
+invoice.invoiceItemCardHeader.invoiceDate,Invoice date,Data della fattura
+invoice.invoiceItemCardHeader.dueDate,Due date,Scadenza
+invoice.invoiceItemCardHeader.invoiceTotal,Invoice total,Totale fattura
+invoice.invoiceItemCardHeader.amountDue,Amount due,Importo dovuto
+invoice.invoiceItemCardHeader.amountToPay,Amount to pay,Importo da pagare
+invoice.footer.invalidNameError,The payment amount entered has an invalid value.,L'importo del pagamento inserito ha un valore non valido.
+invoice.footer.invoiceSelected,{invoices} invoices selected,{invoices} fatture selezionate
+invoice.footer.totalPayment,Total payment: {total},Pagamento totale: {total}
+invoice.footer.payInvoices,Pay invoices,Pagare le fatture
+invoice.paymentHistory.title,Payments history,Cronologia dei pagamenti
+invoice.actions.viewInvoice,View invoice,Visualizza fattura
+invoice.actions.viewOrder,View order,Visualizza ordine
+invoice.actions.viewPaymentHistory,View payment history,Visualizza la cronologia dei pagamenti
+invoice.actions.pay,Pay,Paga
+invoice.actions.print,Print,Stampa
+invoice.actions.download,Download,Scaricamento
+invoice.filterStatus.title,Status,Stato
+invoice.filterStatus.open,Open,Aperto
+invoice.filterStatus.partiallyPaid,Partially paid,Parzialmente pagato
+invoice.filterStatus.paid,Paid,Pagato
+invoice.filterStatus.overdue,Overdue,In ritardo
+
+quotes.dateCreated,Date created,Data di creazione
+quotes.status,Status,Stato
+quotes.updated,Updated,Aggiornato
+quotes.expiration,Expiration,Scadenza
+quotes.sortBy,Sort by,Ordina per
+quotes.open,Open,Aperto
+quotes.ordered,Ordered,Ordinato
+quotes.expired,Expired,Scaduto
+quotes.quoteStatus,Quote status,Stato del preventivo
+quotes.createdBy,Created by,Creato da
+quotes.salesRep,Sales rep,Rappresentante delle vendite
+quotes.quoteNumber,Quote #,Preventivo #
+quotes.title,Title,Titolo
+quotes.lastUpdate,Last update,Ultimo aggiornamento
+quotes.expirationDate,Expiration date,Data di scadenza
+quotes.subtotal,Subtotal,Totale parziale
+quotes.from,From,Da
+quotes.to,To,A
+quotes.cardsPerPage,Cards per page,Carte per pagina
+quotes.quotesPerPage,Quotes per page,Preventivi per pagina
+quotes.quoteItemCard.title,Title,Titolo
+quotes.quoteItemCard.salesRep,Sales rep,Rappresentante delle vendite
+quotes.quoteItemCard.createdBy,Created by,Creato da
+quotes.quoteItemCard.dateCreated,Date created,Data di creazione
+quotes.quoteItemCard.lastUpdate,Last update,Ultimo aggiornamento
+quotes.quoteItemCard.expirationDate,Expiration date,Data di scadenza
+quotes.quoteItemCard.subtotal,Subtotal,Totale parziale
+quotes.quoteItemCard.view,VIEW,VISUALIZZAZIONE
+
+shoppingLists.createNew,Create new,Crea nuovo
+shoppingLists.deleteSuccess,The shopping list was successfully deleted,La lista della spesa è stata cancellata con successo
+shoppingLists.deleteShoppingList,Delete shopping list,Elimina la lista della spesa
+shoppingLists.cancel,Cancel,Annulla
+shoppingLists.delete,Delete,Eliminare
+shoppingLists.close,Close,Vicino
+shoppingLists.confirmDelete,Are you sure you want to delete this shopping list?,Sei sicuro di voler eliminare questa lista della spesa?
+shoppingLists.addSuccess,The shopping list was successfully added,La lista della spesa è stata aggiunta con successo
+shoppingLists.updateSuccess,The shopping list was successfully updated,La lista della spesa è stata aggiornata con successo
+shoppingLists.duplicateSuccess,The shopping list was successfully duplicated,La lista della spesa è stata duplicata con successo
+shoppingLists.edit,Edit shopping list,Modifica la lista della spesa
+shoppingLists.createNewShoppingList,Create new shopping list,Crea una nuova lista della spesa
+shoppingLists.duplicateShoppingList,Duplicate shopping list,Lista della spesa duplicata
+shoppingLists.save,Save,Salva
+shoppingLists.name,Name,Nome
+shoppingLists.title,Add to list,Aggiungi all'elenco
+shoppingLists.addButtonText,Add to list,Aggiungi all'elenco
+shoppingLists.description,Description,Descrizione
+shoppingLists.card.createdBy,Created by:,Creato da:
+shoppingLists.card.products,Products:,Prodotti:
+shoppingLists.card.lastActivity,Last activity:,Ultima attività:
+shoppingLists.card.view,View,Visualizzazione
+shoppingLists.viewShoppingList,View shopping list,Visualizza la lista della spesa
+
+purchasedProducts.product,Product,Prodotto
+purchasedProducts.price,Price,Prezzo
+purchasedProducts.qty,Qty,Qtà
+purchasedProducts.total,Total,Totale
+purchasedProducts.lastOrdered,Last ordered,Ultimo ordinato
+purchasedProducts.totalProducts,{total} products,{total} prodotti
+purchasedProducts.from,From,Da
+purchasedProducts.to,To,A
+purchasedProducts.itemsPerPage,Items per page:,Articoli per pagina:
+purchasedProducts.noProductsFound,No products found,Nessun prodotto trovato
+purchasedProducts.outOfStock,Out of stock,Esaurito
+purchasedProducts.minQuantity,Min Quantity {minQuantity},Quantità minima {minQuantity}
+purchasedProducts.maxQuantity,Max Quantity {maxQuantity},Quantità massima {maxQuantity}
+purchasedProducts.orderDialog.addToShoppingList,Add to shopping list,Aggiungi alla lista della spesa
+purchasedProducts.quickOrderCard.price,Price: {price},Prezzo: {price}
+purchasedProducts.orderCheckboxProduct.price,Price:,Prezzo:
+purchasedProducts.orderCheckboxProduct.qty,Qty,Qtà
+purchasedProducts.orderCheckboxProduct.total,Total:,Totale:
+purchasedProducts.quickOrderCard.lastOrdered,Last ordered: {lastOrderedAt},Ultimo ordine: {lastOrderedAt}
+purchasedProducts.quickOrderPad.productsAdded,Products were added to cart,I prodotti sono stati aggiunti al carrello
+purchasedProducts.quickOrderPad.viewCart,VIEW CART,VISUALIZZA CARRELLO
+purchasedProducts.quickOrderPad.insufficientStockSku,"{sku} does not have enough stock, please change the quantity","{sku} non ha abbastanza scorte, modifica la quantità  "
+purchasedProducts.quickOrderPad.notEnoughStock,{variantSku} does not have enough stock,{variantSku} non ha abbastanza scorte
+purchasedProducts.quickOrderPad.availableAmount,Available amount - {availableAmount},Importo disponibile - {availableAmount}
+purchasedProducts.quickOrderPad.outOfStockSku,{outOfStock} are out of stock,{outOfStock} sono esauriti
+purchasedProducts.quickOrderPad.notPurchaseableSku,SKU {notPurchaseSku} cannot be purchased in online store.,Lo SKU {notPurchaseSku} non può essere acquistato nel negozio online.
+purchasedProducts.quickOrderPad.minQuantityMessage,You need to purchase a minimum of {minQuantity} of the {sku} per order.,Devi acquistare un minimo di {minQuantity} di {sku} per ordine.
+purchasedProducts.quickOrderPad.accountPendingApproval,Your business account is pending approval. This feature is currently disabled.,Il tuo account aziendale è in attesa di approvazione. 
+purchasedProducts.quickOrderPad.maxQuantityMessage,You need to purchase a maximum of {maxQuantity} of the {sku} per order.,Devi acquistare un massimo di {maxQuantity} di {sku} per ordine.
+purchasedProducts.quickOrderPad.addNProductsToCart,Add {quantity} products to cart,Aggiungi {quantity} prodotti al carrello
+purchasedProducts.quickOrderPad.addProductsToCart,Add products to cart,Aggiungi prodotti al carrello
+purchasedProducts.quickOrderPad.quickOrderPad,Quick order pad,Blocco ordini rapido
+purchasedProducts.quickOrderPad.bulkUploadCSV,Bulk upload CSV,Caricamento collettivo CSV
+purchasedProducts.quickOrderPad.downloadErrorsCSV,Download errors csv,Scarica i risultati degli errori
+purchasedProducts.quickOrderPad.addToCart,Add to cart,Aggiungi al carrello
+purchasedProducts.quickAdd.addProductToList,Add product to list,Aggiungi prodotto all'elenco
+purchasedProducts.quickAdd.title,Quick add,Aggiunta rapida
+purchasedProducts.quickAdd.showMoreRowsButton,Show more rows,Mostra più righe
+purchasedProducts.quickAdd.sku,SKU#,
+purchasedProducts.quickAdd.qty,Qty,Qtà
+purchasedProducts.quickAdd.incorrectNumber,Incorrect number,Numero errato
+purchasedProducts.quickAdd.notFoundSku,"SKU {notFoundSku} were not found, please check entered values","{count, plural, one {SKU {notFoundSku} non è stato trovato} other {SKU {notFoundSku} non è stato trovato}}, controlla i valori inseriti"
+purchasedProducts.quickAdd.notPurchaseableSku,SKU {notPurchaseSku} no longer for sale,SKU {notPurchaseSku} non più in vendita
+purchasedProducts.quickAdd.insufficientStockSku,"{stockSku} does not have enough stock, please change the quantity","{stockSku} non ha abbastanza scorte, modifica la quantità "
+purchasedProducts.quickAdd.purchaseQuantityLimitMessage,You need to purchase a {typeText} of {limit} of the {sku} per order,Devi acquistare un {typeText} di {limit} dello {sku} per ordine
+purchasedProducts.footer.selectOneItemToAdd,Please select at least one item to add to cart,Seleziona almeno un articolo da aggiungere al carrello
+purchasedProducts.footer.productsAdded,Products were added to cart,"{count, plural, un {{count} prodotto è stato aggiunto al carrello} altri {{count} prodotti sono stati aggiunti al carrello}}"
+purchasedProducts.footer.productsLimit,The quantity of each product in Quote is 1-1000000.,La quantità di ciascun prodotto in preventivo è 1-1.000.000.
+purchasedProducts.footer.viewCart,VIEW CART,VISUALIZZA CARRELLO
+purchasedProducts.footer.cantAddProductsNoSku,Can not add products without SKU.,Impossibile aggiungere prodotti senza SKU.
+purchasedProducts.footer.notFoundSku,{sku} not found,{sku} non trovato
+purchasedProducts.footer.productsAddedToQuote,Products were added to your quote,I prodotti sono stati aggiunti al tuo preventivo
+purchasedProducts.footer.viewQuote,VIEW QUOTE,VISUALIZZA PREVENTIVO
+purchasedProducts.footer.productsAddedToShoppingList,Products were added to your shopping list,I prodotti sono stati aggiunti alla tua lista della spesa
+purchasedProducts.footer.addToCart,Add selected to cart,Aggiungi selezionato al carrello
+purchasedProducts.footer.addToQuote,Add selected to quote,Aggiungi selezionato al preventivo
+purchasedProducts.footer.addSelectedProductsToShoppingList,Add selected to shopping list,Aggiungi selezionato alla lista della spesa
+purchasedProducts.footer.selectedProducts,{quantity} products selected,{quantity} prodotti selezionati
+purchasedProducts.footer.subtotal,Subtotal: {subtotal},Totale parziale: {subtotal}
+purchasedProducts.footer.addToShoppingList,Add to shopping list,Aggiungi alla lista della spesa
+purchasedProducts.footer.addSelectedTo,Add selected to,Aggiungi selezionato a
+purchasedProducts.success.successfulApplication,"The application is successful, please wait for the merchant's review","La richiesta è andata a buon fine, attendi la revisione del commerciante"
+purchasedProducts.error.returnedQuantityShouldBeWithinThePurchase,The returned quantity should be within the purchased quantity,La quantità restituita deve rientrare nella quantità acquistata
+purchasedProducts.error.selectOneItem,Please select at least one item,Seleziona almeno un elemento
+purchasedProducts.error.fillCorrectQuantity,Please fill in the correct quantity,Si prega di inserire la quantità corretta
+purchasedProducts.error.failedApplication,"Application failed, please contact the merchant.","Richiesta non riuscita, contatta il commerciante."
+
+orderDetail.orderId,Order #{orderId},Ordine n.{orderId}
+orderDetail.purchaseOrderNumber,", {purchaseOrderNumber}",
+orderDetail.backToOrders,Back to orders,Torniamo agli ordini
+orderDetail.pagination.order,Order,Ordine
+orderDetail.pagination.of,of,Di
+orderDetail.paymentMethod,Payment by {paymentMethod},Pagamento tramite {paymentMethod}
+orderDetail.customerName,{firstName} {lastName},
+orderDetail.customerAddress,"{city}, {state} {zip}, {country}",
+orderDetail.itemComments,Comments: {item},Commenti: {item}
+orderDetail.reorder,Re-Order,Riordina
+orderDetail.reorder.productsAdded,Products are added to cart,I prodotti vengono aggiunti al carrello
+orderDetail.reorder.product,Product,Prodotto
+orderDetail.reorder.price,Price,Prezzo
+orderDetail.reorder.qty,Qty,Qtà
+orderDetail.reorder.total,Total,Totale
+orderDetail.return,Return,Ritorno
+orderDetail.addToShoppingList,ADD TO SHOPPING LIST,AGGIUNGI ALLA LISTA DELLA SPESA
+orderDetail.purchaseDetails,Purchased by {name} on {updatedAt}.,Acquistato da {name} il {updatedAt}.
+orderDetail.summary,Summary,Riepilogo
+orderDetail.paidInFull,Paid in full on {paidDate},Pagato per intero il {paidDate}
+orderDetail.paidWithPo,PO Submitted on {paidDate},PO inviato il {paidDate}
+orderDetail.payment,Payment,Pagamento
+orderDetail.viewInvoice,view invoice,visualizzare la fattura
+orderDetail.printInvoice,print invoice,stampare la fattura
+orderDetail.comments,Comments,Commenti
+orderDetail.viewCart,View Cart,Visualizza carrello
+orderDetail.history.title,History,Storia
+orderDetail.history.dateHeader,Date,Data
+orderDetail.history.statusHeader,Status,Stato
+orderDetail.orderCard.reorder,Re-Order,Riordina
+orderDetail.orderCard.return,Return,Ritorno
+orderDetail.orderCard.addToShoppingList,Add to shopping list,Aggiungi alla lista della spesa
+orderDetail.orderCard.reorderDescription,Select products and quantity for reorder,Seleziona i prodotti e la quantità per il riordine
+orderDetail.orderCard.returnDescription,Select products and quantity for return,Seleziona i prodotti e la quantità per il reso
+orderDetail.orderCard.addToShoppingListDescription,Select products and quantity to add to shopping list,Seleziona i prodotti e la quantità da aggiungere alla lista della spesa
+orderDetail.orderCard.reorderConfirmText,Add to cart,Aggiungi al carrello
+orderDetail.orderCard.returnConfirmText,Submit return request,Invia richiesta di reso
+orderDetail.orderCard.addToShoppingListConfirmText,Add to shopping list,Aggiungi alla lista della spesa
+orderDetail.orderCard.errorMasquerade,"To re-order, return or add product to shopping list, please masquerade","Per riordinare, restituire o aggiungere un prodotto alla lista della spesa, mascherati"
+orderDetail.shipment.shipment,Shipment,Spedizione
+orderDetail.shipment.notShippedYet,Not shipped yet,Non ancora spedito
+orderDetail.billing.digitalProducts,Digital products,Prodotti digitali
+orderDetail.summary.subTotal,Sub total,Sub totale
+orderDetail.summary.shipping,Shipping,Spedizione
+orderDetail.summary.handlingFee,Handling fee,Commissione di gestione
+orderDetail.summary.tax,Tax,Tassare
+orderDetail.summary.grandTotal,Grand total,totale
+orderDetail.addToShoppingList.productsAdded,Products were added to your shopping list,I prodotti sono stati aggiunti alla tua lista della spesa
+orderDetail.viewShoppingList,View shopping list,Visualizza la lista della spesa
+
+addresses.noPermissionToAdd,"You do not have permission to add new address, please contact store owner","Non hai l'autorizzazione per aggiungere un nuovo indirizzo, contatta il proprietario del negozio"
+addresses.noPermissionToEdit,"You do not have permission to edit address, please contact store owner","Non hai l'autorizzazione per modificare l'indirizzo, contatta il proprietario del negozio"
+addresses.noPermissionToDelete,"You do not have permission to delete address, please contact store owner","Non hai l'autorizzazione per eliminare l'indirizzo, contatta il proprietario del negozio"
+addresses.addNewAddress,Add new address,Aggiungi nuovo indirizzo
+addresses.addressForm.newAddressAdded,New address is added,Viene aggiunto un nuovo indirizzo
+addresses.addressForm.addressUpdated,Address updated successfully,Indirizzo aggiornato con successo
+addresses.addressForm.addNewAddress,Add new address,Aggiungi nuovo indirizzo
+addresses.addressForm.editAddress,Edit address,Modifica indirizzo
+addresses.addressForm.cancel,Cancel,Annulla
+addresses.addressForm.saveAddress,Save Address,Salva indirizzo
+addresses.addressForm.selectAddressType,Select address type,Seleziona il tipo di indirizzo
+addresses.addressItemCard.defaultShipping,Default shipping,Spedizione predefinita
+addresses.addressItemCard.defaultBilling,Default billing,Fatturazione predefinita
+addresses.addressItemCard.setAsDefault,Set as default,Imposta come predefinito
+addresses.deleteAddressDialog.successfullyDeleted,Successfully deleted,Eliminato con successo
+addresses.deleteAddressDialog.deleteAddress,Delete address,Elimina indirizzo
+addresses.deleteAddressDialog.cancel,cancel,annulla
+addresses.deleteAddressDialog.delete,delete,eliminare
+addresses.deleteAddressDialog.confirmDelete,Are you sure you want to delete this address?,Sei sicuro di voler eliminare questo indirizzo?
+addresses.setDefaultDialog.successfullySet,Successfully set,Impostato con successo
+addresses.setDefaultDialog.setDefaultAddress,Set as default address,Imposta come indirizzo predefinito
+addresses.setDefaultDialog.cancel,cancel,annulla
+addresses.setDefaultDialog.setDefaultShippingAddress,Set as default shipping address,Imposta come indirizzo di spedizione predefinito
+addresses.setDefaultDialog.setDefaultBillingAddress,Set as default billing address,Imposta come indirizzo di fatturazione predefinito
+addresses.filter.city,City,Città
+addresses.filter.state,State,Stato
+addresses.filter.country,Country,Paese
+addresses.editAddress.shipping,Shipping,Spedizione
+addresses.editAddress.defaultShippingAddress,Default Shipping Address,Indirizzo di spedizione predefinito
+addresses.editAddress.billing,Billing,Fatturazione
+addresses.editAddress.defaultBillingAddress,Default Billing Address,Indirizzo di fatturazione predefinito
+addresses.editAddress.addressLabel,Address label,Etichetta dell'indirizzo
+addresses.editAddress.firstName,First name,Nome di battesimo
+addresses.editAddress.lastName,Last name,Cognome
+addresses.editAddress.company,Company,Azienda
+addresses.editAddress.country,Country,Paese
+addresses.editAddress.addressLine1,Address line 1,Indirizzo Linea 1
+addresses.editAddress.addressLine2,Address line 2,Riga indirizzo 2
+addresses.editAddress.city,City,Città
+addresses.editAddress.state,State,Stato
+addresses.editAddress.zipCode,Zip Code,Cap
+addresses.editAddress.phoneNumber,Phone number,Numero di telefono
+
+shoppingList.shoppingListStatusUpdated,Shopping list status updated successfully,Stato della lista della spesa aggiornato correttamente
+shoppingList.productRemoved,Product removed from your shopping list,Prodotto rimosso dalla tua lista della spesa
+shoppingList.addToShoppingList.productsAdded,Products were added to your shopping list,I prodotti sono stati aggiunti alla tua lista della spesa
+shoppingList.addToShoppingList.skuNotAddable,SKU {notAddAble} cannot be added quickly,Lo SKU {notAddAble} non può essere aggiunto rapidamente
+shoppingList.addToShoppingList.skuNotPurchasable,SKU {notPurchaseSku} cannot be purchased in online store.,Lo SKU {notPurchaseSku} non può essere acquistato nel negozio online.
+shoppingList.addToShoppingList.addToList,Add to list,Aggiungi all'elenco
+shoppingList.addToShoppingList.bulkUploadCsv,Bulk upload CSV,Caricamento collettivo CSV
+shoppingList.quickAdd.addToShoppingList,Add product to list,Aggiungi prodotto all'elenco
+shoppingList.quickAdd.skuNotFound,"SKU {notFoundSku} were not found, please check entered values","SKU {notFoundSku} non trovato, controlla i valori inseriti"
+shoppingList.quickAdd.skuNotPurchasable,SKU {notPurchaseSku} no longer for sale,SKU {notPurchaseSku} non più in vendita
+shoppingList.quickAdd.skuNotAddable,SKU {notAddAble} cannot be added quickly,Lo SKU {notAddAble} non può essere aggiunto rapidamente
+shoppingList.quickAdd.skuLimitQuantity,"SKU {numberLimit} add quantity is limited from 1 to 1,000,000",La quantità aggiunta allo SKU {numberLimit} è limitata da 1 a 1.000.000
+shoppingList.quickAdd.quickAdd,Quick add,Aggiunta rapida
+shoppingList.quickAdd.showMoreRows,Show more rows,Mostra più righe
+shoppingList.chooseOptionsDialog.productNoLongerForSale,This product is no longer for sale,Questo prodotto non è più in vendita
+shoppingList.chooseOptionsDialog.saveOption,Save Option,Salva opzione
+shoppingList.chooseOptionsDialog.chooseOptions,Choose options,Scegli le opzioni
+shoppingList.chooseOptionsDialog.addToList,Add To List,Aggiungi alla lista
+shoppingList.chooseOptionsDialog.price,Price:,Prezzo:
+shoppingList.chooseOptionsDialog.quantity,Qty,Qtà
+shoppingList.reAddToCart.fillCorrectQuantity,Please fill in the correct quantity,Si prega di inserire la quantità corretta
+shoppingList.reAddToCart.productsAdded,Products were added to cart,I prodotti sono stati aggiunti al carrello
+shoppingList.reAddToCart.proceedToCheckout,Proceed to checkout,Procedere al checkout
+shoppingList.reAddToCart.addToCart,Add to cart,Aggiungi al carrello
+shoppingList.reAddToCart.productsCanCheckout,{successProducts} product(s) can checkout,I prodotti {successProducts} possono essere acquistati
+shoppingList.reAddToCart.productsAddedToCart,{successProducts} product(s) were added to cart,{successProducts} prodotto/i sono stati aggiunti al carrello
+shoppingList.reAddToCart.productsCantCheckout,"{quantity} product(s) can\n't checkout, please change the quantity","Impossibile effettuare il pagamento per {quantity} prodotto/i, modifica la quantità"
+shoppingList.reAddToCart.productsNotAddedToCart,"{quantity} product(s) were not added to cart, please change the quantity","{quantity} prodotti non sono stati aggiunti al carrello, modifica la quantità"
+shoppingList.reAddToCart.productCount,{quantity} products,{quantity} prodotti
+shoppingList.reAddToCart.adjustQuantity,Adjust quantity,Regola la quantità
+shoppingList.reAddToCart.product,Product,Prodotto
+shoppingList.reAddToCart.quantity,Qty,Qtà
+shoppingList.reAddToCart.total,Total,Totale
+shoppingList.reAddToCart.price,Price,Prezzo
+shoppingList.deleteItems.subtotal,Delete product,Elimina prodotto
+shoppingList.deleteItems.cancel,cancel,annulla
+shoppingList.deleteItems.delete,delete,eliminare
+shoppingList.deleteItems.confirmDelete,Are you sure you want to delete this product?,Sei sicuro di voler eliminare questo prodotto?
+shoppingList.footer.unavailableProducts,"Sku(s): {skus} unavailable for purchasing, please uncheck.","Sku(s): {skus} non disponibile per l'acquisto, deseleziona."
+shoppingList.footer.productsAddedToCart,Products were added to cart,I prodotti sono stati aggiunti al carrello
+shoppingList.footer.viewCart,VIEW CART,VISUALIZZA CARRELLO
+shoppingList.footer.selectedProducts,{quantity} products selected,{quantity} prodotti selezionati
+shoppingList.footer.subtotal,Subtotal: {subtotal},Totale parziale: {subtotal}
+shoppingList.footer.proceedToCheckout,Proceed to checkout,Procedere al checkout
+shoppingList.footer.addSelectedTo,Add selected to,Aggiungi selezionato a
+shoppingList.footer.selectOneItem,Please select at least one item,Seleziona almeno un elemento
+shoppingList.footer.addToQuote,Add selected to quote,Aggiungi selezionato al preventivo
+shoppingList.footer.addToCart,Add selected to cart,Aggiungi selezionato al carrello
+shoppingList.footer.cantAddProductsNoSku,Can not add products without SKU.,Impossibile aggiungere prodotti senza SKU.
+shoppingList.footer.notFoundSku,{sku} not found,{sku} non trovato
+shoppingList.footer.productsAddedToQuote,Products were added to your quote,I prodotti sono stati aggiunti al tuo preventivo
+shoppingList.footer.productsLimit,The quantity of each product in Quote is 1-1000000.,La quantità di ciascun prodotto in preventivo è 1-1.000.000.
+shoppingList.footer.viewQuote,VIEW QUOTE,VISUALIZZA PREVENTIVO
+shoppingList.header.backToShoppingLists,Back to shopping lists,Torniamo alle liste della spesa
+shoppingList.header.backToProduct,Back to product,Torna al prodotto
+shoppingList.header.createdBy,Created by:,Creato da:
+shoppingList.header.submitForApproval,Submit for Approval,Invia per l'approvazione
+shoppingList.header.reject,Reject,Rifiutare
+shoppingList.header.approve,Approve,Approvare
+shoppingList.table.productUpdated,Product updated successfully,Prodotto aggiornato con successo
+shoppingList.table.quantityUpdated,Product quantity updated successfully,Quantità del prodotto aggiornata correttamente
+shoppingList.table.productNotesUpdated,Product notes updated successfully,Note sul prodotto aggiornate con successo
+shoppingList.table.product,Product,Prodotto
+shoppingList.table.price,Price,Prezzo
+shoppingList.table.quantity,Qty,Qtà
+shoppingList.table.total,Total,Totale
+shoppingList.table.totalProductCount,{quantity} products,{quantity} prodotti
+shoppingList.table.itemsPerPage,Items per page,Articoli per pagina
+shoppingList.table.noProductsFound,No products found,Nessun prodotto trovato
+shoppingList.shoppingDetailCard.price,Price: {price},Prezzo: {price}
+shoppingList.shoppingDetailCard.quantity,qty,quantità
+shoppingList.shoppingDetailCard.total,Total: {total},Totale: {total}
+shoppingList.addItemNotes.title,Add note,Aggiungi nota
+shoppingList.addItemNotes.cancel,cancel,annulla
+shoppingList.addItemNotes.save,save,salva
+shoppingList.addItemNotes.placeholder,Add notes to products,Aggiungi note ai prodotti
+
+userManagement.addUser,Add new user,Aggiungi nuovo utente
+userManagement.deleteUserSuccessfully,User deleted successfully,Utente eliminato con successo
+userManagement.deleteUser,Delete user,Elimina utente
+userManagement.cancel,cancel,annulla
+userManagement.delete,delete,eliminare
+userManagement.confirmDelete,Are you sure you want to delete this user?,Sei sicuro di voler eliminare questo utente?
+userManagement.addUserSuccessfully,User added successfully,Utente aggiunto correttamente
+userManagement.userDetected,"User detected in your company, we will allow current storefront access for email: {email}","Utente rilevato nella tua azienda, consentiremo l'accesso corrente al negozio per l'email: {email}"
+userManagement.updateUserSuccessfully,update user successfully,aggiornare l'utente con successo
+userManagement.editUser,Edit user,Modifica utente
+userManagement.addNewUser,Add new user,Aggiungi nuovo utente
+userManagement.saveUser,Save user,Salva utente
+userManagement.config.email,Email,E-mail
+userManagement.config.firstName,First name,Nome di battesimo
+userManagement.config.lastName,Last name,Cognome
+userManagement.config.phoneNumber,Phone number,Numero di telefono
+userManagement.config.userRole,User role,Ruolo utente
+userManagement.userRole.admin,Admin,Ammin
+userManagement.userRole.seniorBuyer,Senior buyer,Acquirente senior
+userManagement.userRole.juniorBuyer,Junior buyer,Acquirente junior
+
+quoteDraft.addQuoteInfo,Please add quote info before submitting,Si prega di aggiungere informazioni sul preventivo prima di inviarlo
+quoteDraft.submit,Please add quote products before submitting,Si prega di aggiungere i prodotti del preventivo prima di inviarli
+quoteDraft.submit.errorTip,There are some products in the quote that are out of stock or unavailable for purchase. Please remove the product or modify the quantity of the product.,Alcuni prodotti nel preventivo sono esauriti o non disponibili per l'acquisto. 
+quoteDraft.button.backToQuoteLists,Back to quote lists,Torna agli elenchi dei preventivi
+quoteDraft.button.back,Back,Indietro
+quoteDraft.button.backToProduct,Back to product,Torna al prodotto
+quoteDraft.title.Quote,Quote,Preventivo
+quoteDraft.button.submit,Submit,Invia
+quoteDraft.section.billing,Billing,Fatturazione
+quoteDraft.section.shipping,Shipping,Spedizione
+quoteDraft.button.saveInfo,Save info,Salva informazioni
+quoteDraft.checkbox.sameAddressShippingAndBilling,My shipping address is the same as my billing address,Il mio indirizzo di spedizione è lo stesso del mio indirizzo di fatturazione
+quoteDraft.notification.cantAddProductsNoSku,Can not add products without SKU.,Impossibile aggiungere prodotti senza SKU.
+quoteDraft.notification.productSingular,Product was added to your quote.,Il prodotto è stato aggiunto al tuo preventivo.
+quoteDraft.notification.productPlural,Products were added to your quote.,I prodotti sono stati aggiunti al tuo preventivo.
+quoteDraft.notification.errorRangeProducts,The quantity of each product in Quote is 1-1000000.,La quantità di ciascun prodotto in preventivo è 1-1.000.000.
+quoteDraft.notification.businessAccountPendingActivation,Your business account is pending approval. This feature is currently disabled.,Il tuo account aziendale è in attesa di approvazione. 
+quoteDraft.notification.openQuote,Open quote,Apri preventivo
+quoteDraft.collapseTitle.addToQuote,Add to quote,Aggiungi al preventivo
+quoteDraft.modalTitle.addToQuote,Add to quote,Aggiungi al preventivo
+quoteDraft.button.addProductsToAddToQuote,Add products to Quote,Aggiungi prodotti al preventivo
+quoteDraft.button.bulkUploadCSV,Bulk upload CSV,Caricamento collettivo CSV
+quoteDraft.contactInfo.contactPerson,Contact person,Referente
+quoteDraft.contactInfo.email,Email,E-mail
+quoteDraft.contactInfo.companyName,Company name,Nome dell'azienda
+quoteDraft.contactInfo.phone,Phone,Telefono
+quoteDraft.contactInfo.quoteTitle,Quote Title,Titolo della preventivo
+quoteDraft.quoteInfo.quoteTitle,Quote Title,Titolo della preventivo:
+quoteDraft.contactInfo.emailExists,Email already exists,L'e-mail esiste già
+quoteDraft.contactInfo.contact,Buyer info,Informazioni sull'acquirente
+quoteDraft.quoteInfo.title,Quote info,Informazioni sul preventivo
+quoteDraft.contactInfo.referenceNumber,Reference number,Numero di riferimento
+quoteDraft.quoteInfo.titleText,Title:,Titolo:
+quoteDraft.quoteInfo.referenceText,Reference:,Riferimento:
+quoteDraft.quoteInfo.ccEmailText,CC:,
+quoteDraft.contactInfo.ccEmail,CC email,E-mail in CC
+quoteDraft.quoteAddress.chooseFromSaved,Choose from saved,Scegli tra salvato
+quoteDraft.chooseAddress.chooseFromSaved,Choose from saved,Scegli tra salvato
+quoteDraft.chooseAddress.searchAddress,Search address,Cerca indirizzo
+quoteDraft.addressItemCard.defaultShipping,Default shipping,Spedizione predefinita
+quoteDraft.addressItemCard.defaultBilling,Default billing,Fatturazione predefinita
+quoteDraft.addressItemCard.chooseAddress,Choose address,Scegli l'indirizzo
+quoteDraft.quoteSummary.summary,Quote summary,Riepilogo preventivo
+quoteDraft.quoteSummary.subTotal,Sub total,Sub totale
+quoteDraft.quoteSummary.shipping,Shipping,Spedizione
+quoteDraft.quoteSummary.tax,Estimated Tax,Imposta stimata
+quoteDraft.quoteSummary.grandTotal,Grand total,totale
+quoteDraft.quoteSummary.tbd,TBD,Da definire
+quoteDraft.quoteTable.productUpdated,Product was updated in your quote.,Il prodotto è stato aggiornato nel tuo preventivo.
+quoteDraft.quoteTable.product,Product,Prodotto
+quoteDraft.quoteTable.price,Price,Prezzo
+quoteDraft.quoteTable.qty,Qty,Qtà
+quoteDraft.quoteTable.total,Total,Totale
+quoteDraft.quoteTable.perPage,Per page:,Per pagina:
+quoteDraft.quoteTable.noProducts,No products found,Nessun prodotto trovato
+quoteDraft.quoteTable.totalProducts,{total} products,{total} prodotti
+quoteDraft.config.addressLabel,Address label,Etichetta dell'indirizzo
+quoteDraft.config.firstName,First name,Nome di battesimo
+quoteDraft.config.lastName,Last name,Cognome
+quoteDraft.config.company,Company,Azienda
+quoteDraft.config.country,Country,Paese
+quoteDraft.config.addressLine1,Address line 1,Indirizzo Linea 1
+quoteDraft.config.addressLine2,Address line 2 (optional),Riga indirizzo 2 (facoltativa)
+quoteDraft.config.city,City,Città
+quoteDraft.config.state,State,Stato
+quoteDraft.config.zipCode,Zip code,Cap
+quoteDraft.config.phoneNumber,Phone number,Numero di telefono
+quoteDraft.searchProduct.addToQuoteButton,Add to quote,Aggiungi al preventivo
+quoteDraft.submission.response.button.text,OK,
+quoteDraft.quoteTable.outOfStock.tip,Insufficient stock,Scorte insufficienti
+quoteDraft.quoteTable.oosNumber.tip,In stock: {qty},Disponibile: {qty}
+quoteDraft.quoteTable.unavailable.tip,Not available for purchase,Non disponibile per l'acquisto
+quoteDraft.productPageToQuote.outOfStock,{name} Out of stock. In stock: {qty},{name} Esaurito. 
+quoteDraft.productPageToQuote.unavailable,Not available for purchase,Non disponibile per l'acquisto
+
+accountSettings.notification.detailsUpdated,Your account details have been updated.,I dettagli del tuo account sono stati aggiornati.
+accountSettings.notification.emailExists,Email already exists,L'e-mail esiste già
+accountSettings.notification.updateEmailPassword,Please type in your current password to update your email address.,Inserisci la tua password attuale per aggiornare il tuo indirizzo email.
+accountSettings.notification.noEdits,You haven't made any edits,Non hai apportato alcuna modifica
+accountSettings.notification.passwordNotMatch,The current password does not match,La password attuale non corrisponde
+accountSettings.button.saveUpdates,Save updates,Salva aggiornamenti
+accountSettings.form.company,Company,Azienda
+accountSettings.form.role,Role,Ruolo
+accountSettings.form.admin,Admin,Ammin
+accountSettings.form.seniorBuyer,Senior buyer,Acquirente senior
+accountSettings.form.juniorBuyer,Junior buyer,Acquirente junior
+accountSettings.form.superAdmin,Super admin,Super amministratore
+accountSettings.form.currentPassword,Current password,Password attuale
+accountSettings.form.password,Password,
+accountSettings.form.confirmPassword,Confirm password,Conferma password
+accountSettings.form.firstName,First name,Nome di battesimo
+accountSettings.form.lastName,Last name,Cognome
+accountSettings.form.email,Email,E-mail
+accountSettings.form.phoneNumber,Phone number,Numero di telefono
+
+quoteDetail.uploadedByCustomer,Uploaded by customer: {createdBy},Caricato dal cliente: {createdBy}
+quoteDetail.uploadedBySalesRep,Uploaded by sales rep: {createdBy},Caricato dal rappresentante di vendita: {createdBy}
+quoteDetail.submittedQuote,Your quote was submitted. You can always find the quote using this link.,Il tuo preventivo è stato inviato. 
+quoteDetail.quoteSubmitted,Your quote was submitted,Il tuo preventivo è stato inviato
+quoteDetail.copySuccessful,copy successfully,copiato con successo
+quoteDetail.copyQuoteLink,Copy quote link,Copia il link del preventivo
+quoteDetail.reviewAllQuotes,Review all quotes,Rivedi tutte le preventivi
+quoteDetail.message.message,Message,Messaggio
+quoteDetail.message.merchantAnswers,Merchant typically answers within 1 day,Il commerciante in genere risponde entro 1 giorno
+quoteDetail.message.typeMessage,Type a message...,Digita un messaggio...
+quoteDetail.message.insufficientStock,{ProductName} does not have sufficient stock. Please contact your Sales Rep to have it re-issued.,{ProductName} non ha scorte sufficienti. 
+quoteDetail.message.nonPurchasable,{ProductName} is not purchasable. Please contact your Sales Rep to have it re-issued.,{ProductName} non è acquistabile. 
+quoteDetail.message.sent,Sent,Inviato
+quoteDetail.footer.proceedToCheckout,Proceed to checkout,Procedere al checkout
+quoteDetail.header.backToQuoteLists,Back to quote lists,Torna agli elenchi dei preventivi
+quoteDetail.header.quoteNumber,Quote #{quoteNumber},Preventivo #{quoteNumber}
+quoteDetail.header.title,Title:,Titolo:
+quoteDetail.header.salesRep,Sales rep:,Rappresentante di vendita:
+quoteDetail.header.issuedOn,Issued on:,Emesso il:
+quoteDetail.header.expirationDate,Expiration date:,Data di scadenza:
+quoteDetail.header.print,Print,Stampa
+quoteDetail.header.downloadPDF,DownLoad pdf,Scarica il pdf
+quoteDetail.summary.quoteSummary,Quote summary,Riepilogo preventivo
+quoteDetail.summary.originalSubtotal,Original subtotal,Totale parziale originale
+quoteDetail.summary.discountAmount,Discount amount,Importo dello sconto
+quoteDetail.summary.quotedSubtotal,Quoted subtotal,Totale parziale citato
+quoteDetail.summary.shipping,Shipping,Spedizione
+quoteDetail.summary.tax,Tax,Tassare
+quoteDetail.summary.grandTotal,Grand total,totale
+quoteDetail.summary.quoteCheckout,Customer choice at checkout,Scelta del cliente al momento del pagamento
+quoteDetail.summary.tbd,TBD,Da definire
+quoteDetail.summary.estimatedTax,Estimated Tax,Imposta stimata
+quoteDetail.table.product,Product,Prodotto
+quoteDetail.table.price,Price,Prezzo
+quoteDetail.table.qty,Qty,Quantità
+quoteDetail.table.total,Total,Totale
+quoteDetail.table.perPage,Per page:,Per pagina:
+quoteDetail.table.noProducts,No products found,Nessun prodotto trovato
+quoteDetail.table.totalProducts,{total} products,{total} prodotti
+quoteDetail.tableCard.price,Price:,Prezzo:
+quoteDetail.tableCard.total,Total:,Totale:
+quoteDetail.tableCard.qty,Qty: {quantity},Qtà: {quantity}
+quoteDetail.termsAndConditions,Terms and conditions,Termini e Condizioni
+
+register.title.registerComplete,Application submitted,Domanda presentata
+register.title.accountCreated,Registration complete!,Registrazione completata!
+register.title.accountRegister,Account registration,Registrazione dell'account
+register.step.optional,Optional,Opzionale
+register.step.account,Account,
+register.step.details,Details,Dettagli
+register.step.finish,Finish,Fine
+register.registeredAccount.accountType,Account type,Tipo di conto
+register.registeredAccount.businessAccount,Business account,Conto aziendale
+register.registeredAccount.personalAccount,Personal account,Conto personale
+register.label.companyAttachments,Company attachments,Allegati aziendali
+register.emailValidate.alreadyExitsBC,The email address {email} is already in use. Please enter a different one.,L'indirizzo email {email} è già in uso. 
+register.registeredSingleCheckBox.label,Email me special promotions and updates,Inviami promozioni speciali e aggiornamenti via e-mail
+login.button.signIn,Sign In,Registrazione
+login.button.signInUppercase,SIGN IN,REGISTRAZIONE
+login.button.createAccount,CREATE ACCOUNT,CREARE UN ACCOUNT
+login.loginTipInfo.resetPassword,You must reset your password before you may log in again. Please check your email at {email} to reset your password,È necessario reimpostare la password prima di poter accedere nuovamente. 
+login.loginTipInfo.receivePassword,"If the entered email address is associated with this store, you will receive a password reset email. If you don't receive this e-mail, please check your junk mail folder or contact us for further assistance.","Se l'indirizzo e-mail inserito è associato a questo negozio, riceverai un'e-mail di reimpostazione della password. "
+login.loginTipInfo.loggedOutLogin,You've been logged out of your account successfully.,Sei stato disconnesso dal tuo account con successo.
+login.loginText.forgotPasswordText,Forgot your password?,Hai dimenticato la password?
+login.loginText.invoiceErrorTip,Please log in to view your invoice,Effettua il login per visualizzare la fattura
+login.loginText.deviceCrowdingLogIn,"The user has logged out, please log in again","L'utente si è disconnesso, effettua nuovamente l'accesso"
+login.loginText.password,Password,
+login.loginText.signInHeader,Sign in,Registrazione
+login.registerLogo,register Logo,registrare il logo
+login.loginText.quoteDetailToCheckoutUrl,Please log in to purchase this quote,Questa preventivo è di sola visualizzazione. 
+login.loginText.missingCaptcha,The captcha you entered is incorrect. Please try again.,Il captcha che hai inserito non è corretto. 
+
+pdp.notification.productsAdded,Products were added to your shopping list,I prodotti sono stati aggiunti alla tua lista della spesa
+pdp.notification.viewShoppingList,view shopping list,visualizzare la lista della spesa
+pdp.addToShoppingList,Add to shopping list,Aggiungi alla lista della spesa
+
+forgotPassword.resetPassword,Reset password,Reimposta la password
+forgotPassword.requestEmail,Fill in your email below to request a new password. An email will be sent to the address below containing a link to verify your email address.,Inserisci la tua email qui sotto per richiedere una nuova password. 
+forgotPassword.resetPasswordBtn,Reset Password,Reimposta password
+
+registeredbctob2b.title,Business Account Application,Richiesta di conto aziendale
+
+payment.errorInvoiceCantBeBlank,The invoice cannot be blank,La fattura non può essere vuota
+payment.errorOpenBalanceIsIncorrect,The invoice openBalance code or value is incorrect,Il codice o il valore della fattura openBalance non è corretto
+payment.clickToLandingPage,Click ok to go to the landing page,Fare clic su OK per andare alla pagina di destinazione
+payment.paymentSuccess,Thank you for your payment,Grazie per il pagamento
+payment.paymentNumber,Payment#,Pagamento#
+payment.paymentReceivedOn,Payment received on,Pagamento ricevuto il
+payment.transactionType,Transaction type,Tipo di transazione
+payment.paymentType,Payment type,Tipo di pagamento
+payment.paymentTotal,Payment total,Totale pagamento
+payment.reference,Reference,Riferimento
+payment.paymentComment,Payment comment,Commento sul pagamento
+payment.invoicesPaid,Invoices paid,Fatture pagate
+payment.paymentTowardsInvoices,You made payments towards the invoices shown below,Hai effettuato pagamenti per le fatture indicate di seguito
+payment.invoiceNumber,Invoice#,Fattura#
+payment.amountPaid,Amount paid,Importo pagato
+payment.okButton,Ok,OK
