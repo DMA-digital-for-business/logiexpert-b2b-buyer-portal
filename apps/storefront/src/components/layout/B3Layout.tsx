@@ -35,6 +35,7 @@ export default function B3Layout({ children }: { children: ReactNode }) {
 
   const emailAddress = useAppSelector(({ company }) => company.customer.emailAddress);
   const customerId = useAppSelector(({ company }) => company.customer.id);
+  const isPageComplete = useAppSelector(({ global }) => global.isPageComplete);
 
   const {
     state: { globalMessageDialog },
@@ -44,10 +45,14 @@ export default function B3Layout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if ((!emailAddress || !customerId) && !getIsTokenGotoPage(location.pathname)) {
+    if (
+      isPageComplete &&
+      (!emailAddress || !customerId) &&
+      !getIsTokenGotoPage(location.pathname)
+    ) {
       navigate('/login');
     }
-  }, [emailAddress, customerId, location, navigate]);
+  }, [emailAddress, customerId, isPageComplete, location.pathname, navigate]);
 
   useEffect(() => {
     const itemsRoutes = routes.find((item) => item.path === location.pathname);
