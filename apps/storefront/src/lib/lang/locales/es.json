@@ -11,6 +11,7 @@
   "global.quoteInfo.addShippingAddress": "Añade una dirección de envío",
   "global.quoteInfo.noBillingAddress": "No hay dirección de facturación",
   "global.quoteInfo.noShippingAddress": "No hay dirección de envío",
+  "quoteDraft.config.addressLabelTooltip": "El nombre que quieres asignar a esta dirección, por ejemplo Casa o Trabajo.",
   "quoteDetail.guestLinkWarning": "Guarda el enlace de esta cotización. Si abandonas esta página, no podrás volver a encontrar la cotización.",
   "global.registrationDialog.title": "Registro",
   "global.registrationDialog.shoppingListMessage": "Crea una cuenta o inicia sesión para crear una lista de compras.",

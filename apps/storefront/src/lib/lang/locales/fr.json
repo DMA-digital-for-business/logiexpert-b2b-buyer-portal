@@ -11,6 +11,7 @@
   "global.quoteInfo.addShippingAddress": "Veuillez ajouter une adresse de livraison",
   "global.quoteInfo.noBillingAddress": "Aucune adresse de facturation",
   "global.quoteInfo.noShippingAddress": "Aucune adresse de livraison",
+  "quoteDraft.config.addressLabelTooltip": "Le nom que vous souhaitez attribuer à cette adresse, par exemple Domicile ou Travail.",
   "quoteDetail.guestLinkWarning": "Enregistrez le lien de ce devis. Si vous quittez cette page, vous ne pourrez plus retrouver le devis.",
   "global.registrationDialog.title": "Inscription",
   "global.registrationDialog.shoppingListMessage": "Créez un compte ou connectez-vous pour créer une liste d'achats.",

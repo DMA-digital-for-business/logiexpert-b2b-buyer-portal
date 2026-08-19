@@ -1,6 +1,7 @@
 import { KeyboardEvent, WheelEvent } from 'react';
 import { Controller } from 'react-hook-form';
-import { Box, TextField } from '@mui/material';
+import { InfoOutlined } from '@mui/icons-material';
+import { Box, TextField, Tooltip } from '@mui/material';
 import debounce from 'lodash-es/debounce';
 
 import { useB3Lang } from '@/lib/lang';
@@ -16,6 +17,7 @@ export function B3ControlTextField({ control, errors, ...rest }: Form.B3UIProps)
     default: defaultValue,
     required,
     label,
+    tooltipText,
     validate,
     variant,
     rows,
@@ -61,10 +63,25 @@ export function B3ControlTextField({ control, errors, ...rest }: Form.B3UIProps)
     control,
   };
 
+  const fieldLabel = tooltipText ? (
+    <Box component="span" sx={{ alignItems: 'center', display: 'inline-flex', gap: '4px' }}>
+      {label}
+      <Tooltip arrow title={tooltipText}>
+        <InfoOutlined
+          aria-label={tooltipText}
+          sx={{ cursor: 'help', fontSize: '0.875rem', pointerEvents: 'auto' }}
+          tabIndex={0}
+        />
+      </Tooltip>
+    </Box>
+  ) : (
+    label
+  );
+
   const textField = {
     type: fieldType,
     name,
-    label,
+    label: fieldLabel,
     rows,
     disabled,
     multiline: fieldType === 'multiline',
@@ -75,6 +92,7 @@ export function B3ControlTextField({ control, errors, ...rest }: Form.B3UIProps)
   };
 
   const inputProps = {
+    ...(tooltipText ? { 'aria-label': label } : {}),
     min,
     max,
     maxLength,

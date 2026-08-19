@@ -615,6 +615,7 @@
   "quoteDraft.quoteTable.noProducts": "No products found",
   "quoteDraft.quoteTable.totalProducts": "{total} products",
   "quoteDraft.config.addressLabel": "Address label",
+  "quoteDraft.config.addressLabelTooltip": "The name you want to give this address, for example Home or Work.",
   "quoteDraft.config.firstName": "First name",
   "quoteDraft.config.lastName": "Last name",
   "quoteDraft.config.company": "Company",

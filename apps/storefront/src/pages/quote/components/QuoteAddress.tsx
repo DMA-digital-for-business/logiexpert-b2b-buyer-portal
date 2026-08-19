@@ -19,6 +19,7 @@ type AddressItemProps = {
 interface AccountFormFieldsProps extends Record<string, any> {
   name: string;
   label?: string;
+  tooltipText?: string;
   required?: boolean;
   fieldType?: string;
   default?: string | Array<any> | number;

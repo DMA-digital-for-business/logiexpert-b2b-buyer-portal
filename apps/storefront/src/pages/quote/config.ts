@@ -5,6 +5,7 @@ const getAccountFormFields = (isMobile: boolean, b3Lang: LangFormatFunction) => 
     {
       name: 'label',
       label: b3Lang('quoteDraft.config.addressLabel'),
+      tooltipText: b3Lang('quoteDraft.config.addressLabelTooltip'),
       required: false,
       default: '',
       fieldType: 'text',
@@ -15,7 +16,7 @@ const getAccountFormFields = (isMobile: boolean, b3Lang: LangFormatFunction) => 
     {
       name: 'firstName',
       label: b3Lang('quoteDraft.config.firstName'),
-      required: false,
+      required: true,
       default: '',
       fieldType: 'text',
       xs: isMobile ? 12 : 6,
@@ -25,7 +26,7 @@ const getAccountFormFields = (isMobile: boolean, b3Lang: LangFormatFunction) => 
     {
       name: 'lastName',
       label: b3Lang('quoteDraft.config.lastName'),
-      required: false,
+      required: true,
       default: '',
       fieldType: 'text',
       xs: isMobile ? 12 : 6,
@@ -45,7 +46,7 @@ const getAccountFormFields = (isMobile: boolean, b3Lang: LangFormatFunction) => 
     {
       name: 'country',
       label: b3Lang('quoteDraft.config.country'),
-      required: false,
+      required: true,
       default: '',
       fieldType: 'dropdown',
       options: [],
@@ -60,7 +61,7 @@ const getAccountFormFields = (isMobile: boolean, b3Lang: LangFormatFunction) => 
     {
       name: 'address',
       label: b3Lang('quoteDraft.config.addressLine1'),
-      required: false,
+      required: true,
       default: '',
       fieldType: 'text',
       xs: 12,
@@ -80,7 +81,7 @@ const getAccountFormFields = (isMobile: boolean, b3Lang: LangFormatFunction) => 
     {
       name: 'city',
       label: b3Lang('quoteDraft.config.city'),
-      required: false,
+      required: true,
       default: '',
       fieldType: 'text',
       options: [],
@@ -91,7 +92,7 @@ const getAccountFormFields = (isMobile: boolean, b3Lang: LangFormatFunction) => 
     {
       name: 'state',
       label: b3Lang('quoteDraft.config.state'),
-      required: false,
+      required: true,
       default: '',
       fieldType: 'text',
       options: [],
@@ -106,7 +107,7 @@ const getAccountFormFields = (isMobile: boolean, b3Lang: LangFormatFunction) => 
     {
       name: 'zipCode',
       label: b3Lang('quoteDraft.config.zipCode'),
-      required: false,
+      required: true,
       default: '',
       fieldType: 'text',
       options: [],
