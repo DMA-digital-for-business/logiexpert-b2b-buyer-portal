@@ -41,7 +41,7 @@ const orderStatusTextColor: OrderStatusConfig = {
 // i18n
 const orderStatusText: OrderStatusConfig = {
   'Partially Refunded': 'Partially Refunded',
-  'Manual Verification Required': 'Manual Verification Required here',
+  'Manual Verification Required': 'Manual Verification Required',
   Disputed: 'Disputed',
   Refunded: 'Refunded',
   Declined: 'Declined',
