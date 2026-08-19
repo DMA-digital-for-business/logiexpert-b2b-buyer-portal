@@ -72,7 +72,7 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
           open: false,
           title: '',
           message: '',
-          cancelText: 'Cancel',
+          cancelText: b3Lang('global.dialog.cancel'),
         },
       },
     });
@@ -85,13 +85,13 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
         payload: {
           globalMessageDialog: {
             open: true,
-            title: 'Registration',
+            title: b3Lang('global.registrationDialog.title'),
             message:
               item.configKey === 'shoppingLists'
-                ? 'Please create an account, or login to create a shopping list.'
-                : 'To receive full access to buyer portal, please register. It will take 2 minutes.',
-            cancelText: 'Cancel',
-            saveText: registerEnabled ? 'Register' : '',
+                ? b3Lang('global.registrationDialog.shoppingListMessage')
+                : b3Lang('global.registrationDialog.buyerPortalMessage'),
+            cancelText: b3Lang('global.dialog.cancel'),
+            saveText: registerEnabled ? b3Lang('global.registrationDialog.register') : '',
             saveFn: jumpRegister,
           },
         },

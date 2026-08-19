@@ -11,5 +11,9 @@
   "global.quoteInfo.addShippingAddress": "Veuillez ajouter une adresse de livraison",
   "global.quoteInfo.noBillingAddress": "Aucune adresse de facturation",
   "global.quoteInfo.noShippingAddress": "Aucune adresse de livraison",
-  "quoteDetail.guestLinkWarning": "Enregistrez le lien de ce devis. Si vous quittez cette page, vous ne pourrez plus retrouver le devis."
+  "quoteDetail.guestLinkWarning": "Enregistrez le lien de ce devis. Si vous quittez cette page, vous ne pourrez plus retrouver le devis.",
+  "global.registrationDialog.title": "Inscription",
+  "global.registrationDialog.shoppingListMessage": "Créez un compte ou connectez-vous pour créer une liste d'achats.",
+  "global.registrationDialog.buyerPortalMessage": "Pour accéder à toutes les fonctionnalités du portail acheteur, inscrivez-vous. Cela ne prendra que 2 minutes.",
+  "global.registrationDialog.register": "S'inscrire"
 }
