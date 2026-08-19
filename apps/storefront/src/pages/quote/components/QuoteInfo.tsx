@@ -56,11 +56,22 @@ const addressKeys: Keys[] = [
 ];
 
 interface QuoteInfoItemProps {
-  flag?: string;
+  flag: 'info' | 'Billing' | 'Shipping';
   title: string;
   info: QuoteInfoItemType;
   status?: string;
 }
+
+const noAddressTranslationKeys = {
+  Billing: {
+    draft: 'global.quoteInfo.addBillingAddress',
+    default: 'global.quoteInfo.noBillingAddress',
+  },
+  Shipping: {
+    draft: 'global.quoteInfo.addShippingAddress',
+    default: 'global.quoteInfo.noShippingAddress',
+  },
+} as const;
 
 function QuoteInfoItem({ flag, title, info, status }: QuoteInfoItemProps) {
   const keyTable = flag === 'info' ? contactInfoKeys : addressKeys;
@@ -68,9 +79,9 @@ function QuoteInfoItem({ flag, title, info, status }: QuoteInfoItemProps) {
   const b3Lang = useB3Lang();
 
   const noAddressText =
-    status === 'Draft'
-      ? `Please add ${flag === 'Billing' ? 'billing' : 'shipping'} address `
-      : `No ${flag === 'Billing' ? 'billing' : 'shipping'} address`;
+    flag !== 'info'
+      ? b3Lang(noAddressTranslationKeys[flag][status === 'Draft' ? 'draft' : 'default'])
+      : '';
 
   const isComplete =
     flag !== 'info' ? addressVerifyKeys.some((item: string) => info && !!info[item]) : false;

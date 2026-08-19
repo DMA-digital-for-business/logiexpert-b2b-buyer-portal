@@ -6,5 +6,9 @@
   "global.quoteNote.fieldLabel": "Message pour votre demande de devis",
   "global.quoteNote.requiredTitle": "Un message est requis avant d'envoyer ce devis",
   "global.quoteNote.requiredHelper": "Précisez les besoins de prix, les quantités, les délais de livraison ou toute demande particulière.",
-  "global.quoteNote.requiredError": "Veuillez saisir un message avant d'envoyer votre devis"
+  "global.quoteNote.requiredError": "Veuillez saisir un message avant d'envoyer votre devis",
+  "global.quoteInfo.addBillingAddress": "Veuillez ajouter une adresse de facturation",
+  "global.quoteInfo.addShippingAddress": "Veuillez ajouter une adresse de livraison",
+  "global.quoteInfo.noBillingAddress": "Aucune adresse de facturation",
+  "global.quoteInfo.noShippingAddress": "Aucune adresse de livraison"
 }

@@ -6,5 +6,9 @@
   "global.quoteNote.fieldLabel": "Mensaje para tu solicitud de cotización",
   "global.quoteNote.requiredTitle": "Debes agregar un mensaje antes de enviar esta cotización",
   "global.quoteNote.requiredHelper": "Explica necesidades de precio, cantidades, tiempos de entrega o cualquier solicitud especial.",
-  "global.quoteNote.requiredError": "Ingresa un mensaje antes de enviar tu cotización"
+  "global.quoteNote.requiredError": "Ingresa un mensaje antes de enviar tu cotización",
+  "global.quoteInfo.addBillingAddress": "Añade una dirección de facturación",
+  "global.quoteInfo.addShippingAddress": "Añade una dirección de envío",
+  "global.quoteInfo.noBillingAddress": "No hay dirección de facturación",
+  "global.quoteInfo.noShippingAddress": "No hay dirección de envío"
 }
