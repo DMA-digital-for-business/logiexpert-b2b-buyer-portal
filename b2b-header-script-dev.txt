@@ -1,0 +1,18 @@
+<script>
+  {{#if customer.id}}
+  {{#contains page_type "account"}}
+  var b2bHideBodyStyle = document.createElement('style');
+  b2bHideBodyStyle.id = 'b2b-account-page-hide-body';
+  b2bHideBodyStyle.innerHTML = 'body { display: none !important }';
+  document.head.appendChild(b2bHideBodyStyle);
+  {{/contains}}
+  {{/if}}
+</script>
+<script type="module">
+  import RefreshRuntime from 'http://localhost:3001/@react-refresh'
+  RefreshRuntime.injectIntoGlobalHook(window)
+  window.$RefreshReg$ = () => {}
+  window.$RefreshSig$ = () => (type) => type
+  window.__vite_plugin_react_preamble_installed__ = true
+</script>
+<script type="module" src="http://localhost:3001/@vite/client"></script>

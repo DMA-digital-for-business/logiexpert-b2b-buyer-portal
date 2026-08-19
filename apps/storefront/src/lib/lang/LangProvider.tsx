@@ -5,7 +5,7 @@ import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useAppSelector } from '@/store';
 
 import { getActiveLocale } from './getActiveLocale';
-import { en, isSupportedLocale } from './locales';
+import { it, isSupportedLocale } from './locales';
 import { pickLocaleBundle } from './pickLocaleBundle';
 import { useLocaleBundle } from './useLocaleBundle';
 
@@ -19,19 +19,19 @@ function LangProvider({ children, customText = {} }: LangProviderProps) {
   const isMultiLang = useFeatureFlag('LOCAL-3191.B2B_multi_language');
   const localesList = useAppSelector(({ global }) => global.locales);
   const activeLocale = isMultiLang ? getActiveLocale(localesList) : undefined;
-  const code = isMultiLang ? (activeLocale?.code ?? 'en') : 'en';
+  const code = isMultiLang ? (activeLocale?.code ?? 'it') : 'it';
   const { ready, bundles } = useLocaleBundle(code);
 
   // Render unconditionally so children (notably B3PageMask) stay mounted while
   // the locale bundle is loading. Until the bundle resolves we fall back to
-  // English; once it lands react-intl swaps the messages in place.
+  // Italian; once it lands react-intl swaps the messages in place.
   const localeMessages = isMultiLang && ready ? pickLocaleBundle(code, bundles) : {};
-  let messages = { ...en, ...localeMessages, ...customText, ...translations };
+  let messages = { ...it, ...localeMessages, ...customText, ...translations };
   if (isMultiLang && activeLocale?.isDefault === false && isSupportedLocale(activeLocale.code)) {
-    messages = { ...en, ...localeMessages, ...customText };
+    messages = { ...it, ...localeMessages, ...customText };
   }
   return (
-    <IntlProvider defaultLocale="en" locale={ready ? code : 'en'} messages={messages}>
+    <IntlProvider defaultLocale="it" locale={ready ? code : 'it'} messages={messages}>
       {children}
     </IntlProvider>
   );
