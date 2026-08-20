@@ -394,7 +394,7 @@ addresses.editAddress.defaultShippingAddress,Default Shipping Address,Indirizzo 
 addresses.editAddress.billing,Billing,Fatturazione
 addresses.editAddress.defaultBillingAddress,Default Billing Address,Indirizzo di fatturazione predefinito
 addresses.editAddress.addressLabel,Address label,Etichetta dell'indirizzo
-addresses.editAddress.firstName,First name,Nome di battesimo
+addresses.editAddress.firstName,First name,Nome
 addresses.editAddress.lastName,Last name,Cognome
 addresses.editAddress.company,Company,Azienda
 addresses.editAddress.country,Country,Paese
@@ -495,7 +495,7 @@ userManagement.editUser,Edit user,Modifica utente
 userManagement.addNewUser,Add new user,Aggiungi nuovo utente
 userManagement.saveUser,Save user,Salva utente
 userManagement.config.email,Email,E-mail
-userManagement.config.firstName,First name,Nome di battesimo
+userManagement.config.firstName,First name,Nome
 userManagement.config.lastName,Last name,Cognome
 userManagement.config.phoneNumber,Phone number,Numero di telefono
 userManagement.config.userRole,User role,Ruolo utente
@@ -560,7 +560,7 @@ quoteDraft.quoteTable.perPage,Per page:,Per pagina:
 quoteDraft.quoteTable.noProducts,No products found,Nessun prodotto trovato
 quoteDraft.quoteTable.totalProducts,{total} products,{total} prodotti
 quoteDraft.config.addressLabel,Address label,Etichetta dell'indirizzo
-quoteDraft.config.firstName,First name,Nome di battesimo
+quoteDraft.config.firstName,First name,Nome
 quoteDraft.config.lastName,Last name,Cognome
 quoteDraft.config.company,Company,Azienda
 quoteDraft.config.country,Country,Paese
@@ -593,7 +593,7 @@ accountSettings.form.superAdmin,Super admin,Super amministratore
 accountSettings.form.currentPassword,Current password,Password attuale
 accountSettings.form.password,Password,
 accountSettings.form.confirmPassword,Confirm password,Conferma password
-accountSettings.form.firstName,First name,Nome di battesimo
+accountSettings.form.firstName,First name,Nome
 accountSettings.form.lastName,Last name,Cognome
 accountSettings.form.email,Email,E-mail
 accountSettings.form.phoneNumber,Phone number,Numero di telefono
