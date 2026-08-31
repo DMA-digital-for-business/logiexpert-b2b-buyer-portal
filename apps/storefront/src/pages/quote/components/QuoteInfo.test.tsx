@@ -2,7 +2,7 @@ import { IntlProvider } from 'react-intl';
 import { builder, faker, render, screen } from 'tests/test-utils';
 
 import en from '@/lib/lang/locales/en.json';
-import { BillingAddress, ContactInfo, QuoteInfoAndExtrafieldsItemProps } from '@/types/quotes';
+import { BillingAddress, ContactInfo } from '@/types/quotes';
 
 import QuoteInfo from './QuoteInfo';
 
@@ -28,15 +28,6 @@ const buildAddressWith = builder<BillingAddress>(() => ({
   zipCode: faker.location.zipCode(),
 }));
 
-const buildQuoteInfoWith = builder<QuoteInfoAndExtrafieldsItemProps>(() => ({
-  info: {
-    quoteTitle: faker.lorem.words(),
-    referenceNumber: faker.string.uuid(),
-  },
-  extraFields: [],
-  recipients: [],
-}));
-
 const noAddress = buildAddressWith({
   address: '',
   apartment: '',
@@ -57,7 +48,6 @@ const renderQuoteInfo = (status: string, translations: Record<string, string>) =
       <QuoteInfo
         billingAddress={noAddress}
         contactInfo={buildContactInfoWith('WHATEVER_VALUES')}
-        quoteAndExtraFieldsInfo={buildQuoteInfoWith('WHATEVER_VALUES')}
         shippingAddress={noAddress}
         status={status}
       />
@@ -65,6 +55,12 @@ const renderQuoteInfo = (status: string, translations: Record<string, string>) =
   );
 
 describe('QuoteInfo missing address messages', () => {
+  it('does not display the quote info section', () => {
+    renderQuoteInfo('Draft', {});
+
+    expect(screen.queryByRole('article', { name: 'Quote info' })).not.toBeInTheDocument();
+  });
+
   it('displays translated prompts for a draft quote', () => {
     const addBillingAddress = faker.lorem.sentence();
     const addShippingAddress = faker.lorem.sentence();

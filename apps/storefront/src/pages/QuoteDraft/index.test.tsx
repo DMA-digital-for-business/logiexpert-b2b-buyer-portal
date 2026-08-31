@@ -729,37 +729,6 @@ describe('when there is no shipping address assigned', () => {
   });
 });
 
-it('displays the quote info', async () => {
-  server.use(
-    graphql.query('Countries', () => HttpResponse.json({ data: { countries: [fakeCountry] } })),
-    graphql.query('Addresses', () =>
-      HttpResponse.json({ data: { addresses: { totalCount: 0, edges: [] } } }),
-    ),
-    graphql.query('getQuoteExtraFields', () =>
-      HttpResponse.json({ data: { quoteExtraFieldsConfig: [] } }),
-    ),
-  );
-
-  const quoteInfo = buildQuoteInfoStateWith({
-    draftQuoteInfo: {
-      contactInfo: { quoteTitle: 'Some lovely things' },
-      recipients: ['billy.bully@acme.com', 'terry.trousers@acme.com'],
-      referenceNumber: 'REF123456',
-    },
-  });
-
-  renderWithProviders(<QuoteDraft setOpenPage={vi.fn()} />, {
-    preloadedState: { ...preloadedState, quoteInfo },
-  });
-
-  const info = await screen.findByRole('article', { name: 'Quote info' });
-
-  expect(within(info).getByText('Title: Some lovely things')).toBeInTheDocument();
-  expect(within(info).getByText('Reference: REF123456')).toBeInTheDocument();
-  expect(within(info).getByText('CC: billy.bully@acme.com')).toBeInTheDocument();
-  expect(within(info).getByText('CC: terry.trousers@acme.com')).toBeInTheDocument();
-});
-
 describe('when editing the buyer info', () => {
   it('displays the "Contact person" and "Email" fields as disabled', async () => {
     const fakeAddress = buildAddressWith({ country: fakeCountry.countryCode, state: 'Fake State' });
@@ -837,55 +806,6 @@ describe('when buyer info is changed and then saved', () => {
 
     expect(within(buyerInfo).getByText("Jack's Slacks")).toBeInTheDocument();
     expect(within(buyerInfo).getByText('1234567890')).toBeInTheDocument();
-  });
-});
-
-describe('when quote info is changed and then saved', () => {
-  it('displays the updated quote info details', async () => {
-    const fakeAddress = buildAddressWith({ country: fakeCountry.countryCode, state: 'Fake State' });
-
-    server.use(
-      graphql.query('Countries', () => HttpResponse.json({ data: { countries: [fakeCountry] } })),
-      graphql.query('Addresses', () =>
-        HttpResponse.json({ data: { addresses: { totalCount: 0, edges: [] } } }),
-      ),
-      graphql.query('getQuoteExtraFields', () =>
-        HttpResponse.json({ data: { quoteExtraFieldsConfig: [] } }),
-      ),
-      http.post('*/api/v2/extra-fields/quote/validate', () => HttpResponse.json({ code: 200 })),
-    );
-
-    const quoteInfo = buildQuoteInfoStateWith({
-      draftQuoteInfo: {
-        // email is checked on save and must match the company.customer in state for the save to succeed
-        contactInfo: { email: customerEmail, quoteTitle: '' },
-        referenceNumber: '',
-        shippingAddress: fakeAddress,
-        billingAddress: fakeAddress,
-      },
-    });
-
-    renderWithProviders(<QuoteDraft setOpenPage={vi.fn()} />, {
-      preloadedState: { ...preloadedState, quoteInfo },
-    });
-
-    await userEvent.click(screen.getByRole('button', { name: 'Edit info' }));
-
-    const phoneInput = screen.getByRole('textbox', { name: 'Quote Title' });
-    await userEvent.type(phoneInput, 'Lots of nice things');
-
-    const companyInput = screen.getByRole('textbox', { name: 'Reference number' });
-    await userEvent.type(companyInput, '818767');
-
-    const ccInput = screen.getByRole('textbox', { name: 'CC email' });
-    await userEvent.type(ccInput, 'fred@acme.com');
-
-    await userEvent.click(screen.getByRole('button', { name: 'Save info' }));
-
-    const quoteInfoSummary = await screen.findByRole('article', { name: 'Quote info' });
-    expect(within(quoteInfoSummary).getByText('Title: Lots of nice things')).toBeInTheDocument();
-    expect(within(quoteInfoSummary).getByText('Reference: 818767')).toBeInTheDocument();
-    expect(within(quoteInfoSummary).getByText('CC: fred@acme.com')).toBeInTheDocument();
   });
 });
 

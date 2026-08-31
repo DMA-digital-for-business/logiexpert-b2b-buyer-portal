@@ -4,23 +4,15 @@ import { Box, Typography } from '@mui/material';
 import CustomButton from '@/components/button/CustomButton';
 import { useMobile } from '@/hooks/useMobile';
 import { useB3Lang } from '@/lib/lang';
-import {
-  BillingAddress,
-  ContactInfo,
-  QuoteInfoAndExtrafieldsItemProps,
-  ShippingAddress,
-} from '@/types/quotes';
+import { BillingAddress, ContactInfo, ShippingAddress } from '@/types/quotes';
 
 import Container from '../style';
-
-import QuoteInfoAndExtrafieldsItem from './QuoteInfoAndExtrafieldsItem';
 
 interface QuoteInfoItemType {
   [key: string]: string;
 }
 interface InfoProps {
   contactInfo: ContactInfo;
-  quoteAndExtraFieldsInfo: QuoteInfoAndExtrafieldsItemProps;
   shippingAddress: ShippingAddress;
   billingAddress: BillingAddress;
   handleEditInfoClick?: () => void;
@@ -160,7 +152,6 @@ function QuoteInfoItem({ flag, title, info, status }: QuoteInfoItemProps) {
 }
 
 function QuoteInfo({
-  quoteAndExtraFieldsInfo,
   contactInfo,
   shippingAddress,
   billingAddress,
@@ -198,7 +189,6 @@ function QuoteInfo({
             status={status}
             info={contactInfo as unknown as QuoteInfoItemType}
           />
-          <QuoteInfoAndExtrafieldsItem status={status} quoteInfo={quoteAndExtraFieldsInfo} />
         </Box>
 
         <QuoteInfoItem

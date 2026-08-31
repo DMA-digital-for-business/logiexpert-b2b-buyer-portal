@@ -103,15 +103,6 @@ export interface QuoteInfo {
   recipients?: string[];
 }
 
-export interface QuoteInfoAndExtrafieldsItemProps {
-  info: {
-    quoteTitle: string;
-    referenceNumber: string;
-  };
-  extraFields: QuoteExtraFields[] | undefined;
-  recipients: string[];
-}
-
 interface FieldsOptionProps {
   label: Maybe<string>;
   value: Maybe<string>;

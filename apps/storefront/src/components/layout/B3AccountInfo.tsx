@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { OpenInNew as OpenInNewIcon } from '@mui/icons-material';
+import { Box, Button, Tooltip } from '@mui/material';
 
 import { useMobile } from '@/hooks/useMobile';
 import { useB3Lang } from '@/lib/lang';
@@ -19,6 +20,8 @@ const list: Array<ListProps> = [
     idLang: 'global.button.logout',
   },
 ];
+
+const BUYING_GUIDE_URL = 'https://www.logiexpert.com/guida-acquisto';
 
 interface B3AccountInfoProps {
   closeSidebar?: (x: boolean) => void;
@@ -73,6 +76,34 @@ export default function B3AccountInfo({ closeSidebar }: B3AccountInfoProps) {
       }}
     >
       <B3DropDown title={name} handleItemClick={handleItemClick} list={newList} />
+      <Tooltip title={b3Lang('global.B3AccountInfo.buyingGuide')}>
+        <Button
+          aria-label={b3Lang('global.B3AccountInfo.buyingGuide')}
+          component="a"
+          className="buying-guide-button"
+          href={BUYING_GUIDE_URL}
+          rel="noopener noreferrer"
+          size="small"
+          endIcon={<OpenInNewIcon fontSize="small" />}
+          variant="outlined"
+          sx={{
+            backgroundColor: 'transparent !important',
+            color: '#000000 !important',
+            borderColor: '#000000 !important',
+            fontWeight: 700,
+            ml: '4px',
+            textTransform: 'none',
+            '&:hover': {
+              backgroundColor: '#000000 !important',
+              color: '#FFFFFF !important',
+              borderColor: '#000000 !important',
+            },
+          }}
+          target="_blank"
+        >
+          {b3Lang('global.B3AccountInfo.buyingGuide')}
+        </Button>
+      </Tooltip>
     </Box>
   );
 }

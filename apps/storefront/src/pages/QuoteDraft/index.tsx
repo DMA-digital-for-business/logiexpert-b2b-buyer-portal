@@ -367,19 +367,6 @@ function QuoteDraft({ setOpenPage }: PageProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectCompanyHierarchyId, isAddressCompanyHierarchy]);
 
-  const quoteAndExtraFieldsInfo = useMemo(() => {
-    const contactInfo: CustomFieldItems = quoteInfoOrigin.contactInfo || {};
-
-    return {
-      info: {
-        quoteTitle: contactInfo?.quoteTitle || '',
-        referenceNumber: quoteInfoOrigin?.referenceNumber || '',
-      },
-      extraFields: quoteInfoOrigin.extraFields || [],
-      recipients: quoteInfoOrigin.recipients || [],
-    };
-  }, [quoteInfoOrigin]);
-
   const getAddress = () => {
     const addressSaveInfo = {
       shippingAddress,
@@ -946,7 +933,6 @@ function QuoteDraft({ setOpenPage }: PageProps) {
         <Box>
           {!isEdit && (
             <QuoteInfo
-              quoteAndExtraFieldsInfo={quoteAndExtraFieldsInfo}
               status="Draft"
               contactInfo={quoteInfoOrigin?.contactInfo}
               shippingAddress={quoteInfoOrigin?.shippingAddress}

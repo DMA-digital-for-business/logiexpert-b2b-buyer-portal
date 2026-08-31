@@ -89,6 +89,7 @@
   "global.B3MainHeader.signIn": "Sign in",
   "global.B3MainHeader.home": "Home",
   "global.B3MainHeader.cart": "Cart",
+  "global.B3AccountInfo.buyingGuide": "Buying guide",
   "global.dialog.cancel": "Cancel",
   "global.dialog.save": "Save",
   "global.registrationDialog.title": "Registration",
