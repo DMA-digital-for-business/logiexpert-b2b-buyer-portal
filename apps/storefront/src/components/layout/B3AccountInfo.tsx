@@ -23,6 +23,28 @@ const list: Array<ListProps> = [
 
 const BUYING_GUIDE_URL = 'https://www.logiexpert.com/guida-acquisto';
 
+export function BuyingGuideButton() {
+  const b3Lang = useB3Lang();
+
+  return (
+    <Tooltip title={b3Lang('global.B3AccountInfo.buyingGuide')}>
+      <Button
+        aria-label={b3Lang('global.B3AccountInfo.buyingGuide')}
+        component="a"
+        className="buying-guide-button"
+        href={BUYING_GUIDE_URL}
+        rel="noopener noreferrer"
+        size="small"
+        endIcon={<OpenInNewIcon fontSize="small" />}
+        variant="outlined"
+        target="_blank"
+      >
+        {b3Lang('global.B3AccountInfo.buyingGuide')}
+      </Button>
+    </Tooltip>
+  );
+}
+
 interface B3AccountInfoProps {
   closeSidebar?: (x: boolean) => void;
 }
@@ -76,34 +98,7 @@ export default function B3AccountInfo({ closeSidebar }: B3AccountInfoProps) {
       }}
     >
       <B3DropDown title={name} handleItemClick={handleItemClick} list={newList} />
-      <Tooltip title={b3Lang('global.B3AccountInfo.buyingGuide')}>
-        <Button
-          aria-label={b3Lang('global.B3AccountInfo.buyingGuide')}
-          component="a"
-          className="buying-guide-button"
-          href={BUYING_GUIDE_URL}
-          rel="noopener noreferrer"
-          size="small"
-          endIcon={<OpenInNewIcon fontSize="small" />}
-          variant="outlined"
-          sx={{
-            backgroundColor: 'transparent !important',
-            color: '#000000 !important',
-            borderColor: '#000000 !important',
-            fontWeight: 700,
-            ml: '4px',
-            textTransform: 'none',
-            '&:hover': {
-              backgroundColor: '#000000 !important',
-              color: '#FFFFFF !important',
-              borderColor: '#000000 !important',
-            },
-          }}
-          target="_blank"
-        >
-          {b3Lang('global.B3AccountInfo.buyingGuide')}
-        </Button>
-      </Tooltip>
+      {isMobile && <BuyingGuideButton />}
     </Box>
   );
 }

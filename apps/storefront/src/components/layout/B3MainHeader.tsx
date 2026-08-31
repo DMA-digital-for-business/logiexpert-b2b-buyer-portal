@@ -12,7 +12,7 @@ import b3TriggerCartNumber from '@/utils/b3TriggerCartNumber';
 
 import { getContrastColor } from '../outSideComponents/utils/b3CustomStyles';
 
-import B3AccountInfo from './B3AccountInfo';
+import B3AccountInfo, { BuyingGuideButton } from './B3AccountInfo';
 import B3CompanyHierarchy from './B3CompanyHierarchy';
 import B3LocaleSwitcher from './B3LocaleSwitcher';
 import B3StatusNotification from './B3StatusNotification';
@@ -157,6 +157,7 @@ export default function MainHeader({ title }: { title: string }) {
                 ) : null}
               </Button>
             )}
+            <BuyingGuideButton />
           </Box>
         </Box>
       </Box>

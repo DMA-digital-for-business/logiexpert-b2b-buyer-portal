@@ -108,21 +108,6 @@ export default function App() {
     font-family: Roboto;
   }`;
 
-  const BUYING_GUIDE_STYLES = `
-  .buying-guide-button,
-  .buying-guide-button.MuiButton-outlined {
-    background-color: transparent !important;
-    border: 1px solid #000000 !important;
-    color: #000000 !important;
-  }
-
-  .buying-guide-button:hover,
-  .buying-guide-button.MuiButton-outlined:hover {
-    background-color: #000000 !important;
-    border-color: #000000 !important;
-    color: #FFFFFF !important;
-  }`;
-
   const [customStyles, setCustomStyle] = useState<string>(CUSTOM_STYLES);
 
   useDomHooks({ setOpenPage, isOpen });
@@ -402,10 +387,10 @@ export default function App() {
   useEffect(() => {
     const cssValue = (cssOverride.css || '').replace(/\};/g, '}');
 
-    const newStyle = `${CUSTOM_STYLES}\n${cssValue}\n${BUYING_GUIDE_STYLES}`;
+    const newStyle = `${CUSTOM_STYLES}\n${cssValue}`;
 
     setCustomStyle(newStyle);
-  }, [cssOverride?.css, CUSTOM_STYLES, BUYING_GUIDE_STYLES]);
+  }, [cssOverride?.css, CUSTOM_STYLES]);
 
   return (
     <>
