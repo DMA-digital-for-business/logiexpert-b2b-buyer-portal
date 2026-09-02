@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router";
 import { Box } from '@mui/material';
 import trim from 'lodash-es/trim';
 

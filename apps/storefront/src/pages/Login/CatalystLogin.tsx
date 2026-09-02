@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from "react-router";
 
 import { Loading } from '@/components/loading';
 import { endUserMasqueradingCompany, superAdminEndMasquerade } from '@/shared/service/b2b';

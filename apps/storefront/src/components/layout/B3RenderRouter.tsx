@@ -1,5 +1,5 @@
 import { Suspense, useContext, useEffect } from 'react';
-import { Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, Route, Routes, useLocation, useNavigate } from "react-router";
 
 import B3Layout from '@/components/layout/B3Layout';
 import B3LayoutTip from '@/components/layout/B3LayoutTip';

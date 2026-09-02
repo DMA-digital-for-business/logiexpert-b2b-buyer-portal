@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router";
 import { Alert, Box, Typography } from '@mui/material';
 
 import { useB3Lang } from '@/lib/lang';

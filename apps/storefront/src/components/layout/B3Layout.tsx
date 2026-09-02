@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router";
 import { Box, useMediaQuery } from '@mui/material';
 
 import { useMobile } from '@/hooks/useMobile';

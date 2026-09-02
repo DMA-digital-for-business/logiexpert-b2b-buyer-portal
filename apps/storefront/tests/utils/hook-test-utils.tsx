@@ -1,6 +1,6 @@
 import { ComponentProps, PropsWithChildren, Suspense, useContext, useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, useLocation } from 'react-router-dom';
+import { MemoryRouter, useLocation } from "react-router";
 import { renderHook, RenderHookOptions } from '@testing-library/react';
 import { Mock } from 'vitest';
 

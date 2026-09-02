@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router";
 import { Box, Typography } from '@mui/material';
 
 import { B3Card } from '@/components/B3Card';

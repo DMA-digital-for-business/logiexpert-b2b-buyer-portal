@@ -1,4 +1,4 @@
-import { Location, NavigateFunction } from 'react-router-dom';
+import { Location, NavigateFunction } from "react-router";
 
 import { LangFormatFunction } from '@/lib/lang';
 import { getBCStorefrontProductSettings, quoteCheckout } from '@/shared/service/b2b';

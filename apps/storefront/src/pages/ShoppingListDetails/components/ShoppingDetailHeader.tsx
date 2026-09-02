@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router";
 import { ArrowBackIosNew } from '@mui/icons-material';
 import { Box, Grid, styled, Typography } from '@mui/material';
 

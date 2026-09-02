@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router";
 import {
   NavigateBefore as NavigateBeforeIcon,
   NavigateNext as NavigateNextIcon,

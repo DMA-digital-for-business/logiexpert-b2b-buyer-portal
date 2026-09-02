@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router";
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material';
 import { Box, Button, Tooltip } from '@mui/material';
 

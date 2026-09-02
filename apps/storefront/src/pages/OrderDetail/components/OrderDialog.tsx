@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router";
 import { Alert, Box, Typography } from '@mui/material';
 import Cookies from 'js-cookie';
 

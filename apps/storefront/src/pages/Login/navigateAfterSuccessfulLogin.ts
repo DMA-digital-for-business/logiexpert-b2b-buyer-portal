@@ -1,4 +1,4 @@
-import { type NavigateFunction } from 'react-router-dom';
+import { type NavigateFunction } from "react-router";
 
 import { PATH_ROUTES } from '@/constants';
 import { CustomerRole, UserTypes } from '@/types';

@@ -1,5 +1,5 @@
 import { lazy, LazyExoticComponent, ReactElement } from 'react';
-import { matchPath } from 'react-router-dom';
+import { matchPath } from "react-router";
 
 import { PageProps } from '@/pages/PageProps';
 import { store } from '@/store';

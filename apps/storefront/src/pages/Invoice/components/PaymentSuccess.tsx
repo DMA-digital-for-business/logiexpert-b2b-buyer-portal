@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router";
 import { Box, Button, Typography } from '@mui/material';
 
 import B3Dialog from '@/components/B3Dialog';

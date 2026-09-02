@@ -1,4 +1,4 @@
-import type { Location } from 'react-router-dom';
+import { Location } from "react-router";
 import { graphql, HttpResponse, startMockServer } from 'tests/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 

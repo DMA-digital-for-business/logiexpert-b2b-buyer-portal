@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router";
 import { Box, Button, useTheme } from '@mui/material';
 
 import { useMobile } from '@/hooks/useMobile';

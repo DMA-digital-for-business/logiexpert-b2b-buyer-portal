@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router";
 
 import { useMobile } from '@/hooks/useMobile';
 import { GlobalContext } from '@/shared/global';

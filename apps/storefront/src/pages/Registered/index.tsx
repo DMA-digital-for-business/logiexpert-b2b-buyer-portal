@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from "react-router";
 import { Box, ImageListItem } from '@mui/material';
 
 import { B3Card } from '@/components/B3Card';

@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router";
 import { Box, Button, Link, Typography, useTheme } from '@mui/material';
 
 import { B3CustomForm } from '@/components/B3CustomForm';

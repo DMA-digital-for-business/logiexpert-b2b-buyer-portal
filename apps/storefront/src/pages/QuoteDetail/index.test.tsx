@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router";
 import copy from 'copy-to-clipboard';
 import {
   buildCompanyStateWith,

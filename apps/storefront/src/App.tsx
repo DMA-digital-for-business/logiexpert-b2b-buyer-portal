@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { HashRouter } from 'react-router-dom';
+import { HashRouter } from "react-router";
 
 import B3GlobalTip from '@/components/B3GlobalTip';
 import GlobalDialog from '@/components/extraTip/GlobalDialog';
