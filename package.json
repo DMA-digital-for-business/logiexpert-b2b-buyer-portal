@@ -17,7 +17,7 @@
     "clean:node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +"
   },
   "devDependencies": {
-    "eslint": "^8.2.0",
+    "eslint": "^10.9.1",
     "prettier": "^3.6.2",
     "turbo": "^2.9.14"
   },

@@ -1,6 +1,49 @@
-module.exports = {
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { fixupConfigRules } from '@eslint/compat';
+import { FlatCompat } from '@eslint/eslintrc';
+import eslint from '@eslint/js';
+import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
+
+const directory = path.dirname(fileURLToPath(import.meta.url));
+const compat = new FlatCompat({
+  allConfig: eslint.configs.all,
+  baseDirectory: directory,
+  recommendedConfig: eslint.configs.recommended,
+});
+
+const removeUnavailableTypeScriptRules = (configs) =>
+  configs.map((config) => {
+    if (!config.rules) {
+      return config;
+    }
+
+    const rules = Object.fromEntries(
+      Object.entries(config.rules).filter(([name]) => {
+        if (!name.startsWith('@typescript-eslint/')) {
+          return true;
+        }
+
+        const ruleName = name.slice('@typescript-eslint/'.length);
+
+        return ruleName in typescriptEslintPlugin.rules;
+      }),
+    );
+
+    return { ...config, rules };
+  });
+
+const legacyConfig = {
   root: true,
-  ignorePatterns: ['dist/', 'out/', 'build/', 'coverage/'],
+  ignorePatterns: [
+    'dist/',
+    'out/',
+    'build/',
+    'coverage/',
+    'eslint.config.js',
+    'vitest.config.ts',
+  ],
   env: {
     browser: true,
     es2021: true,
@@ -77,6 +120,11 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-implicit-coercion': 'error',
     'react/prop-types': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { args: 'after-used', caughtErrors: 'none', ignoreRestSiblings: true, vars: 'all' },
+    ],
+    '@typescript-eslint/only-throw-error': 'error',
     '@typescript-eslint/no-useless-template-literals': 'error',
     'simple-import-sort/imports': [
       'error',
@@ -210,7 +258,8 @@ module.exports = {
         'tests/components/captcha/*.*.tsx',
       ],
       rules: {
-        '@typescript-eslint/ban-types': 0,
+        '@typescript-eslint/no-empty-object-type': 0,
+        '@typescript-eslint/no-wrapper-object-types': 0,
       },
     },
     {
@@ -231,3 +280,5 @@ module.exports = {
     },
   ],
 };
+
+export default removeUnavailableTypeScriptRules(fixupConfigRules(compat.config(legacyConfig)));

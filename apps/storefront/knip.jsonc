@@ -21,9 +21,17 @@
   },
   "babel": true,
   "ignoreDependencies": [
-    "eslint", // Not really sure why this is reported as unused
-    "eslint-plugin-jsx-a11y", // peer dependency of airbnb eslint config
-    "eslint-plugin-react-hooks", // peer dependency of airbnb eslint config
+    "@bigcommerce/eslint-plugin", // Loaded by the legacy presets through FlatCompat
+    "eslint-config-airbnb", // Loaded by name through FlatCompat
+    "eslint-config-airbnb-typescript", // Loaded by name through FlatCompat
+    "eslint-config-prettier", // Loaded by name through FlatCompat
+    "eslint-plugin-import", // Loaded by the legacy presets through FlatCompat
+    "eslint-plugin-jsx-a11y", // Loaded by the legacy presets through FlatCompat
+    "eslint-plugin-prettier", // Loaded by the legacy presets through FlatCompat
+    "eslint-plugin-react", // Loaded by the legacy presets through FlatCompat
+    "eslint-plugin-react-hooks", // Loaded by the legacy presets through FlatCompat
+    "eslint-plugin-simple-import-sort", // Loaded by name through FlatCompat
+    "eslint-plugin-testing-library", // Loaded by the legacy presets through FlatCompat
     "graphql", // used to generate graphql types
     "@mui/styles", // used by react-mui-dropzone
     "@testing-library/dom", // used by @testing-library/react
