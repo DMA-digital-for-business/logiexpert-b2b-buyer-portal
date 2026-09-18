@@ -431,7 +431,7 @@ describe('addProductFromProductPageToQuote', () => {
           );
           await addToQuote();
 
-          expect(globalSnackbar.success).toHaveBeenCalled();
+          expect(globalSnackbar.success).not.toHaveBeenCalled();
           expect(addQuoteDraftProduce).toHaveBeenCalled();
         });
       });
@@ -503,7 +503,7 @@ describe('addProductFromProductPageToQuote', () => {
           );
           await addToQuote();
 
-          expect(globalSnackbar.success).toHaveBeenCalled();
+          expect(globalSnackbar.success).not.toHaveBeenCalled();
           expect(addQuoteDraftProduce).toHaveBeenCalled();
         });
       });
@@ -542,7 +542,7 @@ describe('addProductFromProductPageToQuote', () => {
         );
         await addToQuote();
 
-        expect(globalSnackbar.success).toHaveBeenCalled();
+        expect(globalSnackbar.success).not.toHaveBeenCalled();
         expect(addQuoteDraftProduce).toHaveBeenCalled();
       });
 
@@ -582,7 +582,7 @@ describe('addProductFromProductPageToQuote', () => {
           await addToQuote();
 
           expect(addQuoteDraftProduce).toHaveBeenCalled();
-          expect(globalSnackbar.success).toHaveBeenCalled();
+          expect(globalSnackbar.success).not.toHaveBeenCalled();
         });
 
         it('adds product successfully when product is in stock', async () => {
@@ -620,7 +620,7 @@ describe('addProductFromProductPageToQuote', () => {
           await addToQuote();
 
           expect(addQuoteDraftProduce).toHaveBeenCalled();
-          expect(globalSnackbar.success).toHaveBeenCalled();
+          expect(globalSnackbar.success).not.toHaveBeenCalled();
         });
       });
 
@@ -661,7 +661,7 @@ describe('addProductFromProductPageToQuote', () => {
           await addToQuote();
 
           expect(addQuoteDraftProduce).toHaveBeenCalled();
-          expect(globalSnackbar.success).toHaveBeenCalled();
+          expect(globalSnackbar.success).not.toHaveBeenCalled();
         });
 
         it('adds product successfully when variant is in stock', async () => {
@@ -700,7 +700,7 @@ describe('addProductFromProductPageToQuote', () => {
           await addToQuote();
 
           expect(addQuoteDraftProduce).toHaveBeenCalled();
-          expect(globalSnackbar.success).toHaveBeenCalled();
+          expect(globalSnackbar.success).not.toHaveBeenCalled();
         });
       });
     });
@@ -879,7 +879,7 @@ describe('addProductFromProductPageToQuote', () => {
       );
       await addToQuote();
 
-      expect(globalSnackbar.success).toHaveBeenCalled();
+      expect(globalSnackbar.success).not.toHaveBeenCalled();
       expect(addQuoteDraftProduce).toHaveBeenCalled();
     });
 
@@ -933,12 +933,7 @@ describe('addProductFromProductPageToQuote', () => {
       );
       await addToQuote();
 
-      expect(globalSnackbar.success).toHaveBeenCalledWith('addProductSingular', {
-        action: {
-          onClick: expect.any(Function),
-          label: 'openQuote',
-        },
-      });
+      expect(globalSnackbar.success).not.toHaveBeenCalled();
     });
   });
 });

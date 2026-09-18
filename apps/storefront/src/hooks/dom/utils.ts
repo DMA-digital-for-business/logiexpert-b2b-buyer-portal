@@ -176,13 +176,6 @@ const addProductsToDraftQuote = async (
   if (isSuccess) {
     // Save the shopping cart id, used to clear the shopping cart after submitting the quote
     if (cartId) B3LStorage.set('cartToQuoteId', cartId);
-
-    globalSnackbar.success(b3Lang('quoteDraft.notification.productPlural'), {
-      action: {
-        onClick: () => gotoQuoteDraft(setOpenPage),
-        label: b3Lang('quoteDraft.notification.openQuote'),
-      },
-    });
   }
 };
 
@@ -355,12 +348,6 @@ const addProductFromProductPageToQuote = (
       const isSuccess = validProductQty(newProducts);
       if (quoteListitem && isSuccess) {
         await addQuoteDraftProduce(quoteListitem, qty, optionList || []);
-        globalSnackbar.success(b3Lang('global.notification.addProductSingular'), {
-          action: {
-            onClick: () => gotoQuoteDraft(setOpenPage),
-            label: b3Lang('quoteDraft.notification.openQuote'),
-          },
-        });
       } else if (!isSuccess) {
         globalSnackbar.error(b3Lang('global.notification.maximumPurchaseExceed'), {
           action: {
