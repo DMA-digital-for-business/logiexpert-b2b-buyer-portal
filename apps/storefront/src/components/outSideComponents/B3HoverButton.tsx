@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Box, Button, Snackbar, SnackbarOrigin, SxProps } from '@mui/material';
+import { Box, Button, SxProps } from '@mui/material';
 
 import {
   CHECKOUT_URL,
@@ -63,10 +63,7 @@ export default function B3HoverButton(props: B3HoverButtonProps) {
     FINISH_QUOTE_DEFAULT_VALUE,
   );
 
-  const defaultLocation: SnackbarOrigin = {
-    vertical: 'bottom',
-    horizontal: 'right',
-  };
+  const buttonLocation = getLocation(location);
 
   const cssInfo = splitCustomCssValue(customCss);
   const {
@@ -84,18 +81,26 @@ export default function B3HoverButton(props: B3HoverButtonProps) {
     ...getStyles(cssValue),
   };
 
-  const positionStyles = isMobile ? {} : getPosition(horizontalPadding, verticalPadding, location);
+  const positionStyles = isMobile
+    ? {
+        top: buttonLocation.vertical === 'top' ? '8px' : 'auto',
+        bottom: buttonLocation.vertical === 'bottom' ? '8px' : 'auto',
+        left: '8px',
+        right: '8px',
+      }
+    : getPosition(horizontalPadding, verticalPadding, location);
 
   if (href.includes(CHECKOUT_URL)) return null;
   return (
-    <Snackbar
+    <Box
       sx={{
+        position: 'fixed',
+        display: 'flex',
+        justifyContent: buttonLocation.horizontal === 'left' ? 'flex-start' : 'flex-end',
         zIndex: '99999999993',
         width: 'auto',
         ...positionStyles,
       }}
-      anchorOrigin={getLocation(location) || defaultLocation}
-      open
     >
       <Box
         sx={{
@@ -133,6 +138,6 @@ export default function B3HoverButton(props: B3HoverButtonProps) {
             </Button>
           )}
       </Box>
-    </Snackbar>
+    </Box>
   );
 }
