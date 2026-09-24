@@ -2,6 +2,7 @@ import cloneDeep from 'lodash-es/cloneDeep';
 import isEmpty from 'lodash-es/isEmpty';
 import { v1 as uuid } from 'uuid';
 
+import { pushQuoteEvent } from '@/pages/quote/quoteAnalytics';
 import { getProductPricing } from '@/shared/service/b2b';
 import { setDraftQuoteList, store } from '@/store';
 import { setEnteredInclusiveTax } from '@/store/slices/storeConfigs';
@@ -652,6 +653,7 @@ const addQuoteDraftProducts = (products: CustomFieldItems[]) => {
 
   if (draftQuoteList.length === 0) {
     store.dispatch(setDraftQuoteList(products as QuoteItem[]));
+    pushQuoteEvent('add_to_quote', products as QuoteItem[]);
     return;
   }
 
@@ -681,6 +683,7 @@ const addQuoteDraftProducts = (products: CustomFieldItems[]) => {
   }
 
   store.dispatch(setDraftQuoteList(draftQuote));
+  pushQuoteEvent('add_to_quote', products as QuoteItem[]);
 };
 
 const validProductQty = (products: CustomFieldItems) => {
@@ -762,6 +765,9 @@ const addQuoteDraftProduce = async (
   }
 
   store.dispatch(setDraftQuoteList(draftList));
+  pushQuoteEvent('add_to_quote', [
+    { ...quoteListitem, node: { ...quoteListitem.node, quantity: Number(qty) } },
+  ]);
 };
 
 const getBCPrice = (basePrice: number, taxPrice: number) => {

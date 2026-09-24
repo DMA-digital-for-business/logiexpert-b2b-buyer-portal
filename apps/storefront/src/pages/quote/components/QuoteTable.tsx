@@ -24,6 +24,7 @@ import { getProductOptionsFields } from '@/utils/b3Product/shared/config';
 import { snackbar } from '@/utils/b3Tip';
 
 import ChooseOptionsDialog from '../../ShoppingListDetails/components/ChooseOptionsDialog';
+import { pushQuoteEvent } from '../quoteAnalytics';
 import {
   draftQuoteListHasBackorderedItemsForDisplay,
   getDraftBackorderDisplayFields,
@@ -221,6 +222,16 @@ function QuoteTable({ total, items, updateSummary }: QuoteTableProps) {
         },
       }),
     );
+    if (quantity !== row.quantity) {
+      pushQuoteEvent(quantity > row.quantity ? 'add_to_quote' : 'remove_from_quote', [
+        {
+          node: {
+            ...(quantity > row.quantity ? product : row),
+            quantity: Math.abs(quantity - row.quantity),
+          },
+        },
+      ]);
+    }
     updateSummary();
   };
 
@@ -240,7 +251,9 @@ function QuoteTable({ total, items, updateSummary }: QuoteTableProps) {
   };
 
   const handleDeleteClick = (id: string) => {
+    const removedItem = items.find((item) => item.node.id === id);
     dispatch(deleteProductFromDraftQuoteList(id));
+    if (removedItem) pushQuoteEvent('remove_from_quote', [removedItem]);
     updateSummary();
   };
 

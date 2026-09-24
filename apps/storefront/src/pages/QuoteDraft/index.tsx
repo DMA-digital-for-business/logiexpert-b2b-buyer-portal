@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router';
 import { ArrowBackIosNew } from '@mui/icons-material';
 import { Box, Checkbox, FormControlLabel, Stack, Typography } from '@mui/material';
 import { cloneDeep, concat, isEqual, omit, uniq } from 'lodash-es';
@@ -39,6 +39,7 @@ import {
   QuoteInfo as QuoteInfoType,
   ShippingAddress,
 } from '@/types/quotes';
+import { pushAnalyticsEvent } from '@/utils/analytics';
 import { verifyCreatePermission } from '@/utils/b3CheckPermissions/check';
 import { b2bPermissionsMap } from '@/utils/b3CheckPermissions/config';
 import b2bLogger from '@/utils/b3Logger';
@@ -69,6 +70,7 @@ import QuoteSubmissionResponse from '../quote/components/QuoteSubmissionResponse
 import QuoteSummary from '../quote/components/QuoteSummary';
 import QuoteTable from '../quote/components/QuoteTable';
 import getAccountFormFields from '../quote/config';
+import { pushQuoteEvent } from '../quote/quoteAnalytics';
 import {
   getQuoteValidationErrorMessage,
   QUOTE_VALIDATION_ERROR_CODES,
@@ -155,6 +157,14 @@ function QuoteDraft({ setOpenPage }: PageProps) {
     ({ storeConfigs }) => storeConfigs.currencies.enteredInclusiveTax,
   );
   const draftQuoteList = useAppSelector(({ quoteInfo }) => quoteInfo.draftQuoteList);
+  const viewedQuoteRef = useRef(false);
+
+  useEffect(() => {
+    if (!viewedQuoteRef.current && draftQuoteList.length > 0) {
+      viewedQuoteRef.current = true;
+      pushQuoteEvent('view_quote', draftQuoteList);
+    }
+  }, [draftQuoteList]);
   const salesRepCompanyId = useAppSelector(({ b2bFeatures }) => b2bFeatures.masqueradeCompany.id);
   const salesRepCompanyName = useAppSelector(
     ({ b2bFeatures }) => b2bFeatures.masqueradeCompany.companyName,
@@ -742,6 +752,15 @@ function QuoteDraft({ setOpenPage }: PageProps) {
       } = response;
 
       quoteSubmissionDataRef.current = { id, createdAt, uuid };
+
+      if (id) {
+        pushAnalyticsEvent('generate_lead', {
+          lead_type: 'quote',
+          form_id: 'quote_draft',
+          submission_id: String(id),
+          quote_id: String(id),
+        });
+      }
 
       if (id) {
         const cartId = B3LStorage.get('cartToQuoteId');

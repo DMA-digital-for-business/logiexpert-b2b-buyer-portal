@@ -13,6 +13,7 @@ import { sendSubscribersState, uploadB2BFile } from '@/shared/service/b2b';
 import { getStorefrontToken } from '@/shared/service/b2b/graphql/recaptcha';
 import { RegisterCompanyStatus } from '@/shared/service/bc/graphql/company';
 import { CompanyStatus } from '@/types/company';
+import { pushAnalyticsEvent } from '@/utils/analytics';
 import b2bLogger from '@/utils/b3Logger';
 import { channelId, storeHash } from '@/utils/basicConfig';
 
@@ -332,6 +333,7 @@ export default function CompleteStep(props: CompleteStepProps) {
               blockPendingAccountOrderCreation,
             },
           });
+          pushAnalyticsEvent('sign_up', { method: 'email' });
           saveRegisterPassword({ password, confirmPassword });
           await handleSendSubscribersState();
           handleNext(password);
