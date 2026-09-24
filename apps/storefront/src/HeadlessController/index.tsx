@@ -93,7 +93,6 @@ export default function HeadlessController({ setOpenPage }: HeadlessControllerPr
     state: { addQuoteBtn, shoppingListBtn, addToAllQuoteBtn },
   } = useContext(CustomStyleContext);
   const { addToQuoteFromCart, addToQuoteFromCookie } = addProductsFromCartToQuote(
-    setOpenPage,
     b3Lang,
   );
 
@@ -163,7 +162,7 @@ export default function HeadlessController({ setOpenPage }: HeadlessControllerPr
               sku: await getSku(item),
             };
 
-            return addProductsToDraftQuote([productWithSku], setOpenPage, b3Lang);
+            return addProductsToDraftQuote([productWithSku]);
           },
           addProductsFromCart: addToQuoteFromCookie,
           addProductsFromCartId: addToQuoteFromCart,
@@ -175,7 +174,7 @@ export default function HeadlessController({ setOpenPage }: HeadlessControllerPr
               })),
             );
 
-            return addProductsToDraftQuote(products, setOpenPage, b3Lang);
+            return addProductsToDraftQuote(products);
           },
           getQuoteConfigs: () => quoteConfig,
           getCurrent: () => ({ productList }),

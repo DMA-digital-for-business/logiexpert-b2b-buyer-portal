@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 
 import {
   getContrastColor,
@@ -12,7 +12,6 @@ import { useB3Lang } from '@/lib/lang';
 import { CustomStyleContext } from '@/shared/customStyleButton';
 import { useAppSelector } from '@/store';
 import { CompanyStatus } from '@/types';
-import { OpenPageState } from '@/types/hooks';
 import { B3SStorage } from '@/utils/b3Storage';
 import { globalSnackbar } from '@/utils/b3Tip';
 
@@ -21,9 +20,7 @@ import useStorageState from '../useStorageState';
 
 import { addProductsFromCartToQuote } from './utils';
 
-type DispatchProps = Dispatch<SetStateAction<OpenPageState>>;
 interface MutationObserverProps {
-  setOpenPage: DispatchProps;
   cartQuoteEnabled: boolean;
 }
 
@@ -32,10 +29,9 @@ interface IsShowBlockPendingAccountOrderCreationTipProps {
   checkoutTip: number;
 }
 
-const useCartToQuote = ({ setOpenPage, cartQuoteEnabled }: MutationObserverProps) => {
+const useCartToQuote = ({ cartQuoteEnabled }: MutationObserverProps) => {
   const b3Lang = useB3Lang();
   const { addToQuoteFromCookie: addToQuote, addLoading } = addProductsFromCartToQuote(
-    setOpenPage,
     b3Lang,
   );
 

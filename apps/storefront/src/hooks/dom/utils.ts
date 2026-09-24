@@ -134,8 +134,6 @@ const getCartProducts = (lineItems: LineItemsProps) =>
 
 const addProductsToDraftQuote = async (
   products: LineItem[],
-  setOpenPage: SetOpenPage,
-  b3Lang: LangFormatFunction,
   cartId?: string,
 ) => {
   // filter out products without SKU or variantId
@@ -179,7 +177,7 @@ const addProductsToDraftQuote = async (
   }
 };
 
-const addProductsFromCartToQuote = (setOpenPage: SetOpenPage, b3Lang: LangFormatFunction) => {
+const addProductsFromCartToQuote = (b3Lang: LangFormatFunction) => {
   const addToQuote = async (cartInfoWithOptions: GetCart) => {
     try {
       if (!cartInfoWithOptions.data.site.cart) {
@@ -203,7 +201,7 @@ const addProductsFromCartToQuote = (setOpenPage: SetOpenPage, b3Lang: LangFormat
       const newCartProductsList = cartProductsList.filter(
         (product: PhysicalItemProps) => !product.parentEntityId,
       );
-      await addProductsToDraftQuote(newCartProductsList, setOpenPage, b3Lang, entityId);
+      await addProductsToDraftQuote(newCartProductsList, entityId);
     } catch (e) {
       b2bLogger.error(e);
     } finally {
