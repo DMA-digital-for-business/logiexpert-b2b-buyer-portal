@@ -177,6 +177,47 @@ The local `apps/storefront/.env` file is ignored by Git and is used only for loc
 not upload it or commit it. Variables prefixed with `VITE_` are included in the client-side bundle
 at build time and must never contain passwords, private API keys, or other sensitive values.
 
+### Download delle fatture Odoo
+
+La lista ordini include il pulsante **Scarica fattura** su desktop e mobile quando tutte le
+variabili Odoo sono configurate. Al click, il browser chiama direttamente l’API JSON-2 di Odoo 19:
+ricerca `sale.order` tramite `x_bigcommerce_order_id`, legge `invoice_ids` e scarica il PDF della
+sola fattura cliente confermata (`account.move`, `move_type=out_invoice`, `state=posted`).
+Non vengono inclusi bozze, fatture annullate o note di credito. Corrispondenze multiple vengono
+segnalate senza scegliere una fattura arbitrariamente.
+
+Configurazione locale in `apps/storefront/.env`:
+
+```dotenv
+VITE_ODOO_BASE_URL=https://logiexpert-test.odoo.com
+VITE_ODOO_DATABASE_NAME=logiexpert-test
+VITE_ODOO_API_KEY=<chiave-dell-utente-odoo>
+```
+
+Per il deployment, configura `VITE_ODOO_BASE_URL` e `VITE_ODOO_DATABASE_NAME` come variabili degli
+ambienti GitHub `staging` e `production`, e `VITE_ODOO_API_KEY` come secret degli stessi ambienti.
+Il workflow passa questi valori alla build. Serve una nuova build dopo ogni modifica.
+
+Questa integrazione costituisce un’eccezione intenzionale alla raccomandazione precedente sui
+segreti `VITE_`: **la chiave viene incorporata nel bundle pubblico**, anche se configurata come
+GitHub secret. Chiunque la recuperi può usare tutti i permessi di lettura dell’utente Odoo;
+la sessione BigCommerce non restringe tali permessi. Le restrizioni sui record devono essere
+applicate in Odoo.
+
+Odoo deve consentire CORS dal dominio dello storefront per `/json/2/`, incluse le richieste
+`OPTIONS`/`POST` e gli header `Authorization`, `Content-Type`, `X-Odoo-Database`.
+La verifica del 1 ottobre 2026 su `logiexpert-test.odoo.com` ha restituito `401` alla richiesta
+preliminare `OPTIONS`, senza header CORS: questa configurazione deve essere corretta prima
+di poter scaricare dal browser BigCommerce.
+La configurazione del server di sviluppo Vite non risolve CORS in produzione. L’API esterna
+richiede inoltre un piano Odoo che la supporti.
+
+La chiave deve poter leggere gli ordini di vendita, le fatture e i relativi allegati PDF.
+Il documento viene letto dal campo `invoice_pdf_report_file`: deve essere già generato e salvato
+in Odoo (ad esempio tramite il flusso di invio della fattura). Il portale non genera PDF e non
+esegue operazioni di scrittura con la chiave in sola lettura. Se manca la fattura o il PDF,
+il pulsante mostra un messaggio. Errori di rete, CORS o autorizzazione consentono di riprovare.
+
 The deployment jobs for the same branch run sequentially to prevent concurrent uploads to the same
 destination. A failed build or a missing/invalid FTP setting stops the workflow before the remote
 directory is synchronized. During synchronization, the workflow reports the number and total size

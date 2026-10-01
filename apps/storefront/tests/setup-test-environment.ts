@@ -21,6 +21,9 @@ window.B3 = {
 };
 
 beforeEach(() => {
+  window.URL.createObjectURL = vi.fn((blob: Blob) => `blob:${blob.type}`);
+  window.URL.revokeObjectURL = vi.fn();
+
   window.B3 = {
     setting: {
       channel_id: 1,

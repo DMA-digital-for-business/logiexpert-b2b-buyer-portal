@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router';
 import { Box } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
@@ -37,7 +37,9 @@ import {
   getOrderStatusText,
   translateFilterMoreData,
 } from './config';
+import { InvoiceDownloadButton } from './InvoiceDownloadButton';
 import { type ListItem, mapSfGqlOrderToListItem } from './mapSfGqlOrderToListItem';
+import { isOdooInvoiceConfigured } from './odooInvoice';
 import { OrderItemCard } from './OrderItemCard';
 import {
   getB2BAllOrders,
@@ -377,6 +379,12 @@ function Order({ isCompanyOrder = false }: OrderProps) {
         width: '10%',
         isSortable: true,
       },
+      {
+        key: 'invoice',
+        title: b3Lang('orders.invoice.title'),
+        render: ({ orderId }) => <InvoiceDownloadButton orderId={orderId} />,
+        hidden: !isOdooInvoiceConfigured,
+      },
     ],
     [b3Lang, isB2BUser, isSuperAdminNotAgenting, isCompanyOrder],
   );
@@ -522,6 +530,7 @@ function Order({ isCompanyOrder = false }: OrderProps) {
               key={row.orderId}
               goToDetail={() => navigateToOrderDetail(row, index)}
               item={row}
+              showInvoiceDownload={isOdooInvoiceConfigured}
             />
           )}
           onClickRow={navigateToOrderDetail}

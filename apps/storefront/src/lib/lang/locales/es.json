@@ -1,4 +1,13 @@
 {
+  "orders.invoice.title": "Factura",
+  "orders.invoice.download": "Descargar factura",
+  "orders.invoice.downloadForOrder": "Descargar factura del pedido {orderId}",
+  "orders.invoice.downloading": "Descargando…",
+  "orders.invoice.unavailable": "Factura aún no disponible.",
+  "orders.invoice.ambiguous": "Varias coincidencias en Odoo. Contacta con soporte.",
+  "orders.invoice.pdfUnavailable": "El PDF de la factura aún no está disponible en Odoo.",
+  "orders.invoice.accessDenied": "Acceso a Odoo denegado. Contacta con soporte.",
+  "orders.invoice.requestFailed": "No se pudo descargar la factura. Reintenta o contacta con soporte.",
   "global.navMenu.orders": "Mis pedidos",
   "global.orders.title": "Mis pedidos",
   "global.tips.loading": "Cargando...",

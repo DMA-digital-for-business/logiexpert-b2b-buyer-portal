@@ -10,6 +10,7 @@ import { currencyFormat } from '@/utils/b3CurrencyFormat';
 import { displayFormat } from '@/utils/b3DateFormat';
 
 import OrderStatus from './components/OrderStatus';
+import { InvoiceDownloadButton } from './InvoiceDownloadButton';
 
 interface ListItem {
   orderId: string;
@@ -25,6 +26,7 @@ interface ListItem {
 interface OrderItemCardProps {
   goToDetail: () => void;
   item: ListItem;
+  showInvoiceDownload?: boolean;
 }
 
 const Flex = styled('div')(() => ({
@@ -35,7 +37,11 @@ const Flex = styled('div')(() => ({
   },
 }));
 
-export function OrderItemCard({ item, goToDetail }: OrderItemCardProps) {
+export function OrderItemCard({
+  item,
+  goToDetail,
+  showInvoiceDownload = false,
+}: OrderItemCardProps) {
   const theme = useTheme();
   const isB2BUser = useAppSelector(isB2BUserSelector);
   const customer = useAppSelector(({ company }) => company.customer);
@@ -107,6 +113,7 @@ export function OrderItemCard({ item, goToDetail }: OrderItemCardProps) {
           </Typography>
           <Typography>{`${displayFormat(item.createdAt)}`}</Typography>
         </Box>
+        {showInvoiceDownload && <InvoiceDownloadButton orderId={item.orderId} />}
       </CardContent>
     </Card>
   );

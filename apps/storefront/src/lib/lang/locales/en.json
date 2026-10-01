@@ -1,4 +1,13 @@
 {
+  "orders.invoice.title": "Invoice",
+  "orders.invoice.download": "Download invoice",
+  "orders.invoice.downloadForOrder": "Download invoice for order {orderId}",
+  "orders.invoice.downloading": "Downloading…",
+  "orders.invoice.unavailable": "Invoice not yet available.",
+  "orders.invoice.ambiguous": "Multiple matches found in Odoo. Contact support.",
+  "orders.invoice.pdfUnavailable": "The invoice PDF is not yet available in Odoo.",
+  "orders.invoice.accessDenied": "Odoo access denied. Contact support.",
+  "orders.invoice.requestFailed": "Could not download the invoice. Try again or contact support.",
   "global.tips.loading": "Loading...",
   "global.button.back": "Back",
   "global.button.next": "Continue",
