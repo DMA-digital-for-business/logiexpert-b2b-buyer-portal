@@ -48,9 +48,7 @@ jobs:
           VITE_DISABLE_BUILD_HASH: ${{ vars.VITE_DISABLE_BUILD_HASH }}
           VITE_IS_LOCAL_ENVIRONMENT: ${{ vars.VITE_IS_LOCAL_ENVIRONMENT }}
           VITE_LOCAL_APP_CLIENT_ID: ${{ vars.VITE_LOCAL_APP_CLIENT_ID }}
-          VITE_ODOO_BASE_URL: ${{ vars.VITE_ODOO_BASE_URL }}
-          VITE_ODOO_DATABASE_NAME: ${{ vars.VITE_ODOO_DATABASE_NAME }}
-          VITE_ODOO_API_KEY: ${{ secrets.VITE_ODOO_API_KEY }}
+          VITE_INVOICE_API_URL: ${{ vars.VITE_INVOICE_API_URL }}
         run: yarn build
 
       - name: Replace WebDAV folder with dist

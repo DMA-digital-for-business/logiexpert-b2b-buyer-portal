@@ -177,46 +177,51 @@ The local `apps/storefront/.env` file is ignored by Git and is used only for loc
 not upload it or commit it. Variables prefixed with `VITE_` are included in the client-side bundle
 at build time and must never contain passwords, private API keys, or other sensitive values.
 
-### Download delle fatture Odoo
+### Download delle fatture tramite backend
 
-La lista ordini include il pulsante **Scarica fattura** su desktop e mobile quando tutte le
-variabili Odoo sono configurate. Al click, il browser chiama direttamente l’API JSON-2 di Odoo 19:
-ricerca `sale.order` tramite `x_bigcommerce_order_id`, legge `invoice_ids` e scarica il PDF della
-sola fattura cliente confermata (`account.move`, `move_type=out_invoice`, `state=posted`).
-Non vengono inclusi bozze, fatture annullate o note di credito. Corrispondenze multiple vengono
-segnalate senza scegliere una fattura arbitrariamente.
+Il pulsante **Scarica fattura** nella lista ordini e nel dettaglio ordine, su desktop e mobile,
+viene mostrato quando
+`VITE_INVOICE_API_URL` e `VITE_LOCAL_APP_CLIENT_ID` sono configurati.
+Entrambi sono valori pubblici: configurarli in `apps/storefront/.env` per lo sviluppo e come
+variabili degli ambienti GitHub `staging` e `production` per il deployment.
+Serve una nuova build dopo ogni modifica. Il base URL è `https://s36jgajl1g.execute-api.eu-central-1.amazonaws.com/Stage`.
+Il client ID deve essere configurato prima di attivare il pulsante. Il vecchio pulsante
+Visualizza/Stampa fattura nel dettaglio ordine è stato rimosso.
 
-Configurazione locale in `apps/storefront/.env`:
+Al click il portale Stencil recupera un nuovo JWT da
+`/customer/current.jwt?app_client_id=<VITE_LOCAL_APP_CLIENT_ID>` usando la sessione dello storefront.
+Il client ID deve appartenere all’app BigCommerce il cui client secret è posseduto dal backend.
+Il JWT non viene memorizzato e l’email non viene ricavata o inviata dal frontend.
 
-```dotenv
-VITE_ODOO_BASE_URL=https://logiexpert-test.odoo.com
-VITE_ODOO_DATABASE_NAME=logiexpert-test
-VITE_ODOO_API_KEY=<chiave-dell-utente-odoo>
+Richiesta (metodo GET assunto in attesa di conferma del backend):
+
+```http
+GET <VITE_INVOICE_API_URL>/orders/{order_id}/invoice/download
+Authorization: Bearer <BigCommerce Current Customer JWT>
+
 ```
 
-Per il deployment, configura `VITE_ODOO_BASE_URL` e `VITE_ODOO_DATABASE_NAME` come variabili degli
-ambienti GitHub `staging` e `production`, e `VITE_ODOO_API_KEY` come secret degli stessi ambienti.
-Il workflow passa questi valori alla build. Serve una nuova build dopo ogni modifica.
+Risposta `200`:
 
-Questa integrazione costituisce un’eccezione intenzionale alla raccomandazione precedente sui
-segreti `VITE_`: **la chiave viene incorporata nel bundle pubblico**, anche se configurata come
-GitHub secret. Chiunque la recuperi può usare tutti i permessi di lettura dell’utente Odoo;
-la sessione BigCommerce non restringe tali permessi. Le restrizioni sui record devono essere
-applicate in Odoo.
+```json
+{"downloadUrl":"https://bucket.s3.eu-west-1.amazonaws.com/fattura.pdf?firma=..."}
+```
 
-Odoo deve consentire CORS dal dominio dello storefront per `/json/2/`, incluse le richieste
-`OPTIONS`/`POST` e gli header `Authorization`, `Content-Type`, `X-Odoo-Database`.
-La verifica del 1 ottobre 2026 su `logiexpert-test.odoo.com` ha restituito `401` alla richiesta
-preliminare `OPTIONS`, senza header CORS: questa configurazione deve essere corretta prima
-di poter scaricare dal browser BigCommerce.
-La configurazione del server di sviluppo Vite non risolve CORS in produzione. L’API esterna
-richiede inoltre un piano Odoo che la supporti.
+Il portale segue direttamente il link HTTPS restituito, senza inviare il JWT a S3 e senza
+scaricare prima il PDF via fetch. Il link S3 deve restituire
+`Content-Disposition: attachment; filename="fattura.pdf"` per avviare il download anche tra
+domini diversi: il solo attributo HTML `download` non lo garantisce. Il backend deve impostare
+questo header nell’oggetto o nel link prefirmato e può usare link con scadenza breve.
 
-La chiave deve poter leggere gli ordini di vendita, le fatture e i relativi allegati PDF.
-Il documento viene letto dal campo `invoice_pdf_report_file`: deve essere già generato e salvato
-in Odoo (ad esempio tramite il flusso di invio della fattura). Il portale non genera PDF e non
-esegue operazioni di scrittura con la chiave in sola lettura. Se manca la fattura o il PDF,
-il pulsante mostra un messaggio. Errori di rete, CORS o autorizzazione consentono di riprovare.
+Il backend verifica firma, scadenza, audience e store del JWT, ricava l’email dal payload
+verificato e controlla che il cliente abbia accesso all’ordine, considerando i permessi B2B.
+Poi recupera la fattura Odoo tramite l’ordine `x_bigcommerce_order_id` e genera il link S3.
+Client secret BigCommerce e credenziali Odoo vengono conservati esclusivamente sul backend.
+
+Il backend deve consentire CORS dal dominio dello storefront per `GET`/`OPTIONS` e l’header
+`Authorization`. Le risposte `401`, `403` e `404` sono visualizzate rispettivamente
+come sessione da rinnovare, accesso negato e fattura non disponibile. Errori di rete o risposte
+invalide mostrano un messaggio e consentono di riprovare.
 
 The deployment jobs for the same branch run sequentially to prevent concurrent uploads to the same
 destination. A failed build or a missing/invalid FTP setting stops the workflow before the remote

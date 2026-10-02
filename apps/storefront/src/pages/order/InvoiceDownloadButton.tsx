@@ -4,13 +4,22 @@ import { Alert, Box, Button, CircularProgress } from '@mui/material';
 
 import { useB3Lang } from '@/lib/lang';
 
-import { getOdooInvoicePdf, OdooInvoiceError } from './odooInvoice';
+import {
+  getInvoiceDownloadUrl,
+  InvoiceDownloadError,
+  InvoiceDownloadErrorCode,
+} from './invoiceDownload';
 
-export function InvoiceDownloadButton({ orderId }: { orderId: string }) {
+interface InvoiceDownloadButtonProps {
+  orderId: string;
+  variant?: 'text' | 'outlined';
+}
+
+export function InvoiceDownloadButton({ orderId, variant = 'text' }: InvoiceDownloadButtonProps) {
   const b3Lang = useB3Lang();
   const inFlight = useRef(false);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [errorCode, setErrorCode] = useState<string>();
+  const [errorCode, setErrorCode] = useState<InvoiceDownloadErrorCode>();
 
   const download = async () => {
     if (inFlight.current) return;
@@ -18,21 +27,19 @@ export function InvoiceDownloadButton({ orderId }: { orderId: string }) {
     setIsDownloading(true);
     setErrorCode(undefined);
     try {
-      const { blob, filename } = await getOdooInvoicePdf(orderId);
-      const url = URL.createObjectURL(blob);
+      const url = await getInvoiceDownloadUrl(orderId);
       const link = document.createElement('a');
       link.href = url;
-      link.download = filename;
+      link.download = '';
+      link.referrerPolicy = 'no-referrer';
       document.body.appendChild(link);
       try {
         link.click();
       } finally {
         link.remove();
-        // Give the browser time to start the download before releasing the blob.
-        window.setTimeout(() => URL.revokeObjectURL(url), 1_000);
       }
     } catch (error) {
-      setErrorCode(error instanceof OdooInvoiceError ? error.code : 'requestFailed');
+      setErrorCode(error instanceof InvoiceDownloadError ? error.code : 'requestFailed');
     } finally {
       inFlight.current = false;
       setIsDownloading(false);
@@ -43,6 +50,7 @@ export function InvoiceDownloadButton({ orderId }: { orderId: string }) {
     <Box onClick={(event) => event.stopPropagation()}>
       <Button
         size="small"
+        variant={variant}
         disabled={isDownloading}
         aria-label={b3Lang('orders.invoice.downloadForOrder', { orderId })}
         startIcon={isDownloading ? <CircularProgress size={16} /> : <Download />}

@@ -1,5 +1,4 @@
 import { Fragment, ReactNode, useCallback, useContext, useState } from 'react';
-import { useNavigate } from "react-router";
 import styled from '@emotion/styled';
 import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
 import throttle from 'lodash-es/throttle';
@@ -7,14 +6,13 @@ import throttle from 'lodash-es/throttle';
 import CustomButton from '@/components/button/CustomButton';
 import { useB3Lang } from '@/lib/lang';
 import HierarchyDialog from '@/pages/CompanyHierarchy/components/HierarchyDialog';
+import { isInvoiceDownloadConfigured } from '@/pages/order/invoiceDownload';
+import { InvoiceDownloadButton } from '@/pages/order/InvoiceDownloadButton';
 import { GlobalContext } from '@/shared/global';
 import { isB2BUserSelector, rolePermissionSelector, useAppSelector } from '@/store';
 import { Address, MoneyFormat, OrderProductItem } from '@/types';
-import { verifyLevelPermission } from '@/utils/b3CheckPermissions/check';
-import { b2bPermissionsMap } from '@/utils/b3CheckPermissions/config';
 import { currencyFormat, ordersCurrencyFormat } from '@/utils/b3CurrencyFormat';
 import { displayFormat } from '@/utils/b3DateFormat';
-import { b2bPrintInvoice, getPrintInvoiceUrl } from '@/utils/b3PrintInvoice';
 import { snackbar } from '@/utils/b3Tip';
 
 import { OrderDetailsContext, OrderDetailsState } from '../context/OrderDetailsContext';
@@ -87,8 +85,7 @@ interface OrderCardProps {
   itemKey: string;
   orderId: string;
   role: number | string;
-  ipStatus: number;
-  invoiceId?: number | string | undefined | null;
+  showInvoiceDownload: boolean;
   isCurrentCompany: boolean;
   switchCompanyId: number | string | undefined;
 }
@@ -110,8 +107,7 @@ function OrderCard(props: OrderCardProps) {
     itemKey,
     orderId,
     role,
-    invoiceId,
-    ipStatus,
+    showInvoiceDownload,
     isCurrentCompany,
     switchCompanyId,
   } = props;
@@ -141,13 +137,11 @@ function OrderCard(props: OrderCardProps) {
     },
   ];
 
-  const navigate = useNavigate();
-
   const [openSwitchCompany, setOpenSwitchCompany] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [type, setType] = useState<string>('');
   const [currentDialogData, setCurrentDialogData] = useState<DialogData>();
-  const isShowButtons = buttons.filter((btn) => btn.isCanShow).length > 0;
+  const isShowButtons = showInvoiceDownload || buttons.some((btn) => btn.isCanShow);
 
   let infoKey: string[] = [];
   let infoValue: string[] = [];
@@ -169,27 +163,17 @@ function OrderCard(props: OrderCardProps) {
   };
 
   const handleOpenDialog = (name: string) => {
-    if (name === 'viewInvoice') {
-      if (ipStatus !== 0) {
-        navigate(`/invoice?invoiceId=${invoiceId}`);
-      } else {
-        b2bPrintInvoice(orderId, 'b2b_print_invoice');
-      }
-    } else if (name === 'printInvoice') {
-      window.open(getPrintInvoiceUrl(orderId));
-    } else {
-      const isNeedSwitch = handleShowSwitchCompanyModal();
-      if (isNeedSwitch) return;
-      if (!isAgenting && Number(role) === 3) {
-        snackbar.error(b3Lang('orderDetail.orderCard.errorMasquerade'));
-        return;
-      }
-      setOpen(true);
-      setType(name);
-
-      const newDialogData = dialogData.find((data: DialogData) => data.type === name);
-      setCurrentDialogData(newDialogData);
+    const isNeedSwitch = handleShowSwitchCompanyModal();
+    if (isNeedSwitch) return;
+    if (!isAgenting && Number(role) === 3) {
+      snackbar.error(b3Lang('orderDetail.orderCard.errorMasquerade'));
+      return;
     }
+    setOpen(true);
+    setType(name);
+
+    const newDialogData = dialogData.find((data: DialogData) => data.type === name);
+    setCurrentDialogData(newDialogData);
   };
 
   let showedInformation: ReactNode[] | string = infoValue?.map((value: string) => (
@@ -258,6 +242,7 @@ function OrderCard(props: OrderCardProps) {
         </Box>
       </CardContent>
       <StyledCardActions isShowButtons={isShowButtons}>
+        {showInvoiceDownload && <InvoiceDownloadButton orderId={orderId} variant="outlined" />}
         {buttons &&
           buttons.map((button: Buttons) => (
             <Fragment key={button.key}>
@@ -322,7 +307,6 @@ export function OrderAction(props: OrderActionProps) {
   const { detailsData, isCurrentCompany } = props;
   const b3Lang = useB3Lang();
   const isB2BUser = useAppSelector(isB2BUserSelector);
-  const emailAddress = useAppSelector(({ company }) => company.customer.emailAddress);
   const role = useAppSelector(({ company }) => company.customer.role);
   const b2bPermissions = useAppSelector(rolePermissionSelector);
   const {
@@ -330,7 +314,7 @@ export function OrderAction(props: OrderActionProps) {
   } = useContext(GlobalContext);
 
   const {
-    state: { addressLabelPermission, createdEmail },
+    state: { addressLabelPermission },
   } = useContext(OrderDetailsContext);
 
   const {
@@ -340,10 +324,7 @@ export function OrderAction(props: OrderActionProps) {
     orderComments = '',
     products,
     orderId,
-    ipStatus = 0,
-    invoiceId,
     poNumber,
-    customerId,
     companyInfo: { companyId } = {},
   } = detailsData;
 
@@ -369,12 +350,6 @@ export function OrderAction(props: OrderActionProps) {
   }
 
   const { purchasabilityPermission, shoppingListCreateActionsPermission } = b2bPermissions;
-  const { getInvoicesPermission } = b2bPermissionsMap;
-  const invoiceViewPermission = verifyLevelPermission({
-    code: getInvoicesPermission,
-    companyId: companyId ? Number(companyId) : 0,
-    userId: customerId ? Number(customerId) : 0,
-  });
 
   const getCompanyName = (company: string) => {
     if (addressLabelPermission) {
@@ -470,7 +445,6 @@ export function OrderAction(props: OrderActionProps) {
     },
   ];
 
-  const invoiceBtnPermissions = Number(ipStatus) !== 0 || createdEmail === emailAddress;
   const orderData: OrderData[] = [
     {
       header: b3Lang('orderDetail.summary'),
@@ -493,17 +467,7 @@ export function OrderAction(props: OrderActionProps) {
       header: b3Lang('orderDetail.payment'),
       key: 'payment',
       subtitle: getPaymentMessage(),
-      buttons: [
-        {
-          value: isB2BUser ? b3Lang('orderDetail.viewInvoice') : b3Lang('orderDetail.printInvoice'),
-          key: 'aboutInvoice',
-          name: isB2BUser ? 'viewInvoice' : 'printInvoice',
-          variant: 'outlined',
-          isCanShow: isB2BUser
-            ? invoiceBtnPermissions && invoiceViewPermission
-            : invoiceBtnPermissions,
-        },
-      ],
+      buttons: [],
       infos: {
         info: getFullPaymentAddress(billingAddress),
       },
@@ -529,8 +493,7 @@ export function OrderAction(props: OrderActionProps) {
             {...item}
             itemKey={item.key}
             role={role}
-            ipStatus={ipStatus}
-            invoiceId={invoiceId}
+            showInvoiceDownload={item.key === 'payment' && isInvoiceDownloadConfigured}
             key={item.key}
             isCurrentCompany={isCurrentCompany}
             switchCompanyId={companyId}

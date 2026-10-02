@@ -9,64 +9,55 @@ import {
   waitFor,
 } from 'tests/test-utils';
 
+import { invoiceDownloadConfig } from './invoiceDownload';
 import { InvoiceDownloadButton } from './InvoiceDownloadButton';
-import { odooInvoiceConfig } from './odooInvoice';
 
 const { server } = startMockServer();
 const buildDownloadWith = builder(() => ({
   orderId: faker.number.int({ min: 1, max: 99999 }).toString(),
-  invoiceId: faker.number.int({ min: 1, max: 99999 }),
-  invoiceName: faker.string.alphanumeric(12),
-  pdf: `%PDF-1.7\n${faker.string.alphanumeric(32)}`,
-  apiKey: faker.string.uuid(),
-  database: faker.string.alphanumeric(12),
+  clientId: faker.string.alphanumeric(24),
+  token: Array.from({ length: 3 }, () => faker.string.alphanumeric(24)).join('.'),
+  downloadUrl: `https://invoices.s3.eu-west-1.amazonaws.com/${faker.string.uuid()}.pdf?signature=${faker.string.alphanumeric(24)}`,
 }));
-const originalConfig = { ...odooInvoiceConfig };
+const originalConfig = { ...invoiceDownloadConfig };
+
+function mockCustomerToken(data: ReturnType<typeof buildDownloadWith>) {
+  server.use(
+    http.get('*/customer/current.jwt', ({ request }) => {
+      expect(new URL(request.url).searchParams.get('app_client_id')).toBe(data.clientId);
+      expect(request.credentials).toBe('same-origin');
+      return HttpResponse.text(data.token);
+    }),
+  );
+}
 
 beforeEach(() => {
-  Object.assign(odooInvoiceConfig, {
-    baseUrl: 'https://odoo.example',
-    database: faker.string.alphanumeric(12),
-    apiKey: faker.string.uuid(),
-  });
+  Object.assign(invoiceDownloadConfig, { apiUrl: 'https://api.example/Stage/', clientId: '' });
 });
 
 afterEach(() => {
-  Object.assign(odooInvoiceConfig, originalConfig);
+  Object.assign(invoiceDownloadConfig, originalConfig);
 });
 
-it('downloads the linked invoice PDF without opening the order', async () => {
+it('passes the fresh customer JWT and order ID to the backend and follows the S3 link', async () => {
   const data = buildDownloadWith('WHATEVER_VALUES');
-  Object.assign(odooInvoiceConfig, { database: data.database, apiKey: data.apiKey });
+  invoiceDownloadConfig.clientId = data.clientId;
+  mockCustomerToken(data);
   server.use(
-    http.post('https://odoo.example/json/2/sale.order/search_read', async ({ request }) => {
-      expect(request.headers.get('Authorization')).toBe(`Bearer ${data.apiKey}`);
-      expect(request.headers.get('X-Odoo-Database')).toBe(data.database);
-      expect(await request.json()).toMatchObject({
-        domain: [['x_bigcommerce_order_id', '=', data.orderId]],
-        fields: ['invoice_ids'],
-      });
-      return HttpResponse.json([{ invoice_ids: [data.invoiceId] }]);
-    }),
-    http.post('https://odoo.example/json/2/account.move/search_read', async ({ request }) => {
-      expect(await request.json()).toMatchObject({
-        domain: [
-          ['id', 'in', [data.invoiceId]],
-          ['move_type', '=', 'out_invoice'],
-          ['state', '=', 'posted'],
-        ],
-        context: { bin_size: false },
-      });
-      return HttpResponse.json([
-        { name: data.invoiceName, invoice_pdf_report_file: btoa(data.pdf) },
-      ]);
+    http.get('https://api.example/Stage/orders/:orderId/invoice/download', async ({ request }) => {
+      expect(request.headers.get('Authorization')).toBe(`Bearer ${data.token}`);
+      expect(request.credentials).toBe('omit');
+      expect(new URL(request.url).pathname).toBe(`/Stage/orders/${data.orderId}/invoice/download`);
+      expect(await request.text()).toBe('');
+      return HttpResponse.json({ downloadUrl: data.downloadUrl });
     }),
   );
-  let downloadedFilename: string | undefined;
+  let downloadedUrl: string | undefined;
   vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function captureDownload(
     this: HTMLAnchorElement,
   ) {
-    downloadedFilename = this.download;
+    downloadedUrl = this.href;
+    expect(this.referrerPolicy).toBe('no-referrer');
   });
   const openOrder = vi.fn();
   const { user } = renderWithProviders(
@@ -83,52 +74,44 @@ it('downloads the linked invoice PDF without opening the order', async () => {
   await user.click(
     await screen.findByRole('button', { name: `Scarica fattura per l’ordine ${data.orderId}` }),
   );
-  await waitFor(() => expect(downloadedFilename).toBe(`${data.invoiceName}.pdf`));
+  await waitFor(() => expect(downloadedUrl).toBe(data.downloadUrl));
   expect(openOrder).not.toHaveBeenCalled();
-  expect(URL.createObjectURL).toHaveBeenCalledWith(
-    expect.objectContaining({ type: 'application/pdf' }),
-  );
+  expect(URL.createObjectURL).not.toHaveBeenCalled();
 });
 
-it('explains when the order has no invoice yet', async () => {
+it('does not call the backend when the customer is not signed in', async () => {
   const data = buildDownloadWith('WHATEVER_VALUES');
+  invoiceDownloadConfig.clientId = data.clientId;
+  const backendRequest = vi.fn();
   server.use(
-    http.post('https://odoo.example/json/2/sale.order/search_read', () =>
-      HttpResponse.json([{ invoice_ids: [] }]),
-    ),
-  );
-  const { user } = renderWithProviders(<InvoiceDownloadButton orderId={data.orderId} />);
-  await user.click(
-    await screen.findByRole('button', { name: `Scarica fattura per l’ordine ${data.orderId}` }),
-  );
-  expect(await screen.findByRole('alert')).toHaveTextContent('Fattura non ancora disponibile.');
-});
-
-it('explains when the saved PDF is missing', async () => {
-  const data = buildDownloadWith('WHATEVER_VALUES');
-  server.use(
-    http.post('https://odoo.example/json/2/sale.order/search_read', () =>
-      HttpResponse.json([{ invoice_ids: [data.invoiceId] }]),
-    ),
-    http.post('https://odoo.example/json/2/account.move/search_read', () =>
-      HttpResponse.json([{ name: data.invoiceName, invoice_pdf_report_file: false }]),
-    ),
+    http.get('*/customer/current.jwt', () => new HttpResponse(null, { status: 404 })),
+    http.get('https://api.example/Stage/orders/:orderId/invoice/download', () => {
+      backendRequest();
+      return HttpResponse.json({ downloadUrl: data.downloadUrl });
+    }),
   );
   const { user } = renderWithProviders(<InvoiceDownloadButton orderId={data.orderId} />);
   await user.click(
     await screen.findByRole('button', { name: `Scarica fattura per l’ordine ${data.orderId}` }),
   );
   expect(await screen.findByRole('alert')).toHaveTextContent(
-    'Il PDF della fattura non è ancora disponibile in Odoo.',
+    'Accedi nuovamente per scaricare la fattura.',
   );
+  expect(backendRequest).not.toHaveBeenCalled();
 });
 
-it('allows retrying after Odoo denies access', async () => {
+it.each([
+  [401, 'Accedi nuovamente per scaricare la fattura.'],
+  [403, 'Non hai accesso a questa fattura.'],
+  [404, 'Fattura non ancora disponibile.'],
+])('explains a backend response with status %i', async (status, message) => {
   const data = buildDownloadWith('WHATEVER_VALUES');
+  invoiceDownloadConfig.clientId = data.clientId;
+  mockCustomerToken(data);
   server.use(
-    http.post(
-      'https://odoo.example/json/2/sale.order/search_read',
-      () => new HttpResponse(null, { status: 403 }),
+    http.get(
+      'https://api.example/Stage/orders/:orderId/invoice/download',
+      () => new HttpResponse(null, { status }),
     ),
   );
   const { user } = renderWithProviders(<InvoiceDownloadButton orderId={data.orderId} />);
@@ -136,44 +119,53 @@ it('allows retrying after Odoo denies access', async () => {
     name: `Scarica fattura per l’ordine ${data.orderId}`,
   });
   await user.click(button);
-  expect(await screen.findByRole('alert')).toHaveTextContent(
-    'Accesso a Odoo negato. Contatta l’assistenza.',
-  );
+  expect(await screen.findByRole('alert')).toHaveTextContent(message);
   expect(button).toBeEnabled();
-  server.use(
-    http.post('https://odoo.example/json/2/sale.order/search_read', () => HttpResponse.json([])),
-  );
-  await user.click(button);
-  await waitFor(() =>
-    expect(screen.getByRole('alert')).toHaveTextContent('Fattura non ancora disponibile.'),
-  );
 });
 
-it('does not choose an invoice when several Odoo orders match', async () => {
+it('rejects a download link without HTTPS', async () => {
   const data = buildDownloadWith('WHATEVER_VALUES');
+  invoiceDownloadConfig.clientId = data.clientId;
+  mockCustomerToken(data);
+  const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
   server.use(
-    http.post('https://odoo.example/json/2/sale.order/search_read', () =>
-      HttpResponse.json([{ invoice_ids: [data.invoiceId] }, { invoice_ids: [data.invoiceId] }]),
+    http.get('https://api.example/Stage/orders/:orderId/invoice/download', () =>
+      HttpResponse.json({ downloadUrl: data.downloadUrl.replace('https:', 'http:') }),
     ),
   );
   const { user } = renderWithProviders(<InvoiceDownloadButton orderId={data.orderId} />);
   await user.click(
     await screen.findByRole('button', { name: `Scarica fattura per l’ordine ${data.orderId}` }),
   );
-  expect(await screen.findByRole('alert')).toHaveTextContent('Trovate più corrispondenze in Odoo.');
-  expect(URL.createObjectURL).not.toHaveBeenCalled();
+  expect(await screen.findByRole('alert')).toHaveTextContent('Impossibile scaricare la fattura.');
+  expect(click).not.toHaveBeenCalled();
 });
 
-it('reports a network failure and lets the customer try again', async () => {
+it('fetches a new token when retrying after a network failure', async () => {
   const data = buildDownloadWith('WHATEVER_VALUES');
+  invoiceDownloadConfig.clientId = data.clientId;
+  mockCustomerToken(data);
   server.use(
-    http.post('https://odoo.example/json/2/sale.order/search_read', () => HttpResponse.error()),
+    http.get('https://api.example/Stage/orders/:orderId/invoice/download', () =>
+      HttpResponse.error(),
+    ),
   );
+  const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
   const { user } = renderWithProviders(<InvoiceDownloadButton orderId={data.orderId} />);
   const button = await screen.findByRole('button', {
     name: `Scarica fattura per l’ordine ${data.orderId}`,
   });
   await user.click(button);
   expect(await screen.findByRole('alert')).toHaveTextContent('Impossibile scaricare la fattura.');
-  expect(button).toBeEnabled();
+  const nextData = buildDownloadWith({ clientId: data.clientId, orderId: data.orderId });
+  mockCustomerToken(nextData);
+  server.use(
+    http.get('https://api.example/Stage/orders/:orderId/invoice/download', ({ request }) => {
+      expect(request.headers.get('Authorization')).toBe(`Bearer ${nextData.token}`);
+      return HttpResponse.json({ downloadUrl: nextData.downloadUrl });
+    }),
+  );
+  await user.click(button);
+  await waitFor(() => expect(click).toHaveBeenCalledOnce());
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 });

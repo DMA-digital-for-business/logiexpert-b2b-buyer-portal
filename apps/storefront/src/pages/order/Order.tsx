@@ -37,9 +37,9 @@ import {
   getOrderStatusText,
   translateFilterMoreData,
 } from './config';
+import { isInvoiceDownloadConfigured } from './invoiceDownload';
 import { InvoiceDownloadButton } from './InvoiceDownloadButton';
 import { type ListItem, mapSfGqlOrderToListItem } from './mapSfGqlOrderToListItem';
-import { isOdooInvoiceConfigured } from './odooInvoice';
 import { OrderItemCard } from './OrderItemCard';
 import {
   getB2BAllOrders,
@@ -383,7 +383,7 @@ function Order({ isCompanyOrder = false }: OrderProps) {
         key: 'invoice',
         title: b3Lang('orders.invoice.title'),
         render: ({ orderId }) => <InvoiceDownloadButton orderId={orderId} />,
-        hidden: !isOdooInvoiceConfigured,
+        hidden: !isInvoiceDownloadConfigured,
       },
     ],
     [b3Lang, isB2BUser, isSuperAdminNotAgenting, isCompanyOrder],
@@ -530,7 +530,7 @@ function Order({ isCompanyOrder = false }: OrderProps) {
               key={row.orderId}
               goToDetail={() => navigateToOrderDetail(row, index)}
               item={row}
-              showInvoiceDownload={isOdooInvoiceConfigured}
+              showInvoiceDownload={isInvoiceDownloadConfigured}
             />
           )}
           onClickRow={navigateToOrderDetail}
