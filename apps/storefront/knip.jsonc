@@ -1,10 +1,9 @@
 {
-  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": ["src/main.ts", "src/headless.ts"],
   "project": ["src/**/*.{ts,tsx}", "tests/**/*.{ts,tsx}"],
   "rules": {
     "binaries": "off",
-    "classMembers": "off",
     "enumMembers": "off",
 
     "dependencies": "error",

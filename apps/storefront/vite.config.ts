@@ -69,7 +69,7 @@ export default defineConfig(({ mode }): UserConfig & Pick<ViteUserConfig, 'test'
       },
       deps: {
         optimizer: {
-          web: {
+          client: {
             include: ['react-intl'],
           },
         },

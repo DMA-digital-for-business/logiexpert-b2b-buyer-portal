@@ -24,6 +24,7 @@ vi.mock('./useLogout', () => ({
 }));
 
 vi.mock('@/utils/loginInfo');
+vi.mock('@/hooks/useB2BCallback');
 
 const { server } = startMockServer();
 
@@ -46,8 +47,6 @@ describe('LoginPage', () => {
 
   describe('successful login and redirects', () => {
     it('should redirect junior buyer to /shoppingLists after successful login', async () => {
-      vi.mock('@/hooks/useB2BCallback');
-
       server.use(
         graphql.mutation('Login', () => {
           return HttpResponse.json({
@@ -86,8 +85,6 @@ describe('LoginPage', () => {
     });
 
     it('should redirect SuperAdmin to /dashboard after successful login', async () => {
-      vi.mock('@/hooks/useB2BCallback');
-
       server.use(
         graphql.mutation('Login', () => {
           return HttpResponse.json({
