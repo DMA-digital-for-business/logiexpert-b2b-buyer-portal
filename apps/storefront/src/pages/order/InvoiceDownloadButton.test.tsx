@@ -17,6 +17,8 @@ const buildDownloadWith = builder(() => ({
   orderId: faker.number.int({ min: 1, max: 99999 }).toString(),
   clientId: faker.string.alphanumeric(24),
   token: Array.from({ length: 3 }, () => faker.string.alphanumeric(24)).join('.'),
+  pdf: `%PDF-1.7\n${faker.string.alphanumeric(64)}\n%%EOF`,
+  filename: `FATT_${faker.number.int({ min: 2020, max: 2030 })}_${faker.string.numeric(5)}.pdf`,
   downloadUrl: `https://invoices.s3.eu-west-1.amazonaws.com/${faker.string.uuid()}.pdf?signature=${faker.string.alphanumeric(24)}`,
 }));
 const originalConfig = { ...invoiceDownloadConfig };
@@ -32,25 +34,117 @@ function mockCustomerToken(data: ReturnType<typeof buildDownloadWith>) {
 }
 
 beforeEach(() => {
-  Object.assign(invoiceDownloadConfig, { apiUrl: 'https://api.example/Stage/', clientId: '' });
+  Object.assign(invoiceDownloadConfig, { apiUrl: 'https://api.example/staging/', clientId: '' });
 });
 
 afterEach(() => {
   Object.assign(invoiceDownloadConfig, originalConfig);
 });
 
+it.each(['plain', 'encoded', 'missing', 'octet-stream'])(
+  'downloads the PDF response with a %s filename or content type',
+  async (mode) => {
+    const data = buildDownloadWith('WHATEVER_VALUES');
+    invoiceDownloadConfig.clientId = data.clientId;
+    mockCustomerToken(data);
+    server.use(
+      http.get(
+        'https://api.example/staging/orders/:orderId/invoice/download',
+        ({ request, params }) => {
+          expect(params.orderId).toBe(data.orderId);
+          expect(request.headers.get('Authorization')).toBe(`Bearer ${data.token}`);
+          expect(request.credentials).toBe('omit');
+          const headers = new Headers({
+            'Content-Type':
+              mode === 'octet-stream' ? 'application/octet-stream' : 'application/pdf',
+          });
+          if (mode === 'plain') {
+            headers.set('Content-Disposition', `attachment; filename="${data.filename}"`);
+          } else if (mode === 'encoded') {
+            headers.set(
+              'Content-Disposition',
+              `attachment; filename*=UTF-8''${encodeURIComponent(data.filename)}`,
+            );
+          }
+          return new HttpResponse(data.pdf, { headers });
+        },
+      ),
+    );
+    const blobUrl = `blob:${faker.string.uuid()}`;
+    vi.mocked(URL.createObjectURL).mockReturnValue(blobUrl);
+    let downloadedUrl: string | undefined;
+    let downloadedFilename: string | undefined;
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function captureDownload(
+      this: HTMLAnchorElement,
+    ) {
+      downloadedUrl = this.href;
+      downloadedFilename = this.download;
+    });
+    const { user } = renderWithProviders(<InvoiceDownloadButton orderId={data.orderId} />);
+    await user.click(
+      await screen.findByRole('button', { name: `Scarica fattura per l’ordine ${data.orderId}` }),
+    );
+    await waitFor(() => expect(downloadedUrl).toBe(blobUrl));
+    expect(downloadedFilename).toBe(
+      mode === 'plain' || mode === 'encoded' ? data.filename : `fattura-ordine-${data.orderId}.pdf`,
+    );
+    const blob = vi.mocked(URL.createObjectURL).mock.calls[0][0];
+    expect(blob).toBeInstanceOf(Blob);
+    if (!(blob instanceof Blob)) throw new Error('Expected a PDF blob');
+    const reader = new FileReader();
+    const contents = new Promise((resolve, reject) => {
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(reader.error);
+    });
+    reader.readAsText(blob);
+    expect(await contents).toBe(data.pdf);
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  },
+);
+
+it.each(['empty', 'invalid'])(
+  'shows an error instead of downloading an %s PDF response',
+  async (mode) => {
+    const data = buildDownloadWith('WHATEVER_VALUES');
+    invoiceDownloadConfig.clientId = data.clientId;
+    mockCustomerToken(data);
+    server.use(
+      http.get(
+        'https://api.example/staging/orders/:orderId/invoice/download',
+        () =>
+          new HttpResponse(mode === 'empty' ? '' : faker.lorem.sentence(), {
+            headers: { 'Content-Type': 'application/pdf' },
+          }),
+      ),
+    );
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+    const { user } = renderWithProviders(<InvoiceDownloadButton orderId={data.orderId} />);
+    await user.click(
+      await screen.findByRole('button', { name: `Scarica fattura per l’ordine ${data.orderId}` }),
+    );
+    expect(await screen.findByRole('alert')).toHaveTextContent('Impossibile scaricare la fattura.');
+    expect(click).not.toHaveBeenCalled();
+    expect(URL.createObjectURL).not.toHaveBeenCalled();
+  },
+);
+
 it('passes the fresh customer JWT and order ID to the backend and follows the S3 link', async () => {
   const data = buildDownloadWith('WHATEVER_VALUES');
   invoiceDownloadConfig.clientId = data.clientId;
   mockCustomerToken(data);
   server.use(
-    http.get('https://api.example/Stage/orders/:orderId/invoice/download', async ({ request }) => {
-      expect(request.headers.get('Authorization')).toBe(`Bearer ${data.token}`);
-      expect(request.credentials).toBe('omit');
-      expect(new URL(request.url).pathname).toBe(`/Stage/orders/${data.orderId}/invoice/download`);
-      expect(await request.text()).toBe('');
-      return HttpResponse.json({ downloadUrl: data.downloadUrl });
-    }),
+    http.get(
+      'https://api.example/staging/orders/:orderId/invoice/download',
+      async ({ request }) => {
+        expect(request.headers.get('Authorization')).toBe(`Bearer ${data.token}`);
+        expect(request.credentials).toBe('omit');
+        expect(new URL(request.url).pathname).toBe(
+          `/staging/orders/${data.orderId}/invoice/download`,
+        );
+        expect(await request.text()).toBe('');
+        return HttpResponse.json({ downloadUrl: data.downloadUrl });
+      },
+    ),
   );
   let downloadedUrl: string | undefined;
   vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function captureDownload(
@@ -85,7 +179,7 @@ it('does not call the backend when the customer is not signed in', async () => {
   const backendRequest = vi.fn();
   server.use(
     http.get('*/customer/current.jwt', () => new HttpResponse(null, { status: 404 })),
-    http.get('https://api.example/Stage/orders/:orderId/invoice/download', () => {
+    http.get('https://api.example/staging/orders/:orderId/invoice/download', () => {
       backendRequest();
       return HttpResponse.json({ downloadUrl: data.downloadUrl });
     }),
@@ -110,7 +204,7 @@ it.each([
   mockCustomerToken(data);
   server.use(
     http.get(
-      'https://api.example/Stage/orders/:orderId/invoice/download',
+      'https://api.example/staging/orders/:orderId/invoice/download',
       () => new HttpResponse(null, { status }),
     ),
   );
@@ -129,7 +223,7 @@ it('rejects a download link without HTTPS', async () => {
   mockCustomerToken(data);
   const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
   server.use(
-    http.get('https://api.example/Stage/orders/:orderId/invoice/download', () =>
+    http.get('https://api.example/staging/orders/:orderId/invoice/download', () =>
       HttpResponse.json({ downloadUrl: data.downloadUrl.replace('https:', 'http:') }),
     ),
   );
@@ -146,7 +240,7 @@ it('fetches a new token when retrying after a network failure', async () => {
   invoiceDownloadConfig.clientId = data.clientId;
   mockCustomerToken(data);
   server.use(
-    http.get('https://api.example/Stage/orders/:orderId/invoice/download', () =>
+    http.get('https://api.example/staging/orders/:orderId/invoice/download', () =>
       HttpResponse.error(),
     ),
   );
@@ -160,7 +254,7 @@ it('fetches a new token when retrying after a network failure', async () => {
   const nextData = buildDownloadWith({ clientId: data.clientId, orderId: data.orderId });
   mockCustomerToken(nextData);
   server.use(
-    http.get('https://api.example/Stage/orders/:orderId/invoice/download', ({ request }) => {
+    http.get('https://api.example/staging/orders/:orderId/invoice/download', ({ request }) => {
       expect(request.headers.get('Authorization')).toBe(`Bearer ${nextData.token}`);
       return HttpResponse.json({ downloadUrl: nextData.downloadUrl });
     }),

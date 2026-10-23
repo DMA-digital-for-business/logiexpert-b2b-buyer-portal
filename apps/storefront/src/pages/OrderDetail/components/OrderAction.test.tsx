@@ -28,7 +28,7 @@ const buildOrderWith = builder<OrderDetailsState>(() => ({
 const buildDownloadWith = builder(() => ({
   clientId: faker.string.alphanumeric(24),
   token: Array.from({ length: 3 }, () => faker.string.alphanumeric(24)).join('.'),
-  downloadUrl: `https://invoices.s3.eu-central-1.amazonaws.com/${faker.string.uuid()}.pdf`,
+  pdf: `%PDF-1.7\n${faker.string.alphanumeric(64)}\n%%EOF`,
 }));
 const originalConfig = { ...invoiceDownloadConfig };
 
@@ -38,17 +38,17 @@ it('downloads the invoice from the order detail instead of showing the legacy in
   const order = buildOrderWith('WHATEVER_VALUES');
   const data = buildDownloadWith('WHATEVER_VALUES');
   Object.assign(invoiceDownloadConfig, {
-    apiUrl: 'https://api.example/Stage',
+    apiUrl: 'https://api.example/staging',
     clientId: data.clientId,
   });
   server.use(
     http.get('*/customer/current.jwt', () => HttpResponse.text(data.token)),
     http.get(
-      'https://api.example/Stage/orders/:orderId/invoice/download',
+      'https://api.example/staging/orders/:orderId/invoice/download',
       ({ request, params }) => {
         expect(params.orderId).toBe(String(order.orderId));
         expect(request.headers.get('Authorization')).toBe(`Bearer ${data.token}`);
-        return HttpResponse.json({ downloadUrl: data.downloadUrl });
+        return new HttpResponse(data.pdf, { headers: { 'Content-Type': 'application/pdf' } });
       },
     ),
   );
@@ -66,5 +66,5 @@ it('downloads the invoice from the order detail instead of showing the legacy in
     screen.queryByRole('button', { name: /visualizza fattura|stampa fattura/i }),
   ).not.toBeInTheDocument();
   await user.click(button);
-  await waitFor(() => expect(downloadedUrl).toBe(data.downloadUrl));
+  await waitFor(() => expect(downloadedUrl).toBe('blob:application/pdf'));
 });

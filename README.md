@@ -184,7 +184,7 @@ viene mostrato quando
 `VITE_INVOICE_API_URL` e `VITE_LOCAL_APP_CLIENT_ID` sono configurati.
 Entrambi sono valori pubblici: configurarli in `apps/storefront/.env` per lo sviluppo e come
 variabili degli ambienti GitHub `staging` e `production` per il deployment.
-Serve una nuova build dopo ogni modifica. Il base URL è `https://s36jgajl1g.execute-api.eu-central-1.amazonaws.com/Stage`.
+Serve una nuova build dopo ogni modifica. Il base URL di staging è `https://s36jgajl1g.execute-api.eu-central-1.amazonaws.com/staging` (il percorso distingue maiuscole e minuscole).
 Il client ID deve essere configurato prima di attivare il pulsante. Il vecchio pulsante
 Visualizza/Stampa fattura nel dettaglio ordine è stato rimosso.
 
@@ -193,7 +193,7 @@ Al click il portale Stencil recupera un nuovo JWT da
 Il client ID deve appartenere all’app BigCommerce il cui client secret è posseduto dal backend.
 Il JWT non viene memorizzato e l’email non viene ricavata o inviata dal frontend.
 
-Richiesta (metodo GET assunto in attesa di conferma del backend):
+Richiesta (come nella curl fornita dal backend):
 
 ```http
 GET <VITE_INVOICE_API_URL>/orders/{order_id}/invoice/download
@@ -201,25 +201,34 @@ Authorization: Bearer <BigCommerce Current Customer JWT>
 
 ```
 
-Risposta `200`:
+Il download atteso dalla curl è un PDF. Il portale gestisce risposte `200` con
+`Content-Type: application/pdf` oppure `application/octet-stream` tramite un URL locale temporaneo,
+usando il nome di `Content-Disposition` se disponibile oppure `fattura-ordine-{order_id}.pdf`.
+Gli URL temporanei vengono rilasciati dopo l'avvio del download. Eventuali redirect HTTP
+sono seguiti da fetch, come con `curl --location`.
+
+Per compatibilità resta supportata anche la precedente risposta JSON:
 
 ```json
 {"downloadUrl":"https://bucket.s3.eu-west-1.amazonaws.com/fattura.pdf?firma=..."}
 ```
 
-Il portale segue direttamente il link HTTPS restituito, senza inviare il JWT a S3 e senza
-scaricare prima il PDF via fetch. Il link S3 deve restituire
+In questo caso il portale segue direttamente il link HTTPS restituito, senza inviare il JWT a S3.
+Il link S3 deve restituire
 `Content-Disposition: attachment; filename="fattura.pdf"` per avviare il download anche tra
 domini diversi: il solo attributo HTML `download` non lo garantisce. Il backend deve impostare
 questo header nell’oggetto o nel link prefirmato e può usare link con scadenza breve.
 
 Il backend verifica firma, scadenza, audience e store del JWT, ricava l’email dal payload
 verificato e controlla che il cliente abbia accesso all’ordine, considerando i permessi B2B.
-Poi recupera la fattura Odoo tramite l’ordine `x_bigcommerce_order_id` e genera il link S3.
+Poi recupera la fattura Odoo tramite l’ordine `x_bigcommerce_order_id` e restituisce il PDF
+o un link S3.
 Client secret BigCommerce e credenziali Odoo vengono conservati esclusivamente sul backend.
 
 Il backend deve consentire CORS dal dominio dello storefront per `GET`/`OPTIONS` e l’header
-`Authorization`. Le risposte `401`, `403` e `404` sono visualizzate rispettivamente
+`Authorization`, ed esporre `Content-Disposition` tramite `Access-Control-Expose-Headers`
+per consentire al portale di leggere il nome del file. Anche la destinazione di eventuali
+redirect deve consentire la lettura via CORS. Le risposte `401`, `403` e `404` sono visualizzate rispettivamente
 come sessione da rinnovare, accesso negato e fattura non disponibile. Errori di rete o risposte
 invalide mostrano un messaggio e consentono di riprovare.
 

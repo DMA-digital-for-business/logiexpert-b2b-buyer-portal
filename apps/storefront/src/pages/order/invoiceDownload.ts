@@ -22,7 +22,26 @@ const downloadResponseSchema = z.object({
   downloadUrl: z.url().refine((value) => new URL(value).protocol === 'https:'),
 });
 
-export async function getInvoiceDownloadUrl(orderId: string, config = invoiceDownloadConfig) {
+type InvoiceDownload = { kind: 'pdf'; blob: Blob; filename: string } | { kind: 'url'; url: string };
+
+function getInvoiceFilename(disposition: string | null, orderId: string) {
+  const encoded = disposition?.match(/filename\*=UTF-8''([^;]+)/i)?.[1];
+  const plain = disposition?.match(/filename="([^"]+)"|filename=([^;]+)/i);
+  let filename = plain?.[1] || plain?.[2]?.trim();
+  if (encoded) {
+    try {
+      filename = decodeURIComponent(encoded);
+    } catch {
+      // Fall back to the plain filename if the encoded value is malformed.
+    }
+  }
+  return filename?.split(/[\\/]/).pop() || `fattura-ordine-${orderId}.pdf`;
+}
+
+export async function getInvoiceDownload(
+  orderId: string,
+  config = invoiceDownloadConfig,
+): Promise<InvoiceDownload> {
   try {
     if (!config.apiUrl || !config.clientId) throw new InvoiceDownloadError('requestFailed');
 
@@ -57,9 +76,22 @@ export async function getInvoiceDownloadUrl(orderId: string, config = invoiceDow
     if (response.status === 404) throw new InvoiceDownloadError('unavailable');
     if (!response.ok) throw new InvoiceDownloadError('requestFailed');
 
+    const contentType = response.headers.get('Content-Type')?.split(';')[0].trim().toLowerCase();
+    if (contentType === 'application/pdf' || contentType === 'application/octet-stream') {
+      const bytes = await response.arrayBuffer();
+      if (new TextDecoder().decode(bytes.slice(0, 5)) !== '%PDF-') {
+        throw new InvoiceDownloadError('requestFailed');
+      }
+      return {
+        kind: 'pdf',
+        blob: new Blob([bytes], { type: 'application/pdf' }),
+        filename: getInvoiceFilename(response.headers.get('Content-Disposition'), orderId),
+      };
+    }
+
     const result = downloadResponseSchema.safeParse(await response.json());
     if (!result.success) throw new InvoiceDownloadError('requestFailed');
-    return result.data.downloadUrl;
+    return { kind: 'url', url: result.data.downloadUrl };
   } catch (error) {
     if (error instanceof InvoiceDownloadError) throw error;
     throw new InvoiceDownloadError('requestFailed');

@@ -5,7 +5,7 @@ import { Alert, Box, Button, CircularProgress } from '@mui/material';
 import { useB3Lang } from '@/lib/lang';
 
 import {
-  getInvoiceDownloadUrl,
+  getInvoiceDownload,
   InvoiceDownloadError,
   InvoiceDownloadErrorCode,
 } from './invoiceDownload';
@@ -27,16 +27,21 @@ export function InvoiceDownloadButton({ orderId, variant = 'text' }: InvoiceDown
     setIsDownloading(true);
     setErrorCode(undefined);
     try {
-      const url = await getInvoiceDownloadUrl(orderId);
+      const result = await getInvoiceDownload(orderId);
+      const url = result.kind === 'pdf' ? URL.createObjectURL(result.blob) : result.url;
       const link = document.createElement('a');
       link.href = url;
-      link.download = '';
+      link.download = result.kind === 'pdf' ? result.filename : '';
       link.referrerPolicy = 'no-referrer';
       document.body.appendChild(link);
       try {
         link.click();
       } finally {
         link.remove();
+        if (result.kind === 'pdf') {
+          // Let the browser start reading the PDF before releasing its object URL.
+          setTimeout(() => URL.revokeObjectURL(url), 60_000);
+        }
       }
     } catch (error) {
       setErrorCode(error instanceof InvoiceDownloadError ? error.code : 'requestFailed');
