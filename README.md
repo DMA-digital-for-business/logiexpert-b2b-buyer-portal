@@ -201,28 +201,37 @@ Authorization: Bearer <BigCommerce Current Customer JWT>
 
 ```
 
-Il download atteso dalla curl è un PDF. Il portale gestisce risposte `200` con
+Il portale gestisce risposte `200` con
 `Content-Type: application/pdf` oppure `application/octet-stream` tramite un URL locale temporaneo,
 usando il nome di `Content-Disposition` se disponibile oppure `fattura-ordine-{order_id}.pdf`.
-Gli URL temporanei vengono rilasciati dopo l'avvio del download. Eventuali redirect HTTP
-sono seguiti da fetch, come con `curl --location`.
+Gli URL temporanei vengono rilasciati dopo l'avvio del download. Un redirect `302` verso
+Odoo non equivale a una risposta PDF dell'API: nel browser sia la risposta di redirect
+sia la destinazione devono soddisfare CORS. Una curl riuscita non verifica questi requisiti.
 
-Per compatibilità resta supportata anche la precedente risposta JSON:
+Per il download da browser è preferibile restituire direttamente questa risposta, già
+supportata dal frontend, anziché un `302`:
 
-```json
-{"downloadUrl":"https://bucket.s3.eu-west-1.amazonaws.com/fattura.pdf?firma=..."}
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Access-Control-Allow-Origin: https://rd-software-srl-sandbox.mybigcommerce.com
+Vary: Origin
+
+{"downloadUrl":"https://<host-odoo>/web/content/<id>?download=true&access_token=<token>"}
 ```
 
-In questo caso il portale segue direttamente il link HTTPS restituito, senza inviare il JWT a S3.
-Il link S3 deve restituire
+L'origine è quella dello storefront autorizzato per l'ambiente; quella indicata è il sandbox.
+Il link può anche puntare a S3. In questo caso il portale segue direttamente il link HTTPS
+restituito tramite un elemento `<a>`, senza inoltrare il JWT né leggere il PDF via fetch.
+La risposta del link deve restituire
 `Content-Disposition: attachment; filename="fattura.pdf"` per avviare il download anche tra
 domini diversi: il solo attributo HTML `download` non lo garantisce. Il backend deve impostare
-questo header nell’oggetto o nel link prefirmato e può usare link con scadenza breve.
+questo header in Odoo, nell’oggetto S3 o nel link prefirmato e può usare link con scadenza breve.
 
 Il backend verifica firma, scadenza, audience e store del JWT, ricava l’email dal payload
 verificato e controlla che il cliente abbia accesso all’ordine, considerando i permessi B2B.
 Poi recupera la fattura Odoo tramite l’ordine `x_bigcommerce_order_id` e restituisce il PDF
-o un link S3.
+o un link HTTPS di download.
 Client secret BigCommerce e credenziali Odoo vengono conservati esclusivamente sul backend.
 
 Il backend deve consentire CORS dal dominio dello storefront per `GET`/`OPTIONS` e l’header
@@ -231,6 +240,9 @@ per consentire al portale di leggere il nome del file. Anche la destinazione di 
 redirect deve consentire la lettura via CORS. Le risposte `401`, `403` e `404` sono visualizzate rispettivamente
 come sessione da rinnovare, accesso negato e fattura non disponibile. Errori di rete o risposte
 invalide mostrano un messaggio e consentono di riprovare.
+Gli header CORS devono essere presenti sulle risposte effettive, anche di errore: configurarli
+solo su `OPTIONS` non è sufficiente. `redirect: 'manual'` non permette di leggere `Location`
+di un redirect cross-origin, perché fetch restituisce una risposta `opaqueredirect`.
 
 The deployment jobs for the same branch run sequentially to prevent concurrent uploads to the same
 destination. A failed build or a missing/invalid FTP setting stops the workflow before the remote
