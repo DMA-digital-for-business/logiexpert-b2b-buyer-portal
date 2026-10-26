@@ -28,7 +28,7 @@ const buildOrderWith = builder<OrderDetailsState>(() => ({
 const buildDownloadWith = builder(() => ({
   clientId: faker.string.alphanumeric(24),
   token: Array.from({ length: 3 }, () => faker.string.alphanumeric(24)).join('.'),
-  pdf: `%PDF-1.7\n${faker.string.alphanumeric(64)}\n%%EOF`,
+  downloadUrl: `https://invoices.odoo.com/web/content/${faker.number.int({ min: 1 })}?download=true&access_token=${faker.string.uuid()}`,
 }));
 const originalConfig = { ...invoiceDownloadConfig };
 
@@ -48,16 +48,14 @@ it('downloads the invoice from the order detail instead of showing the legacy in
       ({ request, params }) => {
         expect(params.orderId).toBe(String(order.orderId));
         expect(request.headers.get('Authorization')).toBe(`Bearer ${data.token}`);
-        return new HttpResponse(data.pdf, { headers: { 'Content-Type': 'application/pdf' } });
+        return HttpResponse.json(
+          { downloadUrl: data.downloadUrl },
+          { headers: { 'Cache-Control': 'no-store' } },
+        );
       },
     ),
   );
-  let downloadedUrl: string | undefined;
-  vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function captureDownload(
-    this: HTMLAnchorElement,
-  ) {
-    downloadedUrl = this.href;
-  });
+  const navigate = vi.spyOn(window.location, 'assign').mockImplementation(() => {});
   const { user } = renderWithProviders(<OrderAction detailsData={order} isCurrentCompany />);
   const button = await screen.findByRole('button', {
     name: `Scarica fattura per l’ordine ${order.orderId}`,
@@ -66,5 +64,5 @@ it('downloads the invoice from the order detail instead of showing the legacy in
     screen.queryByRole('button', { name: /visualizza fattura|stampa fattura/i }),
   ).not.toBeInTheDocument();
   await user.click(button);
-  await waitFor(() => expect(downloadedUrl).toBe('blob:application/pdf'));
+  await waitFor(() => expect(navigate).toHaveBeenCalledExactlyOnceWith(data.downloadUrl));
 });

@@ -19,7 +19,7 @@ const buildDownloadWith = builder(() => ({
   token: Array.from({ length: 3 }, () => faker.string.alphanumeric(24)).join('.'),
   pdf: `%PDF-1.7\n${faker.string.alphanumeric(64)}\n%%EOF`,
   filename: `FATT_${faker.number.int({ min: 2020, max: 2030 })}_${faker.string.numeric(5)}.pdf`,
-  downloadUrl: `https://invoices.s3.eu-west-1.amazonaws.com/${faker.string.uuid()}.pdf?signature=${faker.string.alphanumeric(24)}`,
+  downloadUrl: `https://invoices.odoo.com/web/content/${faker.number.int({ min: 1 })}?download=true&access_token=${faker.string.uuid()}`,
 }));
 const originalConfig = { ...invoiceDownloadConfig };
 
@@ -128,7 +128,7 @@ it.each(['empty', 'invalid'])(
   },
 );
 
-it('passes the fresh customer JWT and order ID to the backend and follows the S3 link', async () => {
+it('passes a fresh customer JWT and navigates to the Odoo download in the current window', async () => {
   const data = buildDownloadWith('WHATEVER_VALUES');
   invoiceDownloadConfig.clientId = data.clientId;
   mockCustomerToken(data);
@@ -142,17 +142,15 @@ it('passes the fresh customer JWT and order ID to the backend and follows the S3
           `/staging/orders/${data.orderId}/invoice/download`,
         );
         expect(await request.text()).toBe('');
-        return HttpResponse.json({ downloadUrl: data.downloadUrl });
+        return HttpResponse.json(
+          { downloadUrl: data.downloadUrl },
+          { headers: { 'Cache-Control': 'no-store' } },
+        );
       },
     ),
   );
-  let downloadedUrl: string | undefined;
-  vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function captureDownload(
-    this: HTMLAnchorElement,
-  ) {
-    downloadedUrl = this.href;
-    expect(this.referrerPolicy).toBe('no-referrer');
-  });
+  const navigate = vi.spyOn(window.location, 'assign').mockImplementation(() => {});
+  const openWindow = vi.spyOn(window, 'open').mockImplementation(() => null);
   const openOrder = vi.fn();
   const { user } = renderWithProviders(
     <table>
@@ -168,7 +166,8 @@ it('passes the fresh customer JWT and order ID to the backend and follows the S3
   await user.click(
     await screen.findByRole('button', { name: `Scarica fattura per l’ordine ${data.orderId}` }),
   );
-  await waitFor(() => expect(downloadedUrl).toBe(data.downloadUrl));
+  await waitFor(() => expect(navigate).toHaveBeenCalledExactlyOnceWith(data.downloadUrl));
+  expect(openWindow).not.toHaveBeenCalled();
   expect(openOrder).not.toHaveBeenCalled();
   expect(URL.createObjectURL).not.toHaveBeenCalled();
 });
@@ -221,7 +220,7 @@ it('rejects a download link without HTTPS', async () => {
   const data = buildDownloadWith('WHATEVER_VALUES');
   invoiceDownloadConfig.clientId = data.clientId;
   mockCustomerToken(data);
-  const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+  const navigate = vi.spyOn(window.location, 'assign').mockImplementation(() => {});
   server.use(
     http.get('https://api.example/staging/orders/:orderId/invoice/download', () =>
       HttpResponse.json({ downloadUrl: data.downloadUrl.replace('https:', 'http:') }),
@@ -232,7 +231,7 @@ it('rejects a download link without HTTPS', async () => {
     await screen.findByRole('button', { name: `Scarica fattura per l’ordine ${data.orderId}` }),
   );
   expect(await screen.findByRole('alert')).toHaveTextContent('Impossibile scaricare la fattura.');
-  expect(click).not.toHaveBeenCalled();
+  expect(navigate).not.toHaveBeenCalled();
 });
 
 it('fetches a new token when retrying after a network failure', async () => {
@@ -244,7 +243,7 @@ it('fetches a new token when retrying after a network failure', async () => {
       HttpResponse.error(),
     ),
   );
-  const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+  const navigate = vi.spyOn(window.location, 'assign').mockImplementation(() => {});
   const { user } = renderWithProviders(<InvoiceDownloadButton orderId={data.orderId} />);
   const button = await screen.findByRole('button', {
     name: `Scarica fattura per l’ordine ${data.orderId}`,
@@ -260,6 +259,6 @@ it('fetches a new token when retrying after a network failure', async () => {
     }),
   );
   await user.click(button);
-  await waitFor(() => expect(click).toHaveBeenCalledOnce());
+  await waitFor(() => expect(navigate).toHaveBeenCalledExactlyOnceWith(nextData.downloadUrl));
   expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 });

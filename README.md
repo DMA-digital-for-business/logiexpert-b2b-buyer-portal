@@ -214,6 +214,7 @@ supportata dal frontend, anziché un `302`:
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
+Cache-Control: no-store
 Access-Control-Allow-Origin: https://rd-software-srl-sandbox.mybigcommerce.com
 Vary: Origin
 
@@ -222,10 +223,11 @@ Vary: Origin
 
 L'origine è quella dello storefront autorizzato per l'ambiente; quella indicata è il sandbox.
 Il link può anche puntare a S3. In questo caso il portale segue direttamente il link HTTPS
-restituito tramite un elemento `<a>`, senza inoltrare il JWT né leggere il PDF via fetch.
+restituito tramite `window.location.assign(downloadUrl)` nella finestra corrente, senza
+inoltrare il JWT né leggere il PDF via fetch. Non viene aperta una nuova scheda o finestra.
 La risposta del link deve restituire
 `Content-Disposition: attachment; filename="fattura.pdf"` per avviare il download anche tra
-domini diversi: il solo attributo HTML `download` non lo garantisce. Il backend deve impostare
+domini diversi. Il backend deve impostare
 questo header in Odoo, nell’oggetto S3 o nel link prefirmato e può usare link con scadenza breve.
 
 Il backend verifica firma, scadenza, audience e store del JWT, ricava l’email dal payload
@@ -241,7 +243,8 @@ redirect deve consentire la lettura via CORS. Le risposte `401`, `403` e `404` s
 come sessione da rinnovare, accesso negato e fattura non disponibile. Errori di rete o risposte
 invalide mostrano un messaggio e consentono di riprovare.
 Gli header CORS devono essere presenti sulle risposte effettive, anche di errore: configurarli
-solo su `OPTIONS` non è sufficiente. `redirect: 'manual'` non permette di leggere `Location`
+solo su `OPTIONS` non è sufficiente. Questo include le risposte `401`/`403` generate da API
+Gateway prima dell'esecuzione del backend. `redirect: 'manual'` non permette di leggere `Location`
 di un redirect cross-origin, perché fetch restituisce una risposta `opaqueredirect`.
 
 The deployment jobs for the same branch run sequentially to prevent concurrent uploads to the same

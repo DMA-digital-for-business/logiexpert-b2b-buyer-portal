@@ -28,20 +28,23 @@ export function InvoiceDownloadButton({ orderId, variant = 'text' }: InvoiceDown
     setErrorCode(undefined);
     try {
       const result = await getInvoiceDownload(orderId);
-      const url = result.kind === 'pdf' ? URL.createObjectURL(result.blob) : result.url;
+      if (result.kind === 'url') {
+        window.location.assign(result.url);
+        return;
+      }
+
+      const url = URL.createObjectURL(result.blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = result.kind === 'pdf' ? result.filename : '';
+      link.download = result.filename;
       link.referrerPolicy = 'no-referrer';
       document.body.appendChild(link);
       try {
         link.click();
       } finally {
         link.remove();
-        if (result.kind === 'pdf') {
-          // Let the browser start reading the PDF before releasing its object URL.
-          setTimeout(() => URL.revokeObjectURL(url), 60_000);
-        }
+        // Let the browser start reading the PDF before releasing its object URL.
+        setTimeout(() => URL.revokeObjectURL(url), 60_000);
       }
     } catch (error) {
       setErrorCode(error instanceof InvoiceDownloadError ? error.code : 'requestFailed');
